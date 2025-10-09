@@ -197,7 +197,7 @@ export default function ShopPage() {
 
         {/* 戻るボタン */}
         <div className="flex justify-center">
-          <Link href="/game">
+          <Link href="/">
             <Button className="bg-muted text-muted-foreground hover:bg-muted/80 text-sm px-8">戻る</Button>
           </Link>
         </div>
