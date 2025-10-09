@@ -30,7 +30,7 @@ export function StudyTimer({ onStudyComplete }: StudyTimerProps) {
     <Card className="rpg-window bg-card p-6">
       <div className="space-y-4">
         <div className="border-b-2 border-border pb-2">
-          <h2 className="text-sm md:text-base text-card-foreground">勉強時間を記録</h2>
+          <h2 className="text-sm md:text-base text-card-foreground">今日の勉強時間を記録</h2>
         </div>
 
         <div className="space-y-4">

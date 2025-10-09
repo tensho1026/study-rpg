@@ -75,15 +75,7 @@ export default function StudyQuestPage() {
             <MessageBox message={message} />
 
             {/* Character Display */}
-            <Card className="rpg-window bg-card p-6">
-              <div className="flex flex-col items-center justify-center space-y-4">
-                <div className="text-6xl md:text-8xl">🧙‍♂️</div>
-                <div className="text-center">
-                  <p className="text-xs md:text-sm text-card-foreground">勇者 Lv.{level}</p>
-                  <p className="text-xs text-muted-foreground mt-2">{currentEquipment.weapon} を装備している</p>
-                </div>
-              </div>
-            </Card>
+            
           </div>
         </div>
       </div>
