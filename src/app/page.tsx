@@ -55,11 +55,11 @@ export default function LandingPage() {
 
             {/* Auth Links */}
             <div className="flex justify-center gap-4 text-xs md:text-sm pt-2">
-              <Link href="/login" className="text-muted-foreground hover:text-foreground transition-colors">
+              <Link href="/auth/login" className="text-muted-foreground hover:text-foreground transition-colors">
                 ログイン
               </Link>
               <span className="text-muted-foreground">|</span>
-              <Link href="/signup" className="text-muted-foreground hover:text-foreground transition-colors">
+              <Link href="/auth/signup" className="text-muted-foreground hover:text-foreground transition-colors">
                 新規登録
               </Link>
             </div>

@@ -130,7 +130,7 @@ export default function LoginPage() {
           <div className="mt-6 text-center">
             <p className="text-xs text-muted-foreground">
               アカウントをお持ちでない方は{" "}
-              <Link href="/signup" className="text-primary hover:underline">
+              <Link href="/auth/signup" className="text-primary hover:underline">
                 新規登録
               </Link>
             </p>
