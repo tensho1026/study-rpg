@@ -72,7 +72,7 @@ model UserStatus {
 
 model StudyRecord {
   id String @id @default(cuid())
-  userId String
+  userId String @unique
   Date DateTime
   minutes Int
   createdAt DateTime @default(now())
