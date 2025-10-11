@@ -1,20 +1,13 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 interface Equipment {
-  weapon: string
-  armor: string
-  accessory: string
-}
-
-interface EquipmentWindowProps {
-  equipment: Equipment
-  coins: number
-  onEquipmentChange: (equipment: Equipment) => void
-  onCoinsChange: (coins: number) => void
+  weapon: string;
+  armor: string;
+  accessory: string;
 }
 
 const SHOP_ITEMS = [
@@ -24,20 +17,10 @@ const SHOP_ITEMS = [
   { name: "鉄の鎧", type: "armor", price: 600, emoji: "🛡️" },
   { name: "力の指輪", type: "accessory", price: 300, emoji: "💍" },
   { name: "知恵の眼鏡", type: "accessory", price: 400, emoji: "👓" },
-]
+];
 
-export function EquipmentWindow({ equipment, coins, onEquipmentChange, onCoinsChange }: EquipmentWindowProps) {
-  const [showShop, setShowShop] = useState(false)
-
-  const handlePurchase = (item: (typeof SHOP_ITEMS)[0]) => {
-    if (coins >= item.price) {
-      onCoinsChange(coins - item.price)
-      onEquipmentChange({
-        ...equipment,
-        [item.type]: item.name,
-      })
-    }
-  }
+export function EquipmentWindow() {
+  const [showShop, setShowShop] = useState(false);
 
   return (
     <Card className="rpg-window bg-card p-4">
@@ -56,15 +39,15 @@ export function EquipmentWindow({ equipment, coins, onEquipmentChange, onCoinsCh
           <div className="space-y-2 text-xs">
             <div className="flex justify-between items-center">
               <span className="text-muted-foreground">武器</span>
-              <span className="text-card-foreground">⚔️ {equipment.weapon}</span>
+              <span className="text-card-foreground">⚔️ aa</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-muted-foreground">防具</span>
-              <span className="text-card-foreground">🛡️ {equipment.armor}</span>
+              <span className="text-card-foreground">🛡️ bb</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-muted-foreground">装飾品</span>
-              <span className="text-card-foreground">✨ {equipment.accessory}</span>
+              <span className="text-card-foreground">✨cc</span>
             </div>
           </div>
         ) : (
@@ -80,11 +63,7 @@ export function EquipmentWindow({ equipment, coins, onEquipmentChange, onCoinsCh
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-accent">{item.price}G</span>
-                  <Button
-                    onClick={() => handlePurchase(item)}
-                    disabled={coins < item.price}
-                    className="text-xs px-2 py-1 h-auto bg-secondary text-secondary-foreground hover:bg-secondary/90 disabled:opacity-50"
-                  >
+                  <Button className="text-xs px-2 py-1 h-auto bg-secondary text-secondary-foreground hover:bg-secondary/90 disabled:opacity-50">
                     購入
                   </Button>
                 </div>
@@ -94,5 +73,5 @@ export function EquipmentWindow({ equipment, coins, onEquipmentChange, onCoinsCh
         )}
       </div>
     </Card>
-  )
+  );
 }

@@ -8,8 +8,8 @@ interface StatusWindowProps {
   totalStudyTime: number
 }
 
-export function StatusWindow({ level, exp, expToNextLevel, coins, totalStudyTime }: StatusWindowProps) {
-  const expPercentage = (exp / expToNextLevel) * 100
+export function StatusWindow() {
+
 
   return (
     <Card className="rpg-window bg-card p-4">
@@ -21,29 +21,29 @@ export function StatusWindow({ level, exp, expToNextLevel, coins, totalStudyTime
         <div className="space-y-2 text-xs">
           <div className="flex justify-between items-center">
             <span className="text-muted-foreground">レベル</span>
-            <span className="text-card-foreground font-bold">{level}</span>
+            <span className="text-card-foreground font-bold">1</span>
           </div>
 
           <div className="space-y-1">
             <div className="flex justify-between items-center">
               <span className="text-muted-foreground">EXP</span>
               <span className="text-card-foreground">
-                {exp}/{expToNextLevel}
+                1
               </span>
             </div>
             <div className="h-3 bg-input border-2 border-border">
-              <div className="h-full bg-secondary transition-all duration-300" style={{ width: `${expPercentage}%` }} />
+              <div className="h-full bg-secondary transition-all duration-300" />
             </div>
           </div>
 
           <div className="flex justify-between items-center">
             <span className="text-muted-foreground">所持金</span>
-            <span className="text-accent font-bold">{coins} G</span>
+            <span className="text-accent font-bold">1 G</span>
           </div>
 
           <div className="flex justify-between items-center">
             <span className="text-muted-foreground">総勉強時間</span>
-            <span className="text-card-foreground">{totalStudyTime} 分</span>
+            <span className="text-card-foreground">1 分</span>
           </div>
         </div>
       </div>
