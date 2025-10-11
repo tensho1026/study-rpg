@@ -90,7 +90,7 @@ export default function LandingPage() {
             {/* Auth Links */}
             <div className="flex justify-center gap-4 text-xs md:text-sm pt-2">
               <Link
-                href="/auth/login"
+                href="/auth/signin"
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 ログイン
