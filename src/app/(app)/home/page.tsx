@@ -1,51 +1,57 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Card } from "@/components/ui/card"
-import { StatusWindow } from "@/components/status-window"
-import { EquipmentWindow } from "@/components/equipment-window"
-import { StudyTimer } from "@/components/study-timer"
-import { MessageBox } from "@/components/message-box"
+import { useState, useEffect } from "react";
+import { StatusWindow } from "@/components/status-window";
+import { EquipmentWindow } from "@/components/equipment-window";
+import { StudyTimer } from "@/components/study-timer";
+import { MessageBox } from "@/components/message-box";
+import { useSession } from "next-auth/react";
 
 export default function StudyQuestPage() {
-  const [level, setLevel] = useState(1)
-  const [exp, setExp] = useState(0)
-  const [coins, setCoins] = useState(0)
-  const [totalStudyTime, setTotalStudyTime] = useState(0)
+  const { data } = useSession();
+  console.log(data);
+  const [level, setLevel] = useState(1);
+  const [exp, setExp] = useState(0);
+  const [coins, setCoins] = useState(0);
+  const [totalStudyTime, setTotalStudyTime] = useState(0);
   const [currentEquipment, setCurrentEquipment] = useState({
     weapon: "木の剣",
     armor: "布の服",
     accessory: "なし",
-  })
-  const [message, setMessage] = useState("勉強を始めて経験値を稼ごう！")
+  });
+  const [message, setMessage] = useState("勉強を始めて経験値を稼ごう！");
 
-  const expToNextLevel = level * 100
+  const expToNextLevel = level * 100;
 
   useEffect(() => {
     if (exp >= expToNextLevel) {
-      setLevel((prev) => prev + 1)
-      setExp((prev) => prev - expToNextLevel)
-      setMessage(`レベルアップ！ Lv.${level + 1} になった！`)
+      setLevel((prev) => prev + 1);
+      setExp((prev) => prev - expToNextLevel);
+      setMessage(`レベルアップ！ Lv.${level + 1} になった！`);
     }
-  }, [exp, expToNextLevel, level])
+  }, [exp, expToNextLevel, level]);
 
   const handleStudyComplete = (minutes: number) => {
-    const earnedExp = minutes * 10
-    const earnedCoins = minutes * 5
+    const earnedExp = minutes * 10;
+    const earnedCoins = minutes * 5;
 
-    setExp((prev) => prev + earnedExp)
-    setCoins((prev) => prev + earnedCoins)
-    setTotalStudyTime((prev) => prev + minutes)
-    setMessage(`${minutes}分勉強した！ EXP+${earnedExp} G+${earnedCoins}`)
-  }
+    setExp((prev) => prev + earnedExp);
+    setCoins((prev) => prev + earnedCoins);
+    setTotalStudyTime((prev) => prev + minutes);
+    setMessage(`${minutes}分勉強した！ EXP+${earnedExp} G+${earnedCoins}`);
+  };
 
   return (
     <main className="min-h-screen bg-background p-4 md:p-8">
       <div className="max-w-6xl mx-auto space-y-4">
         {/* Title */}
         <div className="text-center mb-8">
-          <h1 className="text-2xl md:text-4xl text-foreground mb-2 text-balance">勉強クエスト</h1>
-          <p className="text-xs md:text-sm text-muted-foreground">STUDY QUEST RPG</p>
+          <h1 className="text-2xl md:text-4xl text-foreground mb-2 text-balance">
+            勉強クエスト
+          </h1>
+          <p className="text-xs md:text-sm text-muted-foreground">
+            STUDY QUEST RPG
+          </p>
         </div>
 
         {/* Main Game Area */}
@@ -75,10 +81,9 @@ export default function StudyQuestPage() {
             <MessageBox message={message} />
 
             {/* Character Display */}
-            
           </div>
         </div>
       </div>
     </main>
-  )
+  );
 }

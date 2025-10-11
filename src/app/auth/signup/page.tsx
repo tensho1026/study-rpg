@@ -1,18 +1,14 @@
 "use client";
-
 import type React from "react";
-
-import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterForm, registerSchemaRaw } from "@/lib/schemas/auth";
-import { email } from "zod";
 
 export default function SignupPage() {
   const {
@@ -27,8 +23,12 @@ export default function SignupPage() {
     await signIn("email", {
       email: data.email,
       redirect: true,
+      callbackUrl: "/home",
     });
   };
+
+  const { data } = useSession();
+  console.log(data);
 
   return (
     <main className="min-h-screen bg-background flex items-center justify-center p-4">
@@ -55,7 +55,11 @@ export default function SignupPage() {
                   className="rpg-input bg-background text-foreground border-2 border-border"
                   {...register("email")}
                 />
-                <p className="text-sm text-red-500">{errors.email?.message}</p>
+                {errors.email && (
+                  <p className="text-sm text-red-500">
+                    {errors.email?.message}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -81,7 +85,11 @@ export default function SignupPage() {
           <div className="space-y-3">
             <Button
               type="button"
-              onClick={() => signIn("google")}
+              onClick={() =>
+                signIn("google", {
+                  callbackUrl: "/home",
+                })
+              }
               className="w-full rpg-button bg-card text-card-foreground border-2 border-border hover:bg-muted"
             >
               <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
@@ -110,7 +118,10 @@ export default function SignupPage() {
           <div className="mt-6 text-center">
             <p className="text-xs text-muted-foreground">
               すでにアカウントをお持ちの方は{" "}
-              <Link href="/login" className="text-primary hover:underline">
+              <Link
+                href="/auth/signin"
+                className="text-primary hover:underline"
+              >
                 ログイン
               </Link>
             </p>
