@@ -8,7 +8,7 @@ import { saveStudy } from "@/app/actions/study-record";
 
 export function StudyTimer() {
   const [currentMinutes, setCurrentMinutes] = useState(0);
-  const [currrentHours, setCurrentHours] = useState(0);
+  const [currrentHours, setCurrentHours] = useState(0)
 
   const handleTotal = () => {
     const totalTime = currrentHours * 60 + currentMinutes;
