@@ -7,39 +7,26 @@ import { Input } from "@/components/ui/input"
 
 interface StudyTimerProps {
   onStudyComplete: (minutes: number) => void
+  todayTotalMinutes: number
 }
 
-export function StudyTimer({ onStudyComplete }: StudyTimerProps) {
+export function StudyTimer({ onStudyComplete, todayTotalMinutes }: StudyTimerProps) {
   const [inputHours, setInputHours] = useState("")
   const [inputMinutes, setInputMinutes] = useState("")
-  const [selectedPreset, setSelectedPreset] = useState<number | null>(25)
 
   const handleSubmit = () => {
-    const manualTotal = manualTotalMinutes
-    const minutes = manualTotal > 0 ? manualTotal : selectedPreset ?? 0
-
-    if (minutes > 0) {
-      onStudyComplete(minutes)
-      if (manualTotal > 0) {
-        setInputHours("")
-        setInputMinutes("")
-        setSelectedPreset(null)
-      }
+    if (manualTotalMinutes <= 0) {
+      return
     }
-  }
 
-  const handleQuickSelect = (mins: number) => {
-    setSelectedPreset(mins)
-    const hours = Math.floor(mins / 60)
-    const minutes = mins % 60
-    setInputHours(hours > 0 ? hours.toString() : "")
-    setInputMinutes(minutes.toString())
+    onStudyComplete(manualTotalMinutes)
+    setInputHours("")
+    setInputMinutes("")
   }
 
   const handleHoursChange = (value: string) => {
     if (value === "") {
       setInputHours("")
-      setSelectedPreset(null)
       return
     }
 
@@ -49,13 +36,11 @@ export function StudyTimer({ onStudyComplete }: StudyTimerProps) {
     }
 
     setInputHours(Math.min(23, numeric).toString())
-    setSelectedPreset(null)
   }
 
   const handleMinutesChange = (value: string) => {
     if (value === "") {
       setInputMinutes("")
-      setSelectedPreset(null)
       return
     }
 
@@ -65,7 +50,6 @@ export function StudyTimer({ onStudyComplete }: StudyTimerProps) {
     }
 
     setInputMinutes(Math.min(59, numeric).toString())
-    setSelectedPreset(null)
   }
 
   const adjustHours = (delta: number) => {
@@ -73,7 +57,6 @@ export function StudyTimer({ onStudyComplete }: StudyTimerProps) {
     const safeValue = Number.isNaN(current) || current < 0 ? 0 : current
     const next = Math.min(23, Math.max(0, safeValue + delta))
     setInputHours(next.toString())
-    setSelectedPreset(null)
   }
 
   const adjustMinutes = (delta: number) => {
@@ -81,7 +64,6 @@ export function StudyTimer({ onStudyComplete }: StudyTimerProps) {
     const safeValue = Number.isNaN(current) || current < 0 ? 0 : current
     const next = Math.min(59, Math.max(0, safeValue + delta))
     setInputMinutes(next.toString())
-    setSelectedPreset(null)
   }
 
   const manualTotalMinutes = (() => {
@@ -91,7 +73,9 @@ export function StudyTimer({ onStudyComplete }: StudyTimerProps) {
     const safeMinutes = Number.isNaN(minutesValue) || minutesValue < 0 ? 0 : minutesValue
     return safeHours * 60 + safeMinutes
   })()
-  const canSubmit = manualTotalMinutes > 0 || selectedPreset !== null
+  const canSubmit = manualTotalMinutes > 0
+  const todayHours = Math.floor(todayTotalMinutes / 60)
+  const todayMinutes = todayTotalMinutes % 60
 
   return (
     <Card className="rpg-window bg-card p-6">
@@ -101,18 +85,23 @@ export function StudyTimer({ onStudyComplete }: StudyTimerProps) {
         </div>
 
         <div className="space-y-4">
-          <div className="flex gap-2 flex-wrap justify-center">
-            {[15, 25, 45, 60].map((mins) => (
-              <Button
-                key={mins}
-                onClick={() => handleQuickSelect(mins)}
-                className={`text-xs px-3 py-2 ${
-                  selectedPreset === mins ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
-                }`}
-              >
-                {mins}分
-              </Button>
-            ))}
+          <div className="rounded-md border-2 border-border bg-muted/50 p-4 text-center">
+            <p className="text-xs md:text-sm text-muted-foreground">今日の累計勉強時間</p>
+            <div className="mt-3 flex justify-center gap-6">
+              <div>
+                <p className="text-3xl md:text-4xl font-bold text-secondary-foreground text-white">
+                  {todayHours.toString().padStart(2, "0")}
+                </p>
+                <p className="text-xs text-muted-foreground">時間</p>
+              </div>
+              <div>
+                <p className="text-3xl md:text-4xl font-bold text-secondary-foreground text-white">
+                  {todayMinutes.toString().padStart(2, "0")}
+                </p>
+                <p className="text-xs text-muted-foreground">分</p>
+              </div>
+            </div>
+            <p className="mt-3 text-xs text-muted-foreground text-white">合計 {todayTotalMinutes} 分</p>
           </div>
 
           <div className="text-center space-y-4">

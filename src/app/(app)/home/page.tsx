@@ -54,6 +54,8 @@ export default function StudyQuestPage() {
           </p>
         </div>
 
+         <MessageBox message={message} />
+
         {/* Main Game Area */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Left Column - Status */}
@@ -76,9 +78,9 @@ export default function StudyQuestPage() {
 
           {/* Center Column - Timer & Character */}
           <div className="lg:col-span-2 space-y-4">
-            <StudyTimer onStudyComplete={handleStudyComplete} />
+            <StudyTimer todayTotalMinutes={totalStudyTime} onStudyComplete={handleStudyComplete} />
 
-            <MessageBox message={message} />
+           
 
             {/* Character Display */}
           </div>
