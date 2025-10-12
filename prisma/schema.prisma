@@ -59,10 +59,10 @@ model VerificationToken {
 model UserStatus {
   id String    @id @default(cuid())
   userId String
-  level Int
-  exp   Int
-  money Int
-  totalStudy Int
+  level Int @default(1)
+  exp   Int @default(0)
+  money Int @default(0)
+  totalStudy Int @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
@@ -72,12 +72,13 @@ model UserStatus {
 
 model StudyRecord {
   id String @id @default(cuid())
-  userId String @unique
-  Date DateTime
-  minutes Int
+  userId String 
+  Date DateTime?
+  minutes Int @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
 
   user User @relation(fields: [userId],references: [id])
+   @@unique([userId, Date]) 
 }
