@@ -6,22 +6,38 @@ import { StudyTimer } from "@/components/study-timer";
 import { MessageBox } from "@/components/message-box";
 import { useSession } from "next-auth/react";
 import { getHomeData } from "@/app/actions/getHomeData";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
+type HomeData = {
+  userStatus: {
+    level: number;
+    exp: number;
+    money: number;
+    totalStudy: number;
+  } | null;
+  todayStudyRecord: {
+    minutes: number;
+  };
+};
 
 export default function StudyQuestPage() {
+  const [homeData, setHomeData] = useState<HomeData | null>(null);
   const { data } = useSession();
   console.log(data);
 
   useEffect(() => {
     const fetchdata = async () => {
-  const homedata = await getHomeData();
-    console.log(homedata,'ホームデータ');
-    }
+      const datas = await getHomeData();
+      setHomeData(datas ?? null);
+      console.log(datas, "ホームデータ");
+    };
 
-    fetchdata()
+    fetchdata();
   }, []);
-  // const datas = getHomeData();
-  // console.log(datas, "ホームデータ");
+
+  const totalMinutes = homeData?.todayStudyRecord?.minutes ?? 0;
+  const totalHours = Math.floor(totalMinutes / 60);
+  const restMinutes = totalMinutes % 60;
 
   return (
     <main className="min-h-screen bg-background p-4 md:p-8">
@@ -42,14 +58,23 @@ export default function StudyQuestPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Left Column - Status */}
           <div className="space-y-4">
-            <StatusWindow />
+            <StatusWindow
+              level={homeData?.userStatus?.level ?? 999}
+              exp={homeData?.userStatus?.exp ?? 999}
+              coins={homeData?.userStatus?.money ?? 999}
+              totalStudyTime={homeData?.userStatus?.totalStudy ?? 999}
+            />
 
             <EquipmentWindow />
           </div>
 
           {/* Center Column - Timer & Character */}
           <div className="lg:col-span-2 space-y-4">
-            <StudyTimer />
+            <StudyTimer
+              total={totalMinutes}
+              totalHours={totalHours}
+              totalMinutes={restMinutes}
+            />  
 
             {/* Character Display */}
           </div>

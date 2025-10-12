@@ -6,7 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { saveStudy } from "@/app/actions/study-record";
 
-export function StudyTimer() {
+type Props = {
+  total: number;
+  totalMinutes: number;
+  totalHours: number;
+};
+
+export function StudyTimer({ total, totalMinutes, totalHours }: Props) {
   const [currentMinutes, setCurrentMinutes] = useState(0);
   const [currrentHours, setCurrentHours] = useState(0);
 
@@ -34,19 +40,19 @@ export function StudyTimer() {
             <div className="mt-3 flex justify-center gap-6">
               <div>
                 <p className="text-3xl md:text-4xl font-bold text-secondary-foreground text-white">
-                  0
+                  {totalHours}
                 </p>
                 <p className="text-xs text-muted-foreground">時間</p>
               </div>
               <div>
                 <p className="text-3xl md:text-4xl font-bold text-secondary-foreground text-white">
-                  0
+                  {totalMinutes}
                 </p>
                 <p className="text-xs text-muted-foreground">分</p>
               </div>
             </div>
             <p className="mt-3 text-xs text-muted-foreground text-white">
-              合計0 分
+              合計{total}分
             </p>
           </div>
 

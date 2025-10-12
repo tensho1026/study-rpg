@@ -3,12 +3,12 @@ import { Card } from "@/components/ui/card"
 interface StatusWindowProps {
   level: number
   exp: number
-  expToNextLevel: number
+  // expToNextLevel: number
   coins: number
   totalStudyTime: number
 }
 
-export function StatusWindow() {
+export function StatusWindow({level,exp,coins,totalStudyTime}:StatusWindowProps) {
 
 
   return (
@@ -21,14 +21,14 @@ export function StatusWindow() {
         <div className="space-y-2 text-xs">
           <div className="flex justify-between items-center">
             <span className="text-muted-foreground">レベル</span>
-            <span className="text-card-foreground font-bold">1</span>
+            <span className="text-card-foreground font-bold">{level}</span>
           </div>
 
           <div className="space-y-1">
             <div className="flex justify-between items-center">
               <span className="text-muted-foreground">EXP</span>
               <span className="text-card-foreground">
-                1
+                {exp}
               </span>
             </div>
             <div className="h-3 bg-input border-2 border-border">
@@ -38,12 +38,12 @@ export function StatusWindow() {
 
           <div className="flex justify-between items-center">
             <span className="text-muted-foreground">所持金</span>
-            <span className="text-accent font-bold">1 G</span>
+            <span className="text-accent font-bold">{coins}G</span>
           </div>
 
           <div className="flex justify-between items-center">
             <span className="text-muted-foreground">総勉強時間</span>
-            <span className="text-card-foreground">1 分</span>
+            <span className="text-card-foreground">{totalStudyTime}分</span>
           </div>
         </div>
       </div>
