@@ -30,5 +30,24 @@ export const saveStudy = async (minutes: number) => {
       minutes: minutes,
       Date: today,
     },
+
   });
+
+  // const nowTotalTime = await prisma.userStatus.findFirst({
+  //   where:{
+  //     userId:session?.user.id,
+  //   },
+  //   select:{
+  //     totalStudy:true
+  //   }
+  // })
+
+  await prisma.userStatus.update({
+    where:{
+      userId:session?.user.id,
+    },
+    data:{
+      totalStudy:{increment:minutes}
+    }
+  })
 };

@@ -58,7 +58,7 @@ model VerificationToken {
 
 model UserStatus {
   id String    @id @default(cuid())
-  userId String
+  userId String @unique
   level Int @default(1)
   exp   Int @default(0)
   money Int @default(0)
