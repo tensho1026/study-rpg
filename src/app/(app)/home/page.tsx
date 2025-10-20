@@ -23,7 +23,7 @@ type HomeData = {
 export default function StudyQuestPage() {
   const [homeData, setHomeData] = useState<HomeData | null>(null);
   const { data } = useSession();
-  console.log(data);
+  console.log(data,'ログイン情報');
 
   useEffect(() => {
     const fetchdata = async () => {
@@ -34,6 +34,7 @@ export default function StudyQuestPage() {
 
     fetchdata();
   }, []);
+
 
   const totalMinutes = homeData?.todayStudyRecord?.minutes ?? 0;
   const totalHours = Math.floor(totalMinutes / 60);
@@ -59,10 +60,10 @@ export default function StudyQuestPage() {
           {/* Left Column - Status */}
           <div className="space-y-4">
             <StatusWindow
-              level={homeData?.userStatus?.level ?? 999}
-              exp={homeData?.userStatus?.exp ?? 999}
-              coins={homeData?.userStatus?.money ?? 999}
-              totalStudyTime={homeData?.userStatus?.totalStudy ?? 999}
+              level={homeData?.userStatus?.level ?? 0}
+              exp={homeData?.userStatus?.exp ?? 0}
+              coins={homeData?.userStatus?.money ?? 0}
+              totalStudyTime={homeData?.userStatus?.totalStudy ?? 0}
             />
 
             <EquipmentWindow />
@@ -74,7 +75,7 @@ export default function StudyQuestPage() {
               total={totalMinutes}
               totalHours={totalHours}
               totalMinutes={restMinutes}
-            />  
+            />
 
             {/* Character Display */}
           </div>
