@@ -1,40 +1,12 @@
-"use client";
-
 import { StatusWindow } from "@/components/status-window";
 import { EquipmentWindow } from "@/components/equipment-window";
 import { StudyTimer } from "@/components/study-timer";
 import { MessageBox } from "@/components/message-box";
-import { useSession } from "next-auth/react";
+
 import { getHomeData } from "@/app/actions/getHomeData";
-import { useEffect, useState } from "react";
 
-type HomeData = {
-  userStatus: {
-    level: number;
-    exp: number;
-    money: number;
-    totalStudy: number;
-  } | null;
-  todayStudyRecord: {
-    minutes: number;
-  };
-};
-
-export default function StudyQuestPage() {
-  const [homeData, setHomeData] = useState<HomeData | null>(null);
-  const { data } = useSession();
-  console.log(data,'ログイン情報');
-
-  useEffect(() => {
-    const fetchdata = async () => {
-      const datas = await getHomeData();
-      setHomeData(datas ?? null);
-      console.log(datas, "ホームデータ");
-    };
-
-    fetchdata();
-  }, []);
-
+export default async function StudyQuestPage() {
+  const homeData = await getHomeData();
 
   const totalMinutes = homeData?.todayStudyRecord?.minutes ?? 0;
   const totalHours = Math.floor(totalMinutes / 60);

@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { saveStudy } from "@/app/actions/study-record";
+import { useRouter } from "next/navigation";
 
 type Props = {
   total: number;
@@ -15,6 +16,7 @@ type Props = {
 export function StudyTimer({ total, totalMinutes, totalHours }: Props) {
   const [currentMinutes, setCurrentMinutes] = useState(0);
   const [currrentHours, setCurrentHours] = useState(0);
+  const router = useRouter();
 
   const handleTotal = () => {
     const totalTime = currrentHours * 60 + currentMinutes;
@@ -22,6 +24,7 @@ export function StudyTimer({ total, totalMinutes, totalHours }: Props) {
     saveStudy(totalTime);
     setCurrentHours(0);
     setCurrentMinutes(0);
+    router.refresh();
   };
   return (
     <Card className="rpg-window bg-card p-6">
