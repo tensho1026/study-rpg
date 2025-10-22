@@ -9,6 +9,8 @@ export default async function StudyQuestPage() {
 
   const userLevel = homeData?.userStatus?.level;
 
+  if (userLevel === undefined) return;
+
   // 今のユーザーの階層
   const nowExp = levelBorder[userLevel - 1];
 
@@ -29,7 +31,7 @@ export default async function StudyQuestPage() {
   console.log(nowUserExp, nowExp, "レベルボーダー");
 
   const progressExp = (nowUser / needExp) * 100;
-  const percentage = progressExp.toFixed(1);
+  const percentage = Number(progressExp.toFixed(1));
   console.log(percentage, "パーセンテージ！");
 
   const todayMinutes = homeData?.todayStudyRecord?.minutes ?? 0;
