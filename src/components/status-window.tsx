@@ -9,14 +9,14 @@ import { AppSidebar } from "@/components/app-sidebar";
 
 interface StatusWindowProps {
   level: number;
-  exp: number;
+  expProgress: number;
   coins: number;
   totalStudyTime: number;
 }
 
 export function StatusWindow({
   level,
-  exp,
+  expProgress,
   coins,
   totalStudyTime,
 }: StatusWindowProps) {
@@ -25,7 +25,7 @@ export function StatusWindow({
   const openSidebar = () => setIsSidebarOpen(true);
   const closeSidebar = () => setIsSidebarOpen(false);
 
-  const expProgress = Math.max(0, Math.min(100, exp % 100));
+  // const expProgress = Math.max(0, Math.min(100, exp % 100));
   const studyHours = Math.floor(totalStudyTime / 60);
   const studyMinutes = totalStudyTime % 60;
   const title =
@@ -131,7 +131,9 @@ export function StatusWindow({
 
       <div
         className={`fixed inset-0 z-40 bg-black/60 transition-opacity duration-300 ${
-          isSidebarOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+          isSidebarOpen
+            ? "pointer-events-auto opacity-100"
+            : "pointer-events-none opacity-0"
         }`}
         onClick={closeSidebar}
         aria-hidden={!isSidebarOpen}
