@@ -7,32 +7,25 @@ export default async function StudyQuestPage() {
   const homeData = await getHomeData();
   console.log(homeData);
 
-  const userLevel = homeData?.userStatus?.level;
+  const userStatus = homeData?.userStatus;
+  if (!userStatus) return;
 
-  if (userLevel === undefined) return;
+  const { level: userLevel, exp: userExp } = userStatus;
 
-  // 今のユーザーの階層
-  const nowExp = levelBorder[userLevel - 1];
+  // 現在のレベル境界と次のレベル境界
+  const currentLevelBorder = levelBorder[userLevel - 1];
+  const nextLevelBorder = levelBorder[userLevel];
 
-  // 今のユーザーの経験値数
-  const nowUserExp = homeData?.userStatus?.exp;
+  // 必要経験値と現在の進捗
+  const requiredExp = nextLevelBorder - currentLevelBorder;
+  const gainedExp = userExp - currentLevelBorder;
 
-  // 次の階層
-  const nextBorder = levelBorder[userLevel];
+  // 進捗率（%）
+  const progressPercent = Number(((gainedExp / requiredExp) * 100).toFixed(0));
 
-  // 次の階層までに必要な経験値
-  const needExp = nextBorder - nowExp;
-
-  // 次の階層までにどれくらい今進んでいるか
-  const nowUser = nowUserExp! - nowExp;
-
-  console.log("次に必要な経験値", needExp);
-  console.log("今の階層でどれぐらい進んでいるか", nowUser);
-  console.log(nowUserExp, nowExp, "レベルボーダー");
-
-  const progressExp = (nowUser / needExp) * 100;
-  const percentage = Number(progressExp.toFixed(1));
-  console.log(percentage, "パーセンテージ！");
+  console.log("必要経験値:", requiredExp);
+  console.log("現在の進捗経験値:", gainedExp);
+  console.log("進捗率:", progressPercent, "%");
 
   const todayMinutes = homeData?.todayStudyRecord?.minutes ?? 0;
   const totalHours = Math.floor(todayMinutes / 60);
@@ -45,7 +38,7 @@ export default async function StudyQuestPage() {
 
       <StatusWindow
         level={homeData?.userStatus?.level ?? 0}
-        expProgress={percentage}
+        expProgress={progressPercent}
         coins={homeData?.userStatus?.money ?? 0}
         totalStudyTime={homeData?.userStatus?.totalStudy ?? 0}
       />
