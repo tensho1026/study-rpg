@@ -45,18 +45,7 @@ export function StatusWindow({
         <div className="absolute -bottom-10 left-6 size-36 rounded-full bg-cyan-500/10 blur-3xl" />
 
         {/* メニューボタン + ランク表示 */}
-        <div className="relative flex w-full items-start gap-3 md:w-auto md:items-center">
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            className="rounded-xl border border-white/10 bg-white/5 text-white/80 transition hover:bg-white/10 hover:text-white"
-            onClick={openSidebar}
-            aria-label="メニューを開く"
-          >
-            <Menu className="size-4" />
-          </Button>
-
+        <div className="relative flex w-full items-start gap-3 md:w-auto md:flex-row-reverse md:items-center md:gap-4">
           <div className="relative flex flex-col gap-1">
             <span className="text-xs uppercase tracking-[0.24em] text-white/50">
               現在のランク
@@ -71,6 +60,17 @@ export function StatusWindow({
               </div> */}
             </div>
           </div>
+
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="ml-auto h-12 w-12 rounded-xl border border-white/10 bg-white/5 text-white/80 transition hover:bg-white/10 hover:text-white md:ml-0 md:mr-4 md:h-12 md:w-12"
+            onClick={openSidebar}
+            aria-label="メニューを開く"
+          >
+            <Menu className="size-6" />
+          </Button>
         </div>
 
         {/* EXPゲージ */}
