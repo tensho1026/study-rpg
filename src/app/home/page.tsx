@@ -23,14 +23,12 @@ export default async function StudyQuestPage() {
 
       {/* 中央の記録UI */}
 
-      <div className="w-full max-w-4xl">
-        <StudyTimer
-          total={todayMinutes}
-          totalHours={totalHours}
-          totalMinutes={restMinutes}
-          goalMinutes={dailyGoalMinutes}
-        />
-      </div>
+      <StudyTimer
+        total={todayMinutes}
+        totalHours={totalHours}
+        totalMinutes={restMinutes}
+        goalMinutes={dailyGoalMinutes}
+      />
     </div>
   );
 }
