@@ -102,21 +102,11 @@ export default async function StudyQuestPage() {
   return (
     <main className="min-h-screen bg-[#08090F] text-slate-100">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8 md:px-8">
-        <header className="space-y-2 text-center">
-          <p className="text-xs uppercase tracking-[0.28em] text-white/50">
-            Study Quest RPG
-          </p>
-          <h1 className="text-3xl font-semibold text-white md:text-5xl">
-            勉強クエスト
-          </h1>
-          <p className="text-sm text-white/60">
-            日々の学習を冒険に変える、あなただけのホームベース
-          </p>
-        </header>
 
-        <section className="mx-auto w-full max-w-3xl">
+{/* メッセージボックスは常に表示しないで通知が来るタイミングで出す */}
+        {/* <section className="mx-auto w-full max-w-3xl">
           <MessageBox />
-        </section>
+        </section> */}
 
         <div className="grid gap-8 lg:grid-cols-[1.75fr_1fr]">
           <div className="space-y-6">
@@ -128,7 +118,7 @@ export default async function StudyQuestPage() {
             />
 
             <div className="grid gap-4 md:grid-cols-2">
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-lg shadow-black/30">
+              {/* <div className="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-lg shadow-black/30">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <span className="inline-flex size-10 items-center justify-center rounded-full bg-emerald-400/15 text-emerald-200">
@@ -165,9 +155,9 @@ export default async function StudyQuestPage() {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </div> */}
 
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-lg shadow-black/30">
+              {/* <div className="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-lg shadow-black/30">
                 <div className="flex items-center gap-3">
                   <span className="inline-flex size-10 items-center justify-center rounded-full bg-cyan-400/15 text-cyan-200">
                     <History className="size-5" />
@@ -211,7 +201,7 @@ export default async function StudyQuestPage() {
                     ※ 現在はUIのみです。今後のアップデートで遷移が追加されます。
                   </p>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             <div className="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-lg shadow-black/30">
@@ -268,7 +258,7 @@ export default async function StudyQuestPage() {
 
             <EquipmentWindow />
 
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-lg shadow-black/30">
+            {/* <div className="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-lg shadow-black/30">
               <div className="flex items-center gap-3">
                 <span className="inline-flex size-10 items-center justify-center rounded-full bg-emerald-400/15 text-emerald-200">
                   <Sparkles className="size-5" />
@@ -303,7 +293,7 @@ export default async function StudyQuestPage() {
                   </div>
                 ))}
               </div>
-            </div>
+            </div> */}
 
             <nav className="rounded-2xl border border-white/10 bg-slate-900/70 p-4 shadow-inner shadow-black/40">
               <p className="text-xs uppercase tracking-[0.24em] text-white/50">
