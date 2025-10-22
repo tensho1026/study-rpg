@@ -90,13 +90,10 @@ export default async function StudyQuestPage() {
     },
   ];
 
-
-
   return (
     <main className="min-h-screen bg-[#08090F] text-slate-100">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8 md:px-8">
-
-{/* メッセージボックスは常に表示しないで通知が来るタイミングで出す */}
+        {/* メッセージボックスは常に表示しないで通知が来るタイミングで出す */}
         {/* <section className="mx-auto w-full max-w-3xl">
           <MessageBox />
         </section> */}
@@ -249,7 +246,7 @@ export default async function StudyQuestPage() {
               totalStudyTime={homeData?.userStatus?.totalStudy ?? 0}
             />
 
-            <EquipmentWindow />
+            {/* <EquipmentWindow /> */}
 
             {/* <div className="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-lg shadow-black/30">
               <div className="flex items-center gap-3">
@@ -287,8 +284,6 @@ export default async function StudyQuestPage() {
                 ))}
               </div>
             </div> */}
-
-           
           </aside>
         </div>
       </div>

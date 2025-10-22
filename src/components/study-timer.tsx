@@ -31,7 +31,10 @@ export function StudyTimer({
     return Math.max(0, Math.min(raw, 100));
   }, [goalMinutes, total]);
 
-  const hourOptions = useMemo(() => Array.from({ length: 13 }, (_, i) => i), []);
+  const hourOptions = useMemo(
+    () => Array.from({ length: 13 }, (_, i) => i),
+    []
+  );
   const minuteOptions = useMemo(
     () => Array.from({ length: 60 }, (_, i) => i),
     []
@@ -60,9 +63,6 @@ export function StudyTimer({
               今日の勉強時間を記録
             </h2>
           </div>
-          <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs uppercase tracking-[0.18em] text-white/70">
-            Daily Quest
-          </span>
         </div>
 
         <div className="grid gap-4 md:grid-cols-[1.2fr_auto] md:items-center">
@@ -88,7 +88,7 @@ export function StudyTimer({
             <p className="mt-4 text-xs text-white/70">合計 {total} 分の冒険</p>
           </div>
 
-          <div className="flex flex-col items-center gap-2 rounded-2xl border border-amber-500/40 bg-amber-500/10 px-5 py-4 text-center">
+          {/* <div className="flex flex-col items-center gap-2 rounded-2xl border border-amber-500/40 bg-amber-500/10 px-5 py-4 text-center">
             <Flag className="size-5 text-amber-200" />
             <span className="text-xs uppercase tracking-[0.32em] text-amber-200/80">
               今日の目標
@@ -108,7 +108,7 @@ export function StudyTimer({
                 />
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="space-y-4">
@@ -119,7 +119,9 @@ export function StudyTimer({
               </span>
               <select
                 value={currentHours}
-                onChange={(event) => setCurrentHours(Number(event.target.value))}
+                onChange={(event) =>
+                  setCurrentHours(Number(event.target.value))
+                }
                 className="w-full appearance-none rounded-xl border border-white/10 bg-slate-900/80 px-4 py-3 text-lg font-semibold text-white shadow-inner shadow-black/40 outline-none transition focus:border-amber-300/60 focus:ring-2 focus:ring-amber-300/30"
               >
                 {hourOptions.map((hour) => (
@@ -150,7 +152,7 @@ export function StudyTimer({
             </label>
           </div>
 
-          <div className="flex flex-col gap-3 rounded-2xl border border-white/5 bg-white/5 p-4 text-left text-xs text-white/70 md:flex-row md:items-center md:justify-between">
+          {/* <div className="flex flex-col gap-3 rounded-2xl border border-white/5 bg-white/5 p-4 text-left text-xs text-white/70 md:flex-row md:items-center md:justify-between">
             <div className="flex items-center gap-2 text-sm text-white/80">
               <Sparkles className="size-4 text-emerald-300" />
               記録するとスタミナとEXPを獲得できます。
@@ -158,7 +160,7 @@ export function StudyTimer({
             <p className="text-[11px] tracking-wide">
               計測はいつでもやり直し可能。集中できた時間をこまめに登録しよう。
             </p>
-          </div>
+          </div> */}
 
           <Button
             className="group relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500 px-6 py-4 text-base font-semibold text-slate-950 shadow-lg shadow-[0_0_25px_rgba(16,185,129,0.28)] transition hover:translate-y-[1px] hover:shadow-[0_0_35px_rgba(16,185,129,0.45)] focus-visible:ring-emerald-400/40"
@@ -173,12 +175,12 @@ export function StudyTimer({
             </span>
           </Button>
 
-          <div
+          {/* <div
             aria-live="polite"
             className="rounded-xl border border-emerald-400/40 bg-emerald-400/10 px-4 py-3 text-xs text-emerald-100 shadow-inner shadow-[0_0_12px_rgba(16,185,129,0.25)]"
           >
             記録が完了するとこのスペースにトースト通知が表示されます。
-          </div>
+          </div> */}
         </div>
       </div>
     </Card>
