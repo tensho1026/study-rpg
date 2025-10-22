@@ -162,8 +162,8 @@ export function StatusWindow({
             </Button>
           </div>
           <AppSidebar
-            className="h-full overflow-y-auto"
-            contentClassName="m-0 h-full p-6"
+            className="flex h-full flex-1 flex-col justify-center overflow-y-auto"
+            contentClassName="m-0 h-auto p-6"
             onNavigate={closeSidebar}
           />
         </div>

@@ -42,16 +42,18 @@ export function AppSidebar({
   return (
     <aside className={cn("w-full max-w-sm", className)}>
       <div className={cn("m-4", contentClassName)}>
-        <div className="rpg-window bg-card p-4 md:p-6 space-y-6 w-full">
-          <div className="text-center space-y-1">
+        <div className="rpg-window flex w-full min-h-[26rem] flex-col gap-8 bg-card px-5 py-8 md:min-h-[30rem] md:gap-10 md:px-8 md:py-12 lg:min-h-[32rem] lg:gap-12">
+          <div className="text-center space-y-2">
             <p className="text-xs text-muted-foreground tracking-[0.3em] uppercase">
               Menu
             </p>
-            <h2 className="text-lg text-card-foreground">冒険メニュー</h2>
+            <h2 className="text-xl font-semibold text-card-foreground">
+              冒険メニュー
+            </h2>
           </div>
 
-          <nav>
-            <ul className="space-y-3 list-none m-0 p-0">
+          <nav className="flex-1">
+            <ul className="m-0 flex h-full flex-col justify-center gap-4 list-none p-0">
               {sideMenu.map((item) => {
                 const Icon = item.icon;
                 const isActive =
@@ -63,7 +65,7 @@ export function AppSidebar({
                     <Button
                       asChild
                       className={cn(
-                        "flex w-full items-center justify-between rounded-xl border px-4 py-4 text-left transition",
+                        "flex w-full items-center justify-between rounded-xl border px-5 py-5 text-left transition",
                         isActive
                           ? "border-cyan-400/60 bg-cyan-500/20 text-white shadow-[0_0_18px_rgba(14,165,233,0.25)]"
                           : "border-white/5 bg-white/5 text-white/70 hover:border-cyan-400/40 hover:bg-cyan-500/10 hover:text-white"
@@ -77,8 +79,8 @@ export function AppSidebar({
                         className="flex w-full items-center justify-between"
                       >
                         <span className="flex items-center gap-3">
-                          <span className="inline-flex size-9 items-center justify-center rounded-full border border-white/10 bg-white/10">
-                            <Icon className="size-4" />
+                          <span className="inline-flex size-10 items-center justify-center rounded-full border border-white/10 bg-white/10">
+                            <Icon className="size-5" />
                           </span>
                           {item.label}
                         </span>
@@ -91,10 +93,10 @@ export function AppSidebar({
             </ul>
           </nav>
 
-          <div className="pt-4 border-t border-border">
+          <div className="border-t border-border pt-6">
             <Button
               variant="destructive"
-              className="w-full text-xs md:text-sm py-3"
+              className="w-full py-4 text-sm font-semibold"
               onClick={() => {
                 onNavigate?.();
                 // TODO: implement logout action
