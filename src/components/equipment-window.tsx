@@ -5,6 +5,7 @@ import { Gem, Shield, ShoppingBag, Sparkles, Swords } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import Link from "next/link";
 
 type Equipment = {
   weapon: string;
@@ -79,41 +80,39 @@ export function EquipmentWindow() {
               </h3>
             </div>
           </div>
-          <Button
-            onClick={() => setShowShop(!showShop)}
-            className="h-auto rounded-full border border-white/30 bg-white/15 px-4 py-2 text-xs font-semibold text-white transition hover:bg-white/25"
-          >
+          <Link href='/shop'>
+          <Button className="h-auto rounded-full border border-white/30 bg-white/15 px-4 py-2 text-xs font-semibold text-white transition hover:bg-white/25">
             <ShoppingBag className="size-3.5" />
-            {showShop ? "閉じる" : "ショップ"}
+            ショップ
           </Button>
+          </Link>
         </header>
 
-        {!showShop ? (
-          <div className="space-y-3 text-sm">
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 shadow-inner shadow-black/30">
-              <p className="text-xs uppercase tracking-[0.3em] text-white/50">
-                装備中のギア
-              </p>
-              <div className="mt-3 space-y-3">
-                <EquipmentRow
-                  label="武器"
-                  value={EQUIPPED_ITEMS.weapon}
-                  icon={<Swords className="size-4 text-rose-200" />}
-                />
-                <EquipmentRow
-                  label="防具"
-                  value={EQUIPPED_ITEMS.armor}
-                  icon={<Shield className="size-4 text-sky-200" />}
-                />
-                <EquipmentRow
-                  label="装飾品"
-                  value={EQUIPPED_ITEMS.accessory}
-                  icon={<Gem className="size-4 text-emerald-200" />}
-                />
-              </div>
+        <div className="space-y-3 text-sm">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 shadow-inner shadow-black/30">
+            <p className="text-xs uppercase tracking-[0.3em] text-white/50">
+              装備中のギア
+            </p>
+            <div className="mt-3 space-y-3">
+              <EquipmentRow
+                label="武器"
+                value={EQUIPPED_ITEMS.weapon}
+                icon={<Swords className="size-4 text-rose-200" />}
+              />
+              <EquipmentRow
+                label="防具"
+                value={EQUIPPED_ITEMS.armor}
+                icon={<Shield className="size-4 text-sky-200" />}
+              />
+              <EquipmentRow
+                label="装飾品"
+                value={EQUIPPED_ITEMS.accessory}
+                icon={<Gem className="size-4 text-emerald-200" />}
+              />
             </div>
+          </div>
 
-            <div className="rounded-2xl border border-purple-400/40 bg-purple-500/10 p-4 text-xs text-purple-100 shadow-inner shadow-[0_0_12px_rgba(168,85,247,0.25)]">
+          {/* <div className="rounded-2xl border border-purple-400/40 bg-purple-500/10 p-4 text-xs text-purple-100 shadow-inner shadow-[0_0_12px_rgba(168,85,247,0.25)]">
               <div className="flex items-center gap-2 font-semibold text-purple-100">
                 <Sparkles className="size-4" />
                 次の強化ボーナス
@@ -121,46 +120,8 @@ export function EquipmentWindow() {
               <p className="mt-1 leading-relaxed text-purple-100/80">
                 Rare以上の装備を3つ揃えると、経験値獲得量が10%アップするパッシブが解放されます。
               </p>
-            </div>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            <p className="text-xs uppercase tracking-[0.24em] text-white/50">
-              ショップラインナップ
-            </p>
-            <div className="max-h-64 space-y-2 overflow-y-auto pr-1">
-              {SHOP_ITEMS.map((item) => (
-                <div
-                  key={item.name}
-                  className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-xs shadow-inner shadow-black/30"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="text-lg">{item.emoji}</span>
-                    <div>
-                      <p className="text-sm font-semibold text-white">
-                        {item.name}
-                      </p>
-                      <span className="text-[10px] uppercase tracking-[0.32em] text-white/40">
-                        {item.type} / {item.rarity}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-sm font-bold text-amber-200">
-                      {item.price}G
-                    </span>
-                    <Button
-                      className="h-auto rounded-full bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500 px-3 py-1.5 text-[11px] font-semibold text-slate-950 shadow-[0_0_18px_rgba(16,185,129,0.28)] hover:shadow-[0_0_26px_rgba(16,185,129,0.42)]"
-                      disabled
-                    >
-                      購入
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+            </div> */}
+        </div>
       </div>
     </Card>
   );

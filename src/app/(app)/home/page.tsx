@@ -90,14 +90,7 @@ export default async function StudyQuestPage() {
     },
   ];
 
-  const sideMenu: Array<{ label: string; icon: LucideIcon; active?: boolean }> =
-    [
-      { label: "ホーム", icon: Home, active: true },
-      { label: "クエスト", icon: Compass },
-      { label: "図書館", icon: BookOpenCheck },
-      { label: "称号", icon: Trophy },
-      { label: "パーティ", icon: Users },
-    ];
+
 
   return (
     <main className="min-h-screen bg-[#08090F] text-slate-100">
@@ -204,7 +197,7 @@ export default async function StudyQuestPage() {
               </div> */}
             </div>
 
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-lg shadow-black/30">
+            {/* <div className="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-lg shadow-black/30">
               <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div className="flex items-center gap-3">
                   <span className="inline-flex size-12 items-center justify-center rounded-full bg-amber-400/15 text-amber-200">
@@ -245,7 +238,7 @@ export default async function StudyQuestPage() {
                   </p>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
 
           <aside className="space-y-6">
@@ -295,36 +288,7 @@ export default async function StudyQuestPage() {
               </div>
             </div> */}
 
-            <nav className="rounded-2xl border border-white/10 bg-slate-900/70 p-4 shadow-inner shadow-black/40">
-              <p className="text-xs uppercase tracking-[0.24em] text-white/50">
-                メニュー
-              </p>
-              <ul className="mt-3 space-y-2 text-sm">
-                {sideMenu.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <li key={item.label}>
-                      <button
-                        type="button"
-                        className={`flex w-full items-center justify-between rounded-xl border px-4 py-3 text-left transition ${
-                          item.active
-                            ? "border-cyan-400/60 bg-cyan-500/20 text-white shadow-[0_0_18px_rgba(14,165,233,0.25)]"
-                            : "border-white/5 bg-white/5 text-white/70 hover:border-cyan-400/40 hover:bg-cyan-500/10 hover:text-white"
-                        }`}
-                      >
-                        <span className="flex items-center gap-3">
-                          <span className="inline-flex size-9 items-center justify-center rounded-full border border-white/10 bg-white/10">
-                            <Icon className="size-4" />
-                          </span>
-                          {item.label}
-                        </span>
-                        <ArrowRight className="size-4" />
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            </nav>
+           
           </aside>
         </div>
       </div>
