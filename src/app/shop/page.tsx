@@ -4,24 +4,15 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ShopItem } from "@/types/shopItems";
+
 import { SHOP_ITEMS } from "@/constant/equipments";
 
 export default function ShopPage() {
   const [selectedTab, setSelectedTab] = useState<
     "weapon" | "armor" | "accessory"
   >("weapon");
-  const [coins, setCoins] = useState(1000); // 仮のコイン数
-  const [ownedItems, setOwnedItems] = useState<string[]>([]);
 
   const filteredItems = SHOP_ITEMS.filter((item) => item.type === selectedTab);
-
-  const handlePurchase = (item: ShopItem) => {
-    if (coins >= item.price && !ownedItems.includes(item.id)) {
-      setCoins(coins - item.price);
-      setOwnedItems([...ownedItems, item.id]);
-    }
-  };
 
   const getTabLabel = (type: "weapon" | "armor" | "accessory") => {
     switch (type) {
@@ -61,9 +52,7 @@ export default function ShopPage() {
             </div>
             <div className="text-right">
               <p className="text-xs text-muted-foreground">所持金</p>
-              <p className="text-lg md:text-xl text-accent font-bold">
-                {coins} G
-              </p>
+              <p className="text-lg md:text-xl text-accent font-bold">111 G</p>
             </div>
           </div>
         </Card>
@@ -90,9 +79,6 @@ export default function ShopPage() {
         {/* アイテムリスト */}
         <div className="grid gap-4">
           {filteredItems.map((item) => {
-            const isOwned = ownedItems.includes(item.id);
-            const canAfford = coins >= item.price;
-
             return (
               <Card key={item.id} className="rpg-window bg-card p-4">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -102,11 +88,10 @@ export default function ShopPage() {
                       <h3 className="text-sm md:text-base text-card-foreground font-bold">
                         {item.name}
                       </h3>
-                      {isOwned && (
-                        <span className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded">
-                          所持中
-                        </span>
-                      )}
+
+                      <span className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded">
+                        所持中
+                      </span>
                     </div>
                     <p className="text-xs text-muted-foreground mb-2">
                       {item.description}
@@ -133,16 +118,8 @@ export default function ShopPage() {
                         {item.price} G
                       </p>
                     </div>
-                    <Button
-                      onClick={() => handlePurchase(item)}
-                      disabled={!canAfford || isOwned}
-                      className="bg-secondary text-secondary-foreground hover:bg-secondary/90 disabled:opacity-50 disabled:cursor-not-allowed text-xs md:text-sm px-4 md:px-6"
-                    >
-                      {isOwned
-                        ? "購入済み"
-                        : canAfford
-                        ? "購入する"
-                        : "お金が足りない"}
+                    <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 disabled:opacity-50 disabled:cursor-not-allowed text-xs md:text-sm px-4 md:px-6">
+                      購入する
                     </Button>
                   </div>
                 </div>
