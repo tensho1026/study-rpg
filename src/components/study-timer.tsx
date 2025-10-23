@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Clock, Flag, Flame, Sparkles } from "lucide-react";
+import { Clock,Flame, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { saveStudy } from "@/app/actions/study-record";
@@ -15,21 +15,10 @@ type Props = {
   goalMinutes?: number;
 };
 
-export function StudyTimer({
-  total,
-  totalMinutes,
-  totalHours,
-  goalMinutes = 240,
-}: Props) {
+export function StudyTimer({ total, totalMinutes, totalHours }: Props) {
   const [currentMinutes, setCurrentMinutes] = useState(0);
   const [currentHours, setCurrentHours] = useState(0);
   const router = useRouter();
-
-  const goalProgress = useMemo(() => {
-    if (!goalMinutes) return 0;
-    const raw = Math.round((total / goalMinutes) * 100);
-    return Math.max(0, Math.min(raw, 100));
-  }, [goalMinutes, total]);
 
   const hourOptions = useMemo(
     () => Array.from({ length: 13 }, (_, i) => i),
@@ -87,28 +76,6 @@ export function StudyTimer({
             </div>
             <p className="mt-4 text-xs text-white/70">合計 {total} 分の冒険</p>
           </div>
-
-          {/* <div className="flex flex-col items-center gap-2 rounded-2xl border border-amber-500/40 bg-amber-500/10 px-5 py-4 text-center">
-            <Flag className="size-5 text-amber-200" />
-            <span className="text-xs uppercase tracking-[0.32em] text-amber-200/80">
-              今日の目標
-            </span>
-            <p className="text-xl font-semibold text-amber-100">
-              {goalMinutes} 分
-            </p>
-            <div className="w-full">
-              <div className="flex items-center justify-between text-[10px] uppercase text-amber-100/70">
-                <span>進捗</span>
-                <span>{goalProgress}%</span>
-              </div>
-              <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-white/10">
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-amber-400 via-orange-400 to-pink-400 transition-[width] duration-700 ease-out"
-                  style={{ width: `${goalProgress}%` }}
-                />
-              </div>
-            </div>
-          </div> */}
         </div>
 
         <div className="space-y-4">
@@ -152,16 +119,6 @@ export function StudyTimer({
             </label>
           </div>
 
-          {/* <div className="flex flex-col gap-3 rounded-2xl border border-white/5 bg-white/5 p-4 text-left text-xs text-white/70 md:flex-row md:items-center md:justify-between">
-            <div className="flex items-center gap-2 text-sm text-white/80">
-              <Sparkles className="size-4 text-emerald-300" />
-              記録するとスタミナとEXPを獲得できます。
-            </div>
-            <p className="text-[11px] tracking-wide">
-              計測はいつでもやり直し可能。集中できた時間をこまめに登録しよう。
-            </p>
-          </div> */}
-
           <Button
             className="group relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500 px-6 py-4 text-base font-semibold text-slate-950 shadow-lg shadow-[0_0_25px_rgba(16,185,129,0.28)] transition hover:translate-y-[1px] hover:shadow-[0_0_35px_rgba(16,185,129,0.45)] focus-visible:ring-emerald-400/40"
             onClick={handleTotal}
@@ -174,13 +131,6 @@ export function StudyTimer({
               <div className="h-full w-full bg-gradient-to-r from-white/30 via-white/10 to-transparent" />
             </span>
           </Button>
-
-          {/* <div
-            aria-live="polite"
-            className="rounded-xl border border-emerald-400/40 bg-emerald-400/10 px-4 py-3 text-xs text-emerald-100 shadow-inner shadow-[0_0_12px_rgba(16,185,129,0.25)]"
-          >
-            記録が完了するとこのスペースにトースト通知が表示されます。
-          </div> */}
         </div>
       </div>
     </Card>

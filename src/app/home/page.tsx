@@ -2,19 +2,17 @@ import { getHomeData } from "@/app/actions/getHomeData";
 import { StatusWindow } from "@/components/status-window";
 import { StudyTimer } from "@/components/study-timer";
 import progressExp from "@/lib/progressExp";
+import todayStudyTime from "@/lib/todayTime";
 
 export default async function StudyQuestPage() {
   const homeData = await getHomeData();
   console.log(homeData);
 
-  const userStatus = homeData?.userStatus;
-  if (userStatus === undefined) return;
-  const progressPercent = progressExp(userStatus);
+  const progressPercent = progressExp(homeData?.userStatus);
 
-  const todayMinutes = homeData?.todayStudyRecord?.minutes ?? 0;
-  const totalHours = Math.floor(todayMinutes / 60);
-  const restMinutes = todayMinutes % 60;
-  const dailyGoalMinutes = 240;
+  const { todayMinutes, totalHours, restMinutes } = todayStudyTime(
+    homeData?.todayStudyRecord?.minutes ?? 0
+  );
 
   return (
     <div className="mx-auto flex w-full  flex-col gap-8 md:px-8">
@@ -33,7 +31,6 @@ export default async function StudyQuestPage() {
         total={todayMinutes}
         totalHours={totalHours}
         totalMinutes={restMinutes}
-        goalMinutes={dailyGoalMinutes}
       />
     </div>
   );
