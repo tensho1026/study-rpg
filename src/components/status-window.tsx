@@ -25,17 +25,17 @@ export function StatusWindow({
   const openSidebar = () => setIsSidebarOpen(true);
   const closeSidebar = () => setIsSidebarOpen(false);
 
-  // const expProgress = Math.max(0, Math.min(100, exp % 100));
+
   const studyHours = Math.floor(totalStudyTime / 60);
   const studyMinutes = totalStudyTime % 60;
-  const title =
-    level >= 15
-      ? "学術の覇者"
-      : level >= 10
-      ? "熟練の学者"
-      : level >= 5
-      ? "冒険者見習い"
-      : "駆け出し冒険者";
+  // const title =
+  //   level >= 15
+  //     ? "学術の覇者"
+  //     : level >= 10
+  //     ? "熟練の学者"
+  //     : level >= 5
+  //     ? "冒険者見習い"
+  //     : "駆け出し冒険者";
 
   return (
     <>

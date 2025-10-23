@@ -1,31 +1,15 @@
 import { getHomeData } from "@/app/actions/getHomeData";
 import { StatusWindow } from "@/components/status-window";
 import { StudyTimer } from "@/components/study-timer";
-import { levelBorder } from "@/constant/levelBorder";
+import progressExp from "@/lib/progressExp";
 
 export default async function StudyQuestPage() {
   const homeData = await getHomeData();
   console.log(homeData);
 
   const userStatus = homeData?.userStatus;
-  if (!userStatus) return;
-
-  const { level: userLevel, exp: userExp } = userStatus;
-
-  // 現在のレベル境界と次のレベル境界
-  const currentLevelBorder = levelBorder[userLevel - 1];
-  const nextLevelBorder = levelBorder[userLevel];
-
-  // 必要経験値と現在の進捗
-  const requiredExp = nextLevelBorder - currentLevelBorder;
-  const gainedExp = userExp - currentLevelBorder;
-
-  // 進捗率（%）
-  const progressPercent = Number(((gainedExp / requiredExp) * 100).toFixed(0));
-
-  console.log("必要経験値:", requiredExp);
-  console.log("現在の進捗経験値:", gainedExp);
-  console.log("進捗率:", progressPercent, "%");
+  if (userStatus === undefined) return;
+  const progressPercent = progressExp(userStatus);
 
   const todayMinutes = homeData?.todayStudyRecord?.minutes ?? 0;
   const totalHours = Math.floor(todayMinutes / 60);
