@@ -1,18 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-
-import { SHOP_ITEMS } from "@/constant/equipments";
+import getEquipmentData from "../actions/shop/getEquipmentData";
+import { ShopItem } from "@/types/shopItems";
 
 export default function ShopPage() {
   const [selectedTab, setSelectedTab] = useState<
     "weapon" | "armor" | "accessory"
   >("weapon");
+  const [shopItems, setShopItems] = useState<ShopItem[]>([]);
+  useEffect(() => {
+    const fetchItems = async () => {
+      const data = await getEquipmentData();
+      setShopItems(data);
+    };
+    fetchItems();
+  }, []);
 
-  const filteredItems = SHOP_ITEMS.filter((item) => item.type === selectedTab);
+  const filteredItems = shopItems.filter((item) => item.type === selectedTab);
 
   const getTabLabel = (type: "weapon" | "armor" | "accessory") => {
     switch (type) {

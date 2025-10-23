@@ -1,4 +1,4 @@
-import { getHomeData } from "@/app/actions/getHomeData";
+import { getHomeData } from "@/app/actions/home/getHomeData";
 import { StatusWindow } from "@/components/status-window";
 import { StudyTimer } from "@/components/study-timer";
 import progressExp from "@/lib/progressExp";

@@ -3,8 +3,8 @@ export interface ShopItem {
   name: string
   type: "weapon" | "armor" | "accessory"
   price: number
-  attack?: number
-  defense?: number
+  attack?: number | null
+  defense?: number | null
   effect?: string
   description: string
 }
