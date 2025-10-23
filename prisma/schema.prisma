@@ -84,10 +84,16 @@ model StudyRecord {
    @@unique([userId, Date]) 
 }
 
+enum EquipmentType {
+  weapon
+  armor
+  accessory
+}
+
 model MstEquipment {
   id String @id
   name String
-  type String
+  type        EquipmentType 
   price Int
   attack Int?
   defense Int?
