@@ -17,6 +17,7 @@ model User {
   sessions      Session[]
   userStatus    UserStatus[]
   studyRecord StudyRecord[]
+  equipments Equipment[]
 
 }
 
@@ -81,4 +82,27 @@ model StudyRecord {
 
   user User @relation(fields: [userId],references: [id])
    @@unique([userId, Date]) 
+}
+
+model MstEquipment {
+  id String @id
+  name String
+  type String
+  price Int
+  attack Int?
+  defense Int?
+  description String
+  equiument Equipment[]
+  
+}
+
+model Equipment {
+  id String @id @default(cuid())
+  equipmentId String
+  userId String
+  isDraft Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  mstEquipment MstEquipment @relation(fields: [equipmentId],references: [id])
+  user          User           @relation(fields: [userId], references: [id])
 }
