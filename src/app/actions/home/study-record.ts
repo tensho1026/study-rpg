@@ -4,14 +4,12 @@ import { levelBorder } from "@/constant/levelBorder";
 import { authOptions } from "@/lib/auth";
 
 import { prisma } from "@/lib/prisma";
+import getToday from "@/utils/getToday";
 import { getServerSession } from "next-auth";
 
 export const saveStudy = async (minutes: number) => {
   const session = await getServerSession(authOptions);
-  const today = new Date();
-
-  // 時間を０にする
-  today.setHours(0, 0, 0, 0);
+  const today = getToday();
 
   if (!session) {
     return;

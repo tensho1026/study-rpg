@@ -2,13 +2,14 @@
 
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import getToday from "@/utils/getToday";
 import { getServerSession } from "next-auth";
 
 export const getHomeData = async () => {
   const session = await getServerSession(authOptions);
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const today = getToday();
+
   if (!session) return;
 
   let userStatus = await prisma.userStatus.findFirst({
