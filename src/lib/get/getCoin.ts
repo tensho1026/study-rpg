@@ -1,14 +1,14 @@
-import { prisma } from "./prisma";
+import { prisma } from "../prisma";
 
-export default async function getCoins(userId:string) {
+export default async function getCoins(userId: string) {
   const coins = await prisma.userStatus.findFirst({
-    where:{
-      userId:userId
+    where: {
+      userId: userId,
     },
-    select:{
-      money:true
-    }
-  })
+    select: {
+      money: true,
+    },
+  });
 
-  return coins?.money
+  return coins?.money;
 }
