@@ -126,9 +126,11 @@ export default function ShopPage() {
                         {item.name}
                       </h3>
 
-                      <span className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded">
-                        所持中
-                      </span>
+                      {alreadyOwned ? (
+                        <span className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded">
+                          所持中
+                        </span>
+                      ) : null}
                     </div>
                     <p className="text-xs text-muted-foreground mb-2">
                       {item.description}
