@@ -112,6 +112,9 @@ export default function ShopPage() {
         {/* アイテムリスト */}
         <div className="grid gap-4">
           {filteredItems.map((item) => {
+            const alreadyOwned = userEquipments.some(
+              (eq) => eq.equipmentId === item.id
+            );
             return (
               <Card key={item.id} className="rpg-window bg-card p-4">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -151,11 +154,19 @@ export default function ShopPage() {
                         {item.price} G
                       </p>
                     </div>
+
                     <Button
-                      className="bg-secondary text-secondary-foreground hover:bg-secondary/90 disabled:opacity-50 disabled:cursor-not-allowed text-xs md:text-sm px-4 md:px-6"
+                      className={`text-xs md:text-sm px-4 md:px-6
+              ${
+                alreadyOwned
+                  ? "bg-muted text-muted-foreground shadow-inner cursor-not-allowed"
+                  : "bg-secondary text-secondary-foreground hover:bg-secondary/90"
+              }
+            `}
                       onClick={() => handlePurchase(item.id, data?.user.id)}
+                      disabled={alreadyOwned}
                     >
-                      購入する
+                      {alreadyOwned ? "購入済" : "購入する"}
                     </Button>
                   </div>
                 </div>
