@@ -65,6 +65,7 @@ export default function ShopPage() {
     await purchaseEquipment(equipmentsId, userId);
     const updated = await getEquipmentData();
     setUserCoins(updated?.userCoins ?? 0);
+    setUserEquipments(updated?.userEquipments ?? []);
   };
 
   return (
