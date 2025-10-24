@@ -7,10 +7,9 @@ import { getServerSession } from "next-auth";
 
 export const getHomeData = async () => {
   const session = await getServerSession(authOptions);
+  if (!session) return;
 
   const today = getToday();
-
-  if (!session) return;
 
   let userStatus = await prisma.userStatus.findFirst({
     where: { userId: session?.user.id },

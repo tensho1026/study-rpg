@@ -1,9 +1,14 @@
 // src/lib/auth.ts
-import NextAuth, { type AuthOptions, type Session, type User, type SessionStrategy } from "next-auth"
-import GoogleProvider from "next-auth/providers/google"
-import EmailProvider from "next-auth/providers/email"
-import { PrismaAdapter } from "@next-auth/prisma-adapter"
-import { prisma } from "@/lib/prisma"
+import {
+  type AuthOptions,
+  type Session,
+  type User,
+  type SessionStrategy,
+} from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
+import EmailProvider from "next-auth/providers/email";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { prisma } from "@/lib/prisma";
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -23,13 +28,13 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async session({ session, user }: { session: Session; user: User }) {
       if (session.user) {
-        session.user.id = user.id
+        session.user.id = user.id;
       }
-      return session
+      return session;
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/auth/signin",
   },
-}
+};

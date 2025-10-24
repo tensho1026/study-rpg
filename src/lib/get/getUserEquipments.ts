@@ -1,4 +1,4 @@
-import { prisma } from "./prisma";
+import { prisma } from "../prisma";
 
 export default async function getUserEquipments(userId: string) {
   const equipments = await prisma.equipment.findMany({
