@@ -106,7 +106,7 @@ export default function ShopPage() {
                     </div>
 
                     <Button
-                      className={`text-xs md:text-sm px-4 md:px-6
+                      className={`text-xs md:text-sm px-4 md:px-6 
               ${
                 alreadyOwned
                   ? "bg-muted text-muted-foreground shadow-inner cursor-not-allowed"

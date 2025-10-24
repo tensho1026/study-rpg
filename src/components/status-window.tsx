@@ -1,11 +1,8 @@
 "use client";
 
-import { useState } from "react";
-
-import { Award, Clock, Coins, Menu } from "lucide-react";
+import { Award, Clock, Coins } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { AppSidebar } from "@/components/app-sidebar";
+import { AppMenuButton } from "@/components/app-menu-button";
 
 interface StatusWindowProps {
   level: number;
@@ -20,12 +17,6 @@ export function StatusWindow({
   coins,
   totalStudyTime,
 }: StatusWindowProps) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const openSidebar = () => setIsSidebarOpen(true);
-  const closeSidebar = () => setIsSidebarOpen(false);
-
-
   const studyHours = Math.floor(totalStudyTime / 60);
   const studyMinutes = totalStudyTime % 60;
   // const title =
@@ -61,16 +52,7 @@ export function StatusWindow({
             </div>
           </div>
 
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            className="ml-auto h-12 w-12 rounded-xl border border-white/10 bg-white/5 text-white/80 transition hover:bg-white/10 hover:text-white md:ml-0 md:mr-4 md:h-12 md:w-12"
-            onClick={openSidebar}
-            aria-label="メニューを開く"
-          >
-            <Menu className="size-6" />
-          </Button>
+          <AppMenuButton className="ml-auto md:ml-0 md:mr-4" />
         </div>
 
         {/* EXPゲージ */}
@@ -128,48 +110,6 @@ export function StatusWindow({
           </p>
         </footer> */}
       </Card>
-
-      <div
-        className={`fixed inset-0 z-40 bg-black/60 transition-opacity duration-300 ${
-          isSidebarOpen
-            ? "pointer-events-auto opacity-100"
-            : "pointer-events-none opacity-0"
-        }`}
-        onClick={closeSidebar}
-        aria-hidden={!isSidebarOpen}
-      />
-
-      <div
-        className={`fixed inset-y-0 left-0 z-50 w-80 max-w-[92vw] -translate-x-full transform transition-transform duration-300 ease-in-out ${
-          isSidebarOpen ? "translate-x-0" : ""
-        }`}
-        role={isSidebarOpen ? "dialog" : undefined}
-        aria-modal={isSidebarOpen ? "true" : undefined}
-        aria-label="アプリメニュー"
-        aria-hidden={!isSidebarOpen}
-      >
-        <div className="flex h-full flex-col bg-background shadow-xl ring-1 ring-border">
-          <div className="flex items-center justify-between border-b border-border px-4 py-3">
-            <span className="text-sm font-semibold text-card-foreground">
-              メニュー
-            </span>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              className="text-xs text-muted-foreground hover:bg-primary/10 hover:text-primary"
-              onClick={closeSidebar}
-            >
-              CLOSE
-            </Button>
-          </div>
-          <AppSidebar
-            className="flex h-full flex-1 flex-col justify-center overflow-y-auto"
-            contentClassName="m-0 h-auto p-6"
-            onNavigate={closeSidebar}
-          />
-        </div>
-      </div>
     </>
   );
 }
