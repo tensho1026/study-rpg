@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import getEquipmentData from "../actions/shop/getEquipmentData";
+import getEquipmentData from "../actions/shop/getShopData";
 import { ShopItem } from "@/types/shopItems";
 
 export default function ShopPage() {
@@ -12,10 +12,14 @@ export default function ShopPage() {
     "weapon" | "armor" | "accessory"
   >("weapon");
   const [shopItems, setShopItems] = useState<ShopItem[]>([]);
+  const [userCoins, setUserCoins] = useState<number | null>(0);
   useEffect(() => {
     const fetchItems = async () => {
       const data = await getEquipmentData();
-      setShopItems(data);
+      console.log(data, "取得データ");
+
+      setShopItems(data?.equipments ?? []);
+      setUserCoins(data?.userCoins ?? 0);
     };
     fetchItems();
   }, []);
@@ -60,7 +64,9 @@ export default function ShopPage() {
             </div>
             <div className="text-right">
               <p className="text-xs text-muted-foreground">所持金</p>
-              <p className="text-lg md:text-xl text-accent font-bold">111 G</p>
+              <p className="text-lg md:text-xl text-accent font-bold">
+                {userCoins} G
+              </p>
             </div>
           </div>
         </Card>

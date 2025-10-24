@@ -4,8 +4,11 @@ export default async function getCoins(userId:string) {
   const coins = await prisma.userStatus.findFirst({
     where:{
       userId:userId
+    },
+    select:{
+      money:true
     }
   })
 
-  return coins
+  return coins?.money
 }
