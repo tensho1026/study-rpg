@@ -1,4 +1,4 @@
-import { AppMenuButton } from "@/components/app-menu-button";
+import { AppMenuButton } from "@/components/common/app-menu-button";
 import { Card } from "../ui/card";
 
 function Header({ userCoins }: { userCoins: number }) {

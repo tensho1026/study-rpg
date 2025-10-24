@@ -4,7 +4,7 @@ import { ReactNode, useCallback, useState } from "react";
 
 import { Menu } from "lucide-react";
 
-import { AppSidebar } from "@/components/app-sidebar";
+import { AppSidebar } from "@/components/common/app-sidebar";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 

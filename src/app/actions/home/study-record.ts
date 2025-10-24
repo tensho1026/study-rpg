@@ -5,7 +5,6 @@ import { authOptions } from "@/lib/auth";
 
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
-import Coinbase from "next-auth/providers/coinbase";
 
 export const saveStudy = async (minutes: number) => {
   const session = await getServerSession(authOptions);
@@ -36,14 +35,14 @@ export const saveStudy = async (minutes: number) => {
     },
   });
 
-//  勉強時間、coin、経験値をuserstatusに保存
+  //  勉強時間、coin、経験値をuserstatusに保存
   const updatedStatus = await prisma.userStatus.update({
     where: {
       userId: session?.user.id,
     },
     data: {
       totalStudy: { increment: minutes },
-      money: { increment: minutes },
+      money: { increment: minutes * 5 },
       exp: { increment: minutes },
     },
     select: {

@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
-import { getItemIcon, getTabLabel } from "@/lib/getIcon-Label";
+import { getItemIcon, getTabLabel } from "@/utils/getIcon-Label";
 
 type Props = {
   selectedTab: "weapon" | "armor" | "accessory";

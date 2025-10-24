@@ -2,7 +2,7 @@
 
 import { Award, Clock, Coins } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { AppMenuButton } from "@/components/app-menu-button";
+import { AppMenuButton } from "@/components/common/app-menu-button";
 
 interface StatusWindowProps {
   level: number;

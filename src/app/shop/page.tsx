@@ -10,7 +10,7 @@ import { useSession } from "next-auth/react";
 import Header from "@/components/shop/Header";
 import Return from "@/components/shop/Return";
 import SelectTab from "@/components/shop/SelectTab";
-import { getItemIcon } from "@/lib/getIcon-Label";
+import { getItemIcon } from "@/utils/getIcon-Label";
 
 type UserEquipments = {
   equipmentId: string;

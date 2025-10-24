@@ -1,8 +1,8 @@
 import { getHomeData } from "@/app/actions/home/getHomeData";
-import { StatusWindow } from "@/components/status-window";
-import { StudyTimer } from "@/components/study-timer";
-import progressExp from "@/lib/progressExp";
-import todayStudyTime from "@/lib/todayTime";
+import { StatusWindow } from "@/components/home/status-window";
+import { StudyTimer } from "@/components/home/study-timer";
+import progressExp from "@/utils/progressExp";
+import todayStudyTime from "@/utils/todayTime";
 
 export default async function StudyQuestPage() {
   const homeData = await getHomeData();
