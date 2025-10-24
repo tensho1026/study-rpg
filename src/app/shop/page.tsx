@@ -9,12 +9,18 @@ import { ShopItem } from "@/types/shopItems";
 import purchaseEquipment from "../actions/shop/purchaseEquipment";
 import { useSession } from "next-auth/react";
 
+type UserEquipments = {
+  equipmentId: string;
+  isDraft: boolean;
+};
+
 export default function ShopPage() {
   const [selectedTab, setSelectedTab] = useState<
     "weapon" | "armor" | "accessory"
   >("weapon");
   const [shopItems, setShopItems] = useState<ShopItem[]>([]);
   const [userCoins, setUserCoins] = useState<number | null>(0);
+  const [userEquipments, setUserEquipments] = useState<UserEquipments[]>([]);
   useEffect(() => {
     const fetchItems = async () => {
       const data = await getEquipmentData();
@@ -22,6 +28,7 @@ export default function ShopPage() {
 
       setShopItems(data?.equipments ?? []);
       setUserCoins(data?.userCoins ?? 0);
+      setUserEquipments(data?.userEquipments ?? []);
     };
     fetchItems();
   }, []);
