@@ -1,12 +1,19 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Clock,Flame, Sparkles } from "lucide-react";
+import { Clock, Flame, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { saveStudy } from "@/app/actions/home/study-record";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type Props = {
   total: number;
@@ -20,12 +27,9 @@ export function StudyTimer({ total, totalMinutes, totalHours }: Props) {
   const [currentHours, setCurrentHours] = useState(0);
   const router = useRouter();
 
-  const hourOptions = useMemo(
-    () => Array.from({ length: 13 }, (_, i) => i),
-    []
-  );
+  const hourOptions = useMemo(() => Array.from({ length: 7 }, (_, i) => i), []);
   const minuteOptions = useMemo(
-    () => Array.from({ length: 60 }, (_, i) => i),
+    () => Array.from({ length: 6 }, (_, i) => i * 10),
     []
   );
 
@@ -80,43 +84,55 @@ export function StudyTimer({ total, totalMinutes, totalHours }: Props) {
 
         <div className="space-y-4">
           <div className="flex flex-col gap-4 md:grid md:grid-cols-2">
-            <label className="flex flex-col gap-2 text-left">
+            <div className="flex flex-col gap-2 text-left">
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-white/60">
                 時間を選ぶ
               </span>
-              <select
-                value={currentHours}
-                onChange={(event) =>
-                  setCurrentHours(Number(event.target.value))
-                }
-                className="w-full appearance-none rounded-xl border border-white/10 bg-slate-900/80 px-4 py-3 text-lg font-semibold text-white shadow-inner shadow-black/40 outline-none transition focus:border-amber-300/60 focus:ring-2 focus:ring-amber-300/30"
+              <Select
+                value={currentHours.toString()}
+                onValueChange={(value) => setCurrentHours(Number(value))}
               >
-                {hourOptions.map((hour) => (
-                  <option key={hour} value={hour}>
-                    {hour} 時間
-                  </option>
-                ))}
-              </select>
-            </label>
+                <SelectTrigger className="w-full rounded-xl border border-white/10 bg-slate-900/80 px-4 py-3 text-lg font-semibold text-white shadow-inner shadow-black/40 outline-none transition focus:border-amber-300/60 focus:ring-2 focus:ring-amber-300/30">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl border border-white/10 bg-slate-900/95 text-white shadow-lg shadow-black/40">
+                  {hourOptions.map((hour) => (
+                    <SelectItem
+                      key={hour}
+                      value={hour.toString()}
+                      className="text-base"
+                    >
+                      {hour} 時間
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-            <label className="flex flex-col gap-2 text-left">
+            <div className="flex flex-col gap-2 text-left">
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-white/60">
                 分を選ぶ
               </span>
-              <select
-                value={currentMinutes}
-                onChange={(event) =>
-                  setCurrentMinutes(Number(event.target.value))
-                }
-                className="w-full appearance-none rounded-xl border border-white/10 bg-slate-900/80 px-4 py-3 text-lg font-semibold text-white shadow-inner shadow-black/40 outline-none transition focus:border-amber-300/60 focus:ring-2 focus:ring-amber-300/30"
+              <Select
+                value={currentMinutes.toString()}
+                onValueChange={(value) => setCurrentMinutes(Number(value))}
               >
-                {minuteOptions.map((minute) => (
-                  <option key={minute} value={minute}>
-                    {minute} 分
-                  </option>
-                ))}
-              </select>
-            </label>
+                <SelectTrigger className="w-full rounded-xl border border-white/10 bg-slate-900/80 px-4 py-3 text-lg font-semibold text-white shadow-inner shadow-black/40 outline-none transition focus:border-amber-300/60 focus:ring-2 focus:ring-amber-300/30">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl border border-white/10 bg-slate-900/95 text-white shadow-lg shadow-black/40">
+                  {minuteOptions.map((minute) => (
+                    <SelectItem
+                      key={minute}
+                      value={minute.toString()}
+                      className="text-base"
+                    >
+                      {minute} 分
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <Button
