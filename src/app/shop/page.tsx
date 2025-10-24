@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import getEquipmentData from "../actions/shop/getShopData";
 import { ShopItem } from "@/types/shopItems";
+import purchaseEquipment from "../actions/shop/purchaseEquipment";
+import { useSession } from "next-auth/react";
 
 export default function ShopPage() {
   const [selectedTab, setSelectedTab] = useState<
@@ -23,6 +25,10 @@ export default function ShopPage() {
     };
     fetchItems();
   }, []);
+
+  const { data } = useSession();
+  if (data === undefined || data === null) return;
+  console.log(data, "ユーザー情報");
 
   const filteredItems = shopItems.filter((item) => item.type === selectedTab);
 
@@ -46,6 +52,12 @@ export default function ShopPage() {
       case "accessory":
         return "💍";
     }
+  };
+
+  const handlePurchase = async (equipmentsId: string, userId: string) => {
+    await purchaseEquipment(equipmentsId, userId);
+    const updated = await getEquipmentData();
+    setUserCoins(updated?.userCoins ?? 0);
   };
 
   return (
@@ -132,7 +144,10 @@ export default function ShopPage() {
                         {item.price} G
                       </p>
                     </div>
-                    <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 disabled:opacity-50 disabled:cursor-not-allowed text-xs md:text-sm px-4 md:px-6">
+                    <Button
+                      className="bg-secondary text-secondary-foreground hover:bg-secondary/90 disabled:opacity-50 disabled:cursor-not-allowed text-xs md:text-sm px-4 md:px-6"
+                      onClick={() => handlePurchase(item.id, data?.user.id)}
+                    >
                       購入する
                     </Button>
                   </div>
