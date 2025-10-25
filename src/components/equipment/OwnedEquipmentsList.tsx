@@ -4,9 +4,10 @@ import equipItem from "@/app/actions/equipment/equipItem";
 import { EquipmentType } from "@prisma/client";
 import getEquipmentData from "@/app/actions/equipment/getEquipmentData";
 import { Equipment } from "@/types/equipment";
+import { Dispatch, SetStateAction } from "react";
 
 type Props = {
-  setEquipments: () => void;
+  setEquipments: Dispatch<SetStateAction<Equipment[]>>;
   filteredItems: Equipment[];
   selectedCategory: EquipmentType;
 };
