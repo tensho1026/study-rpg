@@ -8,7 +8,7 @@ import { ShopItem } from "@/types/shopItems";
 import purchaseEquipment from "../actions/shop/purchaseEquipment";
 import Header from "@/components/shop/Header";
 import Return from "@/components/shop/Return";
-import SelectTab from "@/components/shop/SelectTab";
+import SelectTab from "@/components/common/SelectTab";
 import { getItemIcon } from "@/utils/getIcon-Label";
 
 type UserEquipments = {

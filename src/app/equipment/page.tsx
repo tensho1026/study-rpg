@@ -2,16 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import getEquipmentData from "../actions/equipment/getEquipmentData";
-import { getTabLabel } from "@/utils/getIcon-Label";
-import equipItem from "../actions/equipment/equipItem";
 import { Equipment } from "@/types/equipment";
-import { EquipmentType } from "@prisma/client";
 import CurrentEquipment from "@/components/equipment/CurrentEquipment";
 import Title from "@/components/equipment/Title";
 import BattleStatus from "@/components/equipment/BattleStatus";
+import SelectTab from "@/components/common/SelectTab";
+import OwnedEquipmentsList from "@/components/equipment/OwnedEquipmentsList";
 
 export default function EquipmentPage() {
   const [equipments, setEquipments] = useState<Equipment[]>([]);
@@ -49,12 +46,6 @@ export default function EquipmentPage() {
     (item) => item.mstEquipment.type === selectedCategory
   );
 
-  const handleEquipItem = async (equipmentId: string, type: EquipmentType) => {
-    await equipItem(equipmentId, type);
-    const update = await getEquipmentData();
-    setEquipments(update ?? []);
-  };
-
   return (
     <main className="min-h-screen bg-background p-4 md:p-8">
       <div className="max-w-6xl mx-auto space-y-4">
@@ -86,91 +77,18 @@ export default function EquipmentPage() {
               </h2>
 
               {/* Category Tabs */}
-              <div className="flex gap-2 mb-4">
-                <Button
-                  onClick={() => setSelectedCategory("weapon")}
-                  className={`rpg-button flex-1 ${
-                    selectedCategory === "weapon"
-                      ? "bg-accent text-accent-foreground"
-                      : "bg-muted text-muted-foreground hover:bg-muted/80"
-                  }`}
-                >
-                  ⚔️ 武器
-                </Button>
-                <Button
-                  onClick={() => setSelectedCategory("armor")}
-                  className={`rpg-button flex-1 ${
-                    selectedCategory === "armor"
-                      ? "bg-accent text-accent-foreground"
-                      : "bg-muted text-muted-foreground hover:bg-muted/80"
-                  }`}
-                >
-                  🛡️ 防具
-                </Button>
-                <Button
-                  onClick={() => setSelectedCategory("accessory")}
-                  className={`rpg-button flex-1 ${
-                    selectedCategory === "accessory"
-                      ? "bg-accent text-accent-foreground"
-                      : "bg-muted text-muted-foreground hover:bg-muted/80"
-                  }`}
-                >
-                  ✨ 装飾品
-                </Button>
-              </div>
+
+              <SelectTab
+                selectedTab={selectedCategory}
+                setSelectedTab={setSelectedCategory}
+              />
 
               {/* Item List */}
-              <div className="space-y-2 max-h-96 overflow-y-auto">
-                {filteredItems.length === 0 ? (
-                  <div className="text-center py-8 text-muted-foreground text-sm">
-                    {getTabLabel(selectedCategory)}を持っていません
-                  </div>
-                ) : (
-                  filteredItems.map((item) => (
-                    <div
-                      key={item.mstEquipment.id}
-                      className={`p-3 border-2 transition-all ${
-                        item.isDraft
-                          ? "bg-accent/20 border-accent"
-                          : "bg-muted/30 border-border hover:border-accent/50"
-                      }`}
-                    >
-                      <div className="flex justify-between items-start mb-2">
-                        <div className="flex-1">
-                          <h3 className="text-sm md:text-base text-card-foreground font-bold mb-1">
-                            {item.mstEquipment.name}
-                            {item.isDraft && (
-                              <span className="ml-2 text-xs text-accent border border-accent px-2 py-0.5">
-                                装備中
-                              </span>
-                            )}
-                          </h3>
-                          <div className="flex gap-4 text-xs text-muted-foreground">
-                            {(item.mstEquipment?.attack ?? 0) > 0 && (
-                              <span>攻撃力 +{item.mstEquipment.attack}</span>
-                            )}
-                            {(item.mstEquipment.defense ?? 0) > 0 && (
-                              <span>防御力 +{item.mstEquipment.defense}</span>
-                            )}
-                          </div>
-                        </div>
-                        <Button
-                          onClick={() =>
-                            handleEquipItem(
-                              item.equipmentId,
-                              item.mstEquipment.type
-                            )
-                          }
-                          disabled={item.isDraft}
-                          className="rpg-button bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed text-xs px-3 py-1"
-                        >
-                          {item.isDraft ? "装備中" : "装備する"}
-                        </Button>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
+              <OwnedEquipmentsList
+                selectedCategory={selectedCategory}
+                filteredItems={filteredItems}
+                setEquipments={setEquipments}
+              />
             </Card>
           </div>
         </div>
