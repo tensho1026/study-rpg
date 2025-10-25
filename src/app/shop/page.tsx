@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import getEquipmentData from "../actions/shop/getShopData";
 import { ShopItem } from "@/types/shopItems";
 import purchaseEquipment from "../actions/shop/purchaseEquipment";
-import { useSession } from "next-auth/react";
 import Header from "@/components/shop/Header";
 import Return from "@/components/shop/Return";
 import SelectTab from "@/components/shop/SelectTab";

@@ -85,7 +85,7 @@ model MstEquipment {
   attack      Int?
   defense     Int?
   description String
-  type        EquipmentType?
+  type        EquipmentType
   equiument   Equipment[]
 }
 
