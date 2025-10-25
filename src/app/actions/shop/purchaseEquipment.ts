@@ -1,37 +1,21 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
+import { authOptions } from "@/lib/auth";
+import createEquipment from "@/lib/create/createEquipment";
+import getEquipmentCost from "@/lib/get/getEquipmentCost";
+import decreaseUserCoins from "@/lib/save/decreaseUserCoins";
+import { getServerSession } from "next-auth";
 
-export default async function purchaseEquipment(
-  equipmentId: string,
-  userId: string
-) {
-  await prisma.equipment.create({
-    data: {
-      equipmentId: equipmentId,
-      userId: userId,
-      isDraft: false,
-    },
-  });
-  const equipmentCost = await prisma.mstEquipment.findFirst({
-    where: {
-      id: equipmentId,
-    },
-    select: {
-      price: true,
-    },
-  });
+export default async function purchaseEquipment(equipmentId: string) {
+  const session = await getServerSession(authOptions);
+  if (!session) return;
 
-  if (equipmentCost === null || undefined) return;
+  await createEquipment(session.user.id, equipmentId);
 
-  await prisma.userStatus.update({
-    where: {
-      userId: userId,
-    },
-    data: {
-      money: { decrement: equipmentCost.price },
-    },
-  });
+  const equipmentCost = await getEquipmentCost(equipmentId);
+  if (equipmentCost === undefined || equipmentCost === null) return;
+
+  await decreaseUserCoins(session.user.id, equipmentCost);
 
   console.log(equipmentId, "を購入しました");
 }

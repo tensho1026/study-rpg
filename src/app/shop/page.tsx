@@ -36,14 +36,10 @@ export default function ShopPage() {
     fetchItems();
   }, []);
 
-  const { data } = useSession();
-  if (data === undefined || data === null) return;
-  console.log(data, "ユーザー情報");
-
   const filteredItems = shopItems.filter((item) => item.type === selectedTab);
 
-  const handlePurchase = async (equipmentsId: string, userId: string) => {
-    await purchaseEquipment(equipmentsId, userId);
+  const handlePurchase = async (equipmentsId: string) => {
+    await purchaseEquipment(equipmentsId);
     const updated = await getEquipmentData();
     setUserCoins(updated?.userCoins ?? 0);
     setUserEquipments(updated?.userEquipments ?? []);
@@ -113,7 +109,7 @@ export default function ShopPage() {
                   : "bg-secondary text-secondary-foreground hover:bg-secondary/90"
               }
             `}
-                      onClick={() => handlePurchase(item.id, data?.user.id)}
+                      onClick={() => handlePurchase(item.id)}
                       disabled={alreadyOwned}
                     >
                       {alreadyOwned ? "購入済" : "購入する"}
