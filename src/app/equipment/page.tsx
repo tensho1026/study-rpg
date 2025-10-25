@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import getEquipmentData from "../actions/equipment/getEquipmentData";
+import { getTabLabel } from "@/utils/getIcon-Label";
 
 type Equipment = {
   equipmentId: string;
@@ -70,18 +71,7 @@ export default function EquipmentPage() {
     (item) => item.mstEquipment.type === selectedCategory
   );
 
-  const getCategoryLabel = (type: string) => {
-    switch (type) {
-      case "weapon":
-        return "武器";
-      case "armor":
-        return "防具";
-      case "accessory":
-        return "装飾品";
-      default:
-        return "";
-    }
-  };
+
 
   return (
     <main className="min-h-screen bg-background p-4 md:p-8">
@@ -218,7 +208,7 @@ export default function EquipmentPage() {
               <div className="space-y-2 max-h-96 overflow-y-auto">
                 {filteredItems.length === 0 ? (
                   <div className="text-center py-8 text-muted-foreground text-sm">
-                    {getCategoryLabel(selectedCategory)}を持っていません
+                    {getTabLabel(selectedCategory)}を持っていません
                   </div>
                 ) : (
                   filteredItems.map((item) => (
