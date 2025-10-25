@@ -6,20 +6,8 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import getEquipmentData from "../actions/equipment/getEquipmentData";
 import { getTabLabel } from "@/utils/getIcon-Label";
-
-type Equipment = {
-  equipmentId: string;
-  isDraft: boolean;
-  mstEquipment: {
-    id: string;
-    attack?: number | null;
-    defense?: number | null;
-    description: string;
-    name: string;
-    type: "weapon" | "armor" | "accessory";
-    price: number;
-  };
-};
+import equipItem from "../actions/equipment/equipItem";
+import { Equipment } from "@/types/equipment";
 
 export default function EquipmentPage() {
   const [equipments, setEquipments] = useState<Equipment[]>([]);
@@ -35,20 +23,6 @@ export default function EquipmentPage() {
   const [selectedCategory, setSelectedCategory] = useState<
     "weapon" | "armor" | "accessory"
   >("weapon");
-
-  const handleEquip = (itemId: string) => {
-    setEquipments((prev) =>
-      prev.map((item) => {
-        if (item.mstEquipment.id === itemId) {
-          return { ...item, isDraft: true };
-        }
-        if (item.mstEquipment.type === selectedCategory && item.isDraft) {
-          return { ...item, isDraft: false };
-        }
-        return item;
-      })
-    );
-  };
 
   const equippedWeapon = equipments.find(
     (item) => item.mstEquipment.type === "weapon" && item.isDraft
@@ -71,7 +45,11 @@ export default function EquipmentPage() {
     (item) => item.mstEquipment.type === selectedCategory
   );
 
-
+  const handleEquipItem = async (equipmentId: string, type: string) => {
+    await equipItem(equipmentId, type);
+    const update = await getEquipmentData();
+    setEquipments(update ?? []);
+  };
 
   return (
     <main className="min-h-screen bg-background p-4 md:p-8">
@@ -240,7 +218,12 @@ export default function EquipmentPage() {
                           </div>
                         </div>
                         <Button
-                          onClick={() => handleEquip(item.mstEquipment.id)}
+                          onClick={() =>
+                            handleEquipItem(
+                              item.equipmentId,
+                              item.mstEquipment.type
+                            )
+                          }
                           disabled={item.isDraft}
                           className="rpg-button bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed text-xs px-3 py-1"
                         >
