@@ -1,48 +1,26 @@
 "use server";
 
 import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { EquipmentType } from "@prisma/client";
+import findDraftedEquipment from "@/lib/equipment/findDraftedEquipment";
+import { unequipEquipment } from "@/lib/equipment/unequipEquipment";
+import { equipEquipment } from "@/lib/equipment/equipEquipment";
 
-export default async function equipItem(equipmentId: string, type: string) {
+export default async function equipItem(
+  equipmentId: string,
+  type: EquipmentType
+) {
   const session = await getServerSession(authOptions);
   if (!session) return;
-  const userId = session.user.id;
 
   // つけている装備検索
-  const draftedItemId = await prisma.equipment.findFirst({
-    where: {
-      userId: session.user.id,
-      isDraft: true,
-      mstEquipment: {
-        type: type as EquipmentType,
-      },
-    },
-    select: {
-      equipmentId: true,
-    },
-  });
+  const draftedItemId = await findDraftedEquipment(session.user.id, type);
 
   if (draftedItemId) {
     // つけていた装備を外す
-    await prisma.equipment.update({
-      where: {
-        userId_equipmentId: {
-          userId: session.user.id,
-          equipmentId: draftedItemId.equipmentId,
-        },
-      },
-      data: {
-        isDraft: !true,
-      },
-    });
+    await unequipEquipment(session.user.id, equipmentId);
   }
 
-  await prisma.equipment.update({
-    where: { userId_equipmentId: { userId, equipmentId } },
-    data: {
-      isDraft: true,
-    },
-  });
+  await equipEquipment(session.user.id, equipmentId);
 }
