@@ -1,14 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card } from "@/components/ui/card";
 import getEquipmentData from "../actions/equipment/getEquipmentData";
 import { Equipment } from "@/types/equipment";
 import CurrentEquipment from "@/components/equipment/CurrentEquipment";
 import Title from "@/components/equipment/Title";
 import BattleStatus from "@/components/equipment/BattleStatus";
-import SelectTab from "@/components/common/SelectTab";
-import OwnedEquipmentsList from "@/components/equipment/OwnedEquipmentsList";
+import Inventory from "@/components/equipment/Inventory";
 
 export default function EquipmentPage() {
   const [equipments, setEquipments] = useState<Equipment[]>([]);
@@ -20,10 +18,6 @@ export default function EquipmentPage() {
     };
     fetchUserEquipments();
   }, []);
-
-  const [selectedCategory, setSelectedCategory] = useState<
-    "weapon" | "armor" | "accessory"
-  >("weapon");
 
   const equippedWeapon = equipments.find(
     (item) => item.mstEquipment.type === "weapon" && item.isDraft
@@ -41,10 +35,6 @@ export default function EquipmentPage() {
   const totalDefense =
     (equippedArmor?.mstEquipment.defense || 0) +
     (equippedAccessory?.mstEquipment.defense || 0);
-
-  const filteredItems = equipments.filter(
-    (item) => item.mstEquipment.type === selectedCategory
-  );
 
   return (
     <main className="min-h-screen bg-background p-4 md:p-8">
@@ -70,27 +60,7 @@ export default function EquipmentPage() {
           </div>
 
           {/* Right Column - Inventory */}
-          <div className="lg:col-span-2">
-            <Card className="rpg-window bg-card p-4">
-              <h2 className="text-sm md:text-base text-card-foreground border-b-2 border-border pb-2 mb-4">
-                所持装備
-              </h2>
-
-              {/* Category Tabs */}
-
-              <SelectTab
-                selectedTab={selectedCategory}
-                setSelectedTab={setSelectedCategory}
-              />
-
-              {/* Item List */}
-              <OwnedEquipmentsList
-                selectedCategory={selectedCategory}
-                filteredItems={filteredItems}
-                setEquipments={setEquipments}
-              />
-            </Card>
-          </div>
+          <Inventory setEquipments={setEquipments} equipments={equipments} />
         </div>
       </div>
     </main>
