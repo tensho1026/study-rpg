@@ -9,8 +9,8 @@ export const getHomeData = async () => {
   const session = await getServerSession(authOptions);
   if (!session) return;
 
-  const userStatus = getOrCreateUserStatusFunction(session.user.id);
+  const userStatus = await getOrCreateUserStatusFunction(session.user.id);
 
-  const todayStudyRecord = getOrCreateTodayStudyRecord(session.user.id);
+  const todayStudyRecord = await getOrCreateTodayStudyRecord(session.user.id);
   return { userStatus, todayStudyRecord };
 };
