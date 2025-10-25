@@ -8,6 +8,10 @@ import getEquipmentData from "../actions/equipment/getEquipmentData";
 import { getTabLabel } from "@/utils/getIcon-Label";
 import equipItem from "../actions/equipment/equipItem";
 import { Equipment } from "@/types/equipment";
+import { EquipmentType } from "@prisma/client";
+import CurrentEquipment from "@/components/equipment/CurrentEquipment";
+import Title from "@/components/equipment/Title";
+import BattleStatus from "@/components/equipment/BattleStatus";
 
 export default function EquipmentPage() {
   const [equipments, setEquipments] = useState<Equipment[]>([]);
@@ -45,7 +49,7 @@ export default function EquipmentPage() {
     (item) => item.mstEquipment.type === selectedCategory
   );
 
-  const handleEquipItem = async (equipmentId: string, type: string) => {
+  const handleEquipItem = async (equipmentId: string, type: EquipmentType) => {
     await equipItem(equipmentId, type);
     const update = await getEquipmentData();
     setEquipments(update ?? []);
@@ -55,90 +59,23 @@ export default function EquipmentPage() {
     <main className="min-h-screen bg-background p-4 md:p-8">
       <div className="max-w-6xl mx-auto space-y-4">
         {/* Title */}
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-2xl md:text-4xl text-foreground mb-2">
-              装備管理
-            </h1>
-            <p className="text-xs md:text-sm text-muted-foreground">
-              EQUIPMENT
-            </p>
-          </div>
-          <Link href="/home">
-            <Button className="rpg-button bg-secondary text-secondary-foreground hover:bg-secondary/90">
-              戻る
-            </Button>
-          </Link>
-        </div>
+        <Title />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Left Column - Current Equipment & Stats */}
           <div className="space-y-4">
             {/* Current Equipment */}
-            <Card className="rpg-window bg-card p-4">
-              <h2 className="text-sm md:text-base text-card-foreground border-b-2 border-border pb-2 mb-3">
-                現在の装備
-              </h2>
-              <div className="space-y-3 text-xs md:text-sm">
-                <div className="flex justify-between items-center p-2 bg-muted/30 border border-border">
-                  <span className="text-muted-foreground">武器</span>
-                  <span className="text-card-foreground">
-                    ⚔️ {equippedWeapon?.mstEquipment.name}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center p-2 bg-muted/30 border border-border">
-                  <span className="text-muted-foreground">防具</span>
-                  <span className="text-card-foreground">
-                    🛡️ {equippedArmor?.mstEquipment.name}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center p-2 bg-muted/30 border border-border">
-                  <span className="text-muted-foreground">装飾品</span>
-                  <span className="text-card-foreground">
-                    ✨ {equippedAccessory?.mstEquipment.name}
-                  </span>
-                </div>
-              </div>
-            </Card>
+            <CurrentEquipment
+              equippedWeapon={equippedWeapon?.mstEquipment.name}
+              equippedArmor={equippedArmor?.mstEquipment.name}
+              equippedAccessory={equippedAccessory?.mstEquipment.name}
+            />
 
-            {/* Combat Stats */}
-            <Card className="rpg-window bg-card p-4">
-              <h2 className="text-sm md:text-base text-card-foreground border-b-2 border-border pb-2 mb-3">
-                戦闘ステータス
-              </h2>
-              <div className="space-y-3">
-                <div className="space-y-1">
-                  <div className="flex justify-between items-center text-xs md:text-sm">
-                    <span className="text-muted-foreground">攻撃力</span>
-                    <span className="text-accent font-bold">{totalAttack}</span>
-                  </div>
-                  <div className="h-3 bg-muted border border-border overflow-hidden">
-                    <div
-                      className="h-full bg-accent transition-all duration-300"
-                      style={{
-                        width: `${Math.min((totalAttack / 50) * 100, 100)}%`,
-                      }}
-                    />
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <div className="flex justify-between items-center text-xs md:text-sm">
-                    <span className="text-muted-foreground">防御力</span>
-                    <span className="text-primary font-bold">
-                      {totalDefense}
-                    </span>
-                  </div>
-                  <div className="h-3 bg-muted border border-border overflow-hidden">
-                    <div
-                      className="h-full bg-primary transition-all duration-300"
-                      style={{
-                        width: `${Math.min((totalDefense / 50) * 100, 100)}%`,
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </Card>
+            {/* Battle Stats */}
+            <BattleStatus
+              totalAttack={totalAttack}
+              totalDefense={totalDefense}
+            />
           </div>
 
           {/* Right Column - Inventory */}
