@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import SelectTab from "../common/SelectTab";
 import { Card } from "../ui/card";
 import OwnedEquipmentsList from "./OwnedEquipmentsList";
-import { Equipment } from "@prisma/client";
+import { Equipment } from "@/types/equipment";
 
 type Props = {
   setEquipments: Dispatch<SetStateAction<Equipment[]>>;
