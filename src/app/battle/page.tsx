@@ -3,6 +3,9 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import HpBar from "@/components/battle/HpBar";
 import BattleSprite from "@/components/battle/BattleSprite";
+import { useEffect, useState } from "react";
+import getBattleData from "../actions/battle/getBattleData";
+import { BattleStatusType } from "@/types/battleStatus";
 
 const player = {
   name: "ヒーロー",
@@ -16,6 +19,18 @@ const enemies = [
 ];
 
 export default function BattlePage() {
+  const [status, setStatus] = useState<BattleStatusType>();
+
+  useEffect(() => {
+    const fetchBattleData = async () => {
+      const data = await getBattleData();
+      if (data) {
+        console.log(data);
+        setStatus(data);
+      }
+    };
+    fetchBattleData();
+  }, []);
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_center,rgba(30,30,50,1),rgba(5,10,20,1))] p-4 md:p-8 font-mono">
       <div className="mx-auto flex max-w-5xl flex-col gap-6">

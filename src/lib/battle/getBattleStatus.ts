@@ -23,3 +23,4 @@ export default async function getBattleStatus(userId: string) {
 
   return battleStatus;
 }
+
