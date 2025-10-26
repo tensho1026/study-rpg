@@ -19,7 +19,7 @@ export default function BattleSprite({
           className={`absolute inset-0 bg-[radial-gradient(circle_at_40%_30%,rgba(255,255,255,0.3),transparent_70%)]`}
         />
         {/* 簡易ドット模様 */}
-        <div className="absolute inset-0 bg-[url('/pixel-grid.png')] opacity-20 mix-blend-overlay" />
+        <div className="absolute inset-0  opacity-20 mix-blend-overlay" />
       </div>
       <span className="mt-2 rounded-sm border border-slate-700 bg-slate-900/80 px-3 py-1 text-amber-200">
         {label}

@@ -7,16 +7,18 @@ export default async function getBattleStatus(userId: string) {
     },
     include: {
       user: {
-        include: {
-          equipments: {
-            where: {
-              isDraft: true,
+        select:{
+          name:true,
+          equipments:{
+            where:{
+              isDraft:true
             },
-            include: {
-              mstEquipment: true,
-            },
+            include:{
+              mstEquipment:true
+            }
           },
-        },
+
+        }
       },
     },
   });

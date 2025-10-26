@@ -37,7 +37,7 @@ export default function BattlePage() {
         {/* バトルエリア */}
         <section className="relative overflow-hidden rounded-md border-2 border-slate-700 bg-gradient-to-b from-slate-900 to-slate-950 p-6 shadow-[inset_0_0_10px_rgba(0,0,0,0.8)]">
           {/* ドット模様 */}
-          <div className="absolute inset-0 bg-[url('/pixel-grid.png')] opacity-10" />
+          <div className="absolute inset-0  opacity-10" />
           <div className="relative flex h-[300px] items-center justify-between">
             <div className="flex flex-col gap-10 pl-2 md:pl-6">
               {enemies.map((enemy) => (
