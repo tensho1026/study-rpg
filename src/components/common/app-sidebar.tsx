@@ -10,6 +10,7 @@ import {
   LucideIcon,
   Shield,
   ShoppingBag,
+  Swords,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -24,6 +25,7 @@ const sideMenu: Array<{
   { label: "図書館", icon: BookOpenCheck, href: "/library" },
   { label: "ショップ", icon: ShoppingBag, href: "/shop" },
   { label: "装備", icon: Shield, href: "/equipment" },
+  { label: "冒険", icon: Swords, href: "/adventure" },
 ] as const;
 
 interface AppSidebarProps {
