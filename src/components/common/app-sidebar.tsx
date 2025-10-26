@@ -25,7 +25,7 @@ const sideMenu: Array<{
   { label: "図書館", icon: BookOpenCheck, href: "/library" },
   { label: "ショップ", icon: ShoppingBag, href: "/shop" },
   { label: "装備", icon: Shield, href: "/equipment" },
-  { label: "冒険", icon: Swords, href: "/adventure" },
+  { label: "戦闘", icon: Swords, href: "/battle" },
 ] as const;
 
 interface AppSidebarProps {
