@@ -18,6 +18,7 @@ model User {
   sessions      Session[]
   studyRecord   StudyRecord[]
   userStatus    UserStatus?
+  battleStatus  BattleStatus[]
 }
 
 model Account {
@@ -106,3 +107,17 @@ enum EquipmentType {
   armor
   accessory
 }
+
+model BattleStatus {
+  id           String  @id @default(cuid())
+  userId       String
+  maxHp        Int @default(100)
+  hp           Int @default(100)
+  attack Int @default(1)
+  defense Int @default(1)
+  level Int @default(1)
+  exp Int @default(0)
+
+
+  user         User     @relation(fields: [userId], references: [id])
+} 
