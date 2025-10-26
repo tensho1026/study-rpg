@@ -1,6 +1,7 @@
 "use server";
 
 import { authOptions } from "@/lib/auth";
+import getNowTodayStudyRecord from "@/lib/get/getNowTodayStudyRecord";
 import saveStudyFunction from "@/lib/save/saveStudy";
 import updateUserLevel from "@/lib/save/updateUserLevel";
 import updateUserStautusFunction from "@/lib/save/updateUserStatus";
@@ -12,16 +13,44 @@ export const saveStudy = async (minutes: number) => {
   if (!session) return;
   const today = getToday();
 
-  await saveStudyFunction({
+  const todayminutes = await getNowTodayStudyRecord({
     userId: session.user.id,
     today: today,
-    minutes: minutes,
   });
 
-  const updatedStatus = await updateUserStautusFunction(
-    session.user.id,
-    minutes
-  );
+  if (todayminutes === undefined) return;
 
-  await updateUserLevel(session.user.id, updatedStatus?.totalStudy);
+  // 勉強時間の合計が24時間に到達していない場合実行
+  if (todayminutes + minutes <= 1440) {
+    // 今日の勉強時間をtodayStudyRecordに保存
+    await saveStudyFunction({
+      userId: session.user.id,
+      today: today,
+      minutes: minutes,
+    });
+
+    // userStatusに保存
+    const updatedStatus = await updateUserStautusFunction(
+      session.user.id,
+      minutes
+    );
+
+    // Level更新
+    await updateUserLevel(session.user.id, updatedStatus?.totalStudy);
+  } else {
+    // 勉強時間の合計が24時間を超える場合のロジック
+    const possibleMinutes = 1440 - todayminutes;
+    await saveStudyFunction({
+      userId: session.user.id,
+      today: today,
+      minutes: possibleMinutes,
+    });
+
+    const updatedStatus = await updateUserStautusFunction(
+      session.user.id,
+      possibleMinutes
+    );
+
+    await updateUserLevel(session.user.id, updatedStatus?.totalStudy);
+  }
 };
