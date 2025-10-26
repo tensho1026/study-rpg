@@ -8,6 +8,11 @@ export default async function StudyQuestPage() {
   const homeData = await getHomeData();
   console.log(homeData);
 
+  if (homeData === undefined) return;
+  if (homeData?.todayStudyRecord.minutes > 1440) {
+    homeData.todayStudyRecord.minutes = 1440;
+  }
+
   const progressPercent = progressExp(homeData?.userStatus);
 
   const { todayMinutes, totalHours, restMinutes } = todayStudyTime(
