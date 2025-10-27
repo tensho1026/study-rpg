@@ -3,42 +3,23 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import HpBar from "@/components/battle/HpBar";
 import BattleSprite from "@/components/battle/BattleSprite";
-import { useEffect, useState } from "react";
-
+import { useState } from "react";
 import { BattleStatusType } from "@/types/battleStatus";
-import getBattleData from "@/app/actions/battle/getBattleData";
+import { Enemy } from "@/types/enemy";
 
-const enemies = {
-  name: "ゴブリン",
-  hp: 100,
-  maxHp: 100,
-  attack: 10,
+type Props = {
+  enemyData: Enemy | null;
+  userInfo: BattleStatusType | null;
 };
-
-type Enemy = {
-  name: string;
-  hp: number;
-  maxHp: number;
-  attck: number;
-};
-function Battle() {
-  const [status, setStatus] = useState<BattleStatusType>();
-  const [enemiesHp, setEnemiesHp] = useState<number>();
-
-  useEffect(() => {
-    const fetchBattleData = async () => {
-      const data = await getBattleData();
-      if (data) {
-        console.log(data);
-        setStatus(data);
-      }
-    };
-    setEnemiesHp(enemies?.hp);
-    fetchBattleData();
-  }, []);
+function Battle({ userInfo, enemyData }: Props) {
+  const [status, setStatus] = useState<BattleStatusType | null>(userInfo);
+  const [enemy, setEnemy] = useState<Enemy | null>(enemyData);
 
   const handleAttack = async () => {
-    setEnemiesHp((prev) => prev! - 10);
+    setEnemy((prev) => {
+      if (!prev) return null;
+      return { ...prev, hp: prev.hp - 10 };
+    });
   };
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_center,rgba(30,30,50,1),rgba(5,10,20,1))] p-4 md:p-8 font-mono">
@@ -49,7 +30,7 @@ function Battle() {
           <div className="absolute inset-0  opacity-10" />
           <div className="relative flex h-[300px] items-center justify-between">
             <div className="flex flex-col gap-10 pl-2 md:pl-6">
-              <BattleSprite label={enemies.name} variant="enemy" />
+              <BattleSprite label={enemy!.name} variant="enemy" />
             </div>
             <div className="flex w-full justify-end pr-2 md:pr-6">
               <BattleSprite label={status?.user.name ?? ""} variant="player" />
@@ -66,16 +47,16 @@ function Battle() {
             </h2>
             <div className="space-y-3">
               <div
-                key={enemies.name}
+                key={enemy?.name}
                 className="rounded-sm border border-slate-700 bg-slate-950/60 p-2"
               >
                 <div className="flex justify-between text-xs text-slate-200">
-                  <span>{enemies.name}</span>
+                  <span>{enemy?.name}</span>
                   <span>HP</span>
                 </div>
                 <HpBar
-                  current={enemiesHp ?? 0}
-                  max={enemies.maxHp}
+                  current={enemy?.hp ?? 0}
+                  max={enemy!.maxHp}
                   color="bg-rose-500"
                 />
               </div>

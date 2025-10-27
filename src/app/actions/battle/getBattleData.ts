@@ -3,6 +3,7 @@
 import { authOptions } from "@/lib/auth";
 import CreateFirstBattleStatus from "@/lib/battle/createFirstBattleStatus";
 import getBattleStatus from "@/lib/battle/getBattleStatus";
+import getEnemy from "@/lib/battle/getEnemy";
 import { getServerSession } from "next-auth";
 
 export default async function getBattleData() {
@@ -16,6 +17,7 @@ export default async function getBattleData() {
     battleStatus = await getBattleStatus(session.user.id);
   }
 
+  const enemyData = await getEnemy();
 
-  return battleStatus;
+  return { battleStatus, enemyData };
 }
