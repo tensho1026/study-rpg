@@ -1,5 +1,6 @@
-export const enemies = [
+export const enemiesData = [
   {
+    id: "1",
     name: "スライム",
     hp: 50,
     maxHp: 50,
@@ -9,6 +10,7 @@ export const enemies = [
     gold: 3,
   },
   {
+    id: "2",
     name: "ゴブリン",
     hp: 100,
     maxHp: 100,
@@ -18,6 +20,7 @@ export const enemies = [
     gold: 5,
   },
   {
+    id: "3",
     name: "オオコウモリ",
     hp: 80,
     maxHp: 80,
@@ -27,6 +30,7 @@ export const enemies = [
     gold: 4,
   },
   {
+    id: "4",
     name: "スケルトン",
     hp: 120,
     maxHp: 120,
@@ -36,6 +40,7 @@ export const enemies = [
     gold: 6,
   },
   {
+    id: "5",
     name: "オーク",
     hp: 200,
     maxHp: 200,
@@ -45,6 +50,7 @@ export const enemies = [
     gold: 10,
   },
   {
+    id: "6",
     name: "ファイアウルフ",
     hp: 160,
     maxHp: 160,
@@ -54,6 +60,7 @@ export const enemies = [
     gold: 12,
   },
   {
+    id: "7",
     name: "シャドーナイト",
     hp: 300,
     maxHp: 300,
@@ -63,6 +70,7 @@ export const enemies = [
     gold: 20,
   },
   {
+    id: "8",
     name: "ドラゴン",
     hp: 800,
     maxHp: 800,
