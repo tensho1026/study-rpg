@@ -8,9 +8,10 @@ import getBattleData from "../actions/battle/getBattleData";
 import { BattleStatusType } from "@/types/battleStatus";
 
 const enemies = {
-  name: "ゴブリンA",
+  name: "ゴブリン",
   hp: 100,
   maxHp: 100,
+  attack:10
 };
 
 export default function BattlePage() {
