@@ -1,35 +1,11 @@
-import { SHOP_ITEMS } from "@/constant/equipments";
 import { prisma } from "@/lib/prisma";
+import seedEquipmentData from "./equipment";
+import seedEnemyData from "./enemy";
 
 async function main() {
-  const equipments = SHOP_ITEMS;
-
-  for (const equipment of equipments) {
-    await prisma.mstEquipment.upsert({
-      where: {
-        id: equipment.id,
-      },
-      update: {
-        name: equipment.name,
-        type: equipment.type,
-        price: equipment.price,
-        attack: equipment.attack ?? null,
-        defense: equipment.defense ?? null,
-        description: equipment.description,
-      },
-      create: {
-        id: equipment.id,
-        name: equipment.name,
-        type: equipment.type,
-        price: equipment.price,
-        attack: equipment.attack ?? null,
-        defense: equipment.defense ?? null,
-        description: equipment.description,
-      },
-    });
-  }
+  await seedEquipmentData();
+  await seedEnemyData();
 }
-
 main()
   .then(async () => {
     console.log("Seed completed");
