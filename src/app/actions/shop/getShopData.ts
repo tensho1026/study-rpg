@@ -3,9 +3,9 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
-import getUserEquipments from "@/lib/get/getUserEquipments";
-import { fetchEquipments } from "@/lib/get/getMstEquipment";
-import getCoins from "@/lib/get/getCoin";
+import getUserEquipments from "@/lib/equipment/getUserEquipments";
+import { fetchEquipments } from "@/lib/equipment/getMstEquipment";
+import getCoins from "@/lib/common/getCoin";
 
 export default async function getEquipmentData() {
   const session = await getServerSession(authOptions);

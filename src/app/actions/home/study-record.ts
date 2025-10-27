@@ -1,10 +1,10 @@
 "use server";
 
 import { authOptions } from "@/lib/auth";
-import getNowTodayStudyRecord from "@/lib/get/getNowTodayStudyRecord";
-import saveStudyFunction from "@/lib/save/saveStudy";
-import updateUserLevel from "@/lib/save/updateUserLevel";
-import updateUserStautusFunction from "@/lib/save/updateUserStatus";
+import getNowTodayStudyRecord from "@/lib/study/getNowTodayStudyRecord";
+import saveStudyFunction from "@/lib/study/saveStudy";
+import updateUserLevel from "@/lib/study/updateUserLevel";
+import updateUserStautusFunction from "@/lib/study/updateUserStatus";
 import getToday from "@/utils/getToday";
 import { getServerSession } from "next-auth";
 

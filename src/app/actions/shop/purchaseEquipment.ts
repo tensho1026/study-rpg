@@ -1,9 +1,9 @@
 "use server";
 
 import { authOptions } from "@/lib/auth";
-import createEquipment from "@/lib/create/createEquipment";
-import getEquipmentCost from "@/lib/get/getEquipmentCost";
-import decreaseUserCoins from "@/lib/save/decreaseUserCoins";
+import createEquipment from "@/lib/equipment/createEquipment";
+import getEquipmentCost from "@/lib/equipment/getEquipmentCost";
+import decreaseUserCoins from "@/lib/study/decreaseUserCoins";
 import { getServerSession } from "next-auth";
 
 export default async function purchaseEquipment(equipmentId: string) {

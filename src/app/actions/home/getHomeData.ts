@@ -1,8 +1,8 @@
 "use server";
 
 import { authOptions } from "@/lib/auth";
-import getOrCreateTodayStudyRecord from "@/lib/get/getTodayStudyRecord";
-import { getOrCreateUserStatusFunction } from "@/lib/get/getUserStatus";
+import getOrCreateTodayStudyRecord from "@/lib/study/getTodayStudyRecord";
+import { getOrCreateUserStatusFunction } from "@/lib/common/getUserStatus";
 import { getServerSession } from "next-auth";
 
 export const getHomeData = async () => {

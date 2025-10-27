@@ -20,6 +20,10 @@ function Battle({ userInfo, enemyData }: Props) {
       if (!prev) return null;
       return { ...prev, hp: prev.hp - 10 };
     });
+    setStatus((prev) => {
+      if (!prev) return null;
+      return { ...prev, hp: prev.hp - 10 };
+    });
   };
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_center,rgba(30,30,50,1),rgba(5,10,20,1))] p-4 md:p-8 font-mono">

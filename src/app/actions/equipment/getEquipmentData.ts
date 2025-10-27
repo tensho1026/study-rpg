@@ -1,7 +1,7 @@
 "use server";
 
 import { authOptions } from "@/lib/auth";
-import getUserEquipments from "@/lib/get/getUserEquipments";
+import getUserEquipments from "@/lib/equipment/getUserEquipments";
 import { getServerSession } from "next-auth";
 
 export default async function getEquipmentData() {
