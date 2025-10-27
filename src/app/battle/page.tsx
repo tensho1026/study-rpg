@@ -7,12 +7,6 @@ import { useEffect, useState } from "react";
 import getBattleData from "../actions/battle/getBattleData";
 import { BattleStatusType } from "@/types/battleStatus";
 
-const player = {
-  name: "ヒーロー",
-  hp: 128,
-  maxHp: 160,
-};
-
 const enemies = [
   { id: "goblin-a", name: "ゴブリンA", hp: 70, maxHp: 100 },
   { id: "goblin-b", name: "ゴブリンB", hp: 45, maxHp: 100 },
@@ -49,7 +43,7 @@ export default function BattlePage() {
               ))}
             </div>
             <div className="flex w-full justify-end pr-2 md:pr-6">
-              <BattleSprite label={player.name} variant="player" />
+              <BattleSprite label={status?.user.name ?? ""} variant="player" />
             </div>
           </div>
         </section>
@@ -88,12 +82,12 @@ export default function BattlePage() {
             </h2>
             <div className="rounded-sm border border-slate-700 bg-slate-950/60 p-2">
               <div className="flex justify-between text-xs text-slate-200">
-                <span>{player.name}</span>
+                <span>{status?.user.name}</span>
                 <span>HP</span>
               </div>
               <HpBar
-                current={player.hp}
-                max={player.maxHp}
+                current={status?.hp ?? 0}
+                max={status?.maxHp ?? 0}
                 color="bg-cyan-400"
               />
             </div>
@@ -105,7 +99,7 @@ export default function BattlePage() {
               >
                 たたかう
               </Button>
-              <Button
+              {/* <Button
                 variant="outline"
                 className="border-2 border-slate-600 text-slate-200 hover:bg-slate-700"
               >
@@ -122,7 +116,7 @@ export default function BattlePage() {
                 className="border-2 border-slate-600 text-slate-200 hover:bg-slate-700"
               >
                 アイテム
-              </Button>
+              </Button> */}
             </div>
           </Card>
         </div>
