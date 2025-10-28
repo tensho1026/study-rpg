@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import HpBar from "@/components/battle/HpBar";
 import BattleSprite from "@/components/battle/BattleSprite";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { BattleStatusType } from "@/types/battleStatus";
 import { Enemy } from "@/types/enemy";
 
@@ -14,27 +14,71 @@ type Props = {
 function Battle({ userInfo, enemyData }: Props) {
   const [status, setStatus] = useState<BattleStatusType | null>(userInfo);
   const [enemy, setEnemy] = useState<Enemy | null>(enemyData);
+  const [battleLog, setBattleLog] = useState<string>(`${enemy?.name}が現れた`);
 
   const handleAttack = async () => {
-    setEnemy((prev) => {
-      if (!prev) return null;
-      return { ...prev, hp: prev.hp - 10 };
-    });
-    setStatus((prev) => {
-      if (!prev) return null;
-      return { ...prev, hp: prev.hp - 10 };
+    setEnemy((prevEnemy) => {
+      if (!prevEnemy) return null;
+      const newEnemyHp = Math.max(0, prevEnemy.hp - 10);
+      const newEnemy = { ...prevEnemy, hp: newEnemyHp };
+      if (newEnemyHp <= 0) {
+        setBattleLog("君の勝利だ！");
+        return newEnemy;
+      }
+      setBattleLog(
+        `${status?.user.name}の攻撃！敵の${enemy?.name}に10の攻撃！`
+      );
+
+      setTimeout(() => {
+        setStatus((prevStatus) => {
+          if (!prevStatus) return null;
+          const newStatusHp = Math.max(0, prevStatus.hp - 600);
+          const newStatus = { ...prevStatus, hp: newStatusHp };
+          setBattleLog(
+            `敵の${enemy?.name}の攻撃！${status?.user.name}に10の攻撃！`
+          );
+
+          if (newStatusHp <= 0) {
+            setTimeout(() => {
+              setBattleLog("君の負けだ...");
+              return newStatus;
+            }, 3000);
+          }
+
+          return newStatus;
+        });
+
+        if (status) {
+          if (status?.hp <= 0) {
+            setBattleLog("君の負けだ");
+            return;
+          }
+        }
+      }, 3000);
+      return newEnemy;
     });
   };
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_center,rgba(30,30,50,1),rgba(5,10,20,1))] p-4 md:p-8 font-mono">
       <div className="mx-auto flex max-w-5xl flex-col gap-6">
+        <Card className="relative overflow-hidden border-2 border-slate-700 bg-slate-950/90 p-4 text-slate-100 shadow-[0_10px_40px_rgba(15,23,42,0.65)]">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.12),_transparent_70%)]" />
+          <div className="relative flex max-h-32 flex-col gap-2 overflow-hidden">
+            <div className="rounded-sm border border-white/10 bg-white/5 px-3 py-2 text-[11px] uppercase tracking-[0.12em] text-cyan-100/90 shadow-inner">
+              {battleLog}
+            </div>
+          </div>
+        </Card>
+
         {/* バトルエリア */}
         <section className="relative overflow-hidden rounded-md border-2 border-slate-700 bg-gradient-to-b from-slate-900 to-slate-950 p-6 shadow-[inset_0_0_10px_rgba(0,0,0,0.8)]">
           {/* ドット模様 */}
           <div className="absolute inset-0  opacity-10" />
           <div className="relative flex h-[300px] items-center justify-between">
             <div className="flex flex-col gap-10 pl-2 md:pl-6">
-              <BattleSprite label={enemy!.name} variant="enemy" />
+              {enemy ? (
+                <BattleSprite label={enemy.name} variant="enemy" />
+              ) : null}
             </div>
             <div className="flex w-full justify-end pr-2 md:pr-6">
               <BattleSprite label={status?.user.name ?? ""} variant="player" />
@@ -60,7 +104,7 @@ function Battle({ userInfo, enemyData }: Props) {
                 </div>
                 <HpBar
                   current={enemy?.hp ?? 0}
-                  max={enemy!.maxHp}
+                  max={enemy?.maxHp ?? 0}
                   color="bg-rose-500"
                 />
               </div>
