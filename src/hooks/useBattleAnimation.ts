@@ -4,8 +4,8 @@ export function useBattleAnimation(
   setEnemyAttackAnim: (v: boolean) => void
 ) {
   const userAnimation = () => {
-    const playerStart = setTimeout(() => setPlayerAttackAnim(true), 200);
-    const playerEnd = setTimeout(() => setPlayerAttackAnim(false), 700);
+    const playerStart = setTimeout(() => setPlayerAttackAnim(true), 1);
+    const playerEnd = setTimeout(() => setPlayerAttackAnim(false), 1500);
     return () => {
       clearTimeout(playerStart);
       clearTimeout(playerEnd);
@@ -13,7 +13,7 @@ export function useBattleAnimation(
   };
 
   const enemyAnimation = () => {
-    const enemyStart = setTimeout(() => setEnemyAttackAnim(true), 950);
+    const enemyStart = setTimeout(() => setEnemyAttackAnim(true), 1);
     const enemyEnd = setTimeout(() => setEnemyAttackAnim(false), 1500);
     return () => {
       clearTimeout(enemyStart);
