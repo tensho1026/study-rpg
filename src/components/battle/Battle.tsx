@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import HpBar from "@/components/battle/HpBar";
 import BattleSprite from "@/components/battle/BattleSprite";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { BattleStatusType } from "@/types/battleStatus";
 import { Enemy } from "@/types/enemy";
 
@@ -15,8 +15,29 @@ function Battle({ userInfo, enemyData }: Props) {
   const [status, setStatus] = useState<BattleStatusType | null>(userInfo);
   const [enemy, setEnemy] = useState<Enemy | null>(enemyData);
   const [battleLog, setBattleLog] = useState<string>(`${enemy?.name}が現れた`);
+  const [playerAttackAnim, setPlayerAttackAnim] = useState(false);
+  const [enemyAttackAnim, setEnemyAttackAnim] = useState(false);
+
+  const userAnimation = () => {
+    const playerStart = setTimeout(() => setPlayerAttackAnim(true), 200);
+    const playerEnd = setTimeout(() => setPlayerAttackAnim(false), 700);
+    return () => {
+      clearTimeout(playerStart);
+      clearTimeout(playerEnd);
+    };
+  };
+
+  const enemyAnimation = () => {
+    const enemyStart = setTimeout(() => setEnemyAttackAnim(true), 950);
+    const enemyEnd = setTimeout(() => setEnemyAttackAnim(false), 1500);
+    return () => {
+      clearTimeout(enemyStart);
+      clearTimeout(enemyEnd);
+    };
+  };
 
   const handleAttack = async () => {
+    userAnimation();
     setEnemy((prevEnemy) => {
       if (!prevEnemy) return null;
       const newEnemyHp = Math.max(0, prevEnemy.hp - 10);
@@ -30,6 +51,7 @@ function Battle({ userInfo, enemyData }: Props) {
       );
 
       setTimeout(() => {
+        enemyAnimation();
         setStatus((prevStatus) => {
           if (!prevStatus) return null;
           const newStatusHp = Math.max(0, prevStatus.hp - 600);
@@ -77,11 +99,36 @@ function Battle({ userInfo, enemyData }: Props) {
           <div className="relative flex h-[300px] items-center justify-between">
             <div className="flex flex-col gap-10 pl-2 md:pl-6">
               {enemy ? (
-                <BattleSprite label={enemy.name} variant="enemy" />
+                <div
+                  className={`relative transition-all duration-300 ${
+                    enemyAttackAnim
+                      ? "translate-x-5 scale-110 drop-shadow-[0_0_18px_rgba(250,204,21,0.5)]"
+                      : "translate-x-0"
+                  }`}
+                >
+                  {enemyAttackAnim ? (
+                    <span className="pointer-events-none absolute -left-6 top-1/2 h-12 w-12 -translate-y-1/2 rotate-12 bg-[radial-gradient(circle,rgba(250,204,21,0.55),transparent_70%)] blur-md" />
+                  ) : null}
+                  <BattleSprite label={enemy.name} variant="enemy" />
+                </div>
               ) : null}
             </div>
             <div className="flex w-full justify-end pr-2 md:pr-6">
-              <BattleSprite label={status?.user.name ?? ""} variant="player" />
+              <div
+                className={`relative transition-all duration-300 ${
+                  playerAttackAnim
+                    ? "-translate-x-5 scale-110 drop-shadow-[0_0_24px_rgba(56,189,248,0.55)]"
+                    : "translate-x-0"
+                }`}
+              >
+                {playerAttackAnim ? (
+                  <span className="pointer-events-none absolute -right-8 top-1/2 h-12 w-16 -translate-y-1/2 rotate-[18deg] bg-[radial-gradient(circle,rgba(56,189,248,0.55),transparent_70%)] blur-lg" />
+                ) : null}
+                <BattleSprite
+                  label={status?.user.name ?? ""}
+                  variant="player"
+                />
+              </div>
             </div>
           </div>
         </section>
