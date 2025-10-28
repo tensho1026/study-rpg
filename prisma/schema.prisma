@@ -92,6 +92,7 @@ model MstEquipment {
 
 model MstEnemies {
   id        String   @id 
+  dropItemId String? @unique
   name      String
   hp        Int
   maxHp     Int
@@ -101,6 +102,26 @@ model MstEnemies {
   gold      Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  dropItem MstMonsterDropItem?  @relation(fields: [dropItemId], references: [id])
+
+}
+
+model MstMonsterDropItem {
+  id        String   @id 
+  name      String
+  rare      Int
+  description String
+
+  enemy MstEnemies?
+}
+
+model MstNomalDropitem {
+  id        String   @id 
+  name      String
+  rare      Int
+  description String
+
 }
 
 model Equipment {
@@ -134,6 +155,7 @@ model BattleStatus {
 
   user         User     @relation(fields: [userId], references: [id])
 } 
+
 
 
 
