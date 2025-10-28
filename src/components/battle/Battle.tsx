@@ -3,9 +3,10 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import HpBar from "@/components/battle/HpBar";
 import BattleSprite from "@/components/battle/BattleSprite";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BattleStatusType } from "@/types/battleStatus";
 import { Enemy } from "@/types/enemy";
+import { useBattleAnimation } from "@/hooks/useBattleAnimation";
 
 type Props = {
   enemyData: Enemy | null;
@@ -18,23 +19,10 @@ function Battle({ userInfo, enemyData }: Props) {
   const [playerAttackAnim, setPlayerAttackAnim] = useState(false);
   const [enemyAttackAnim, setEnemyAttackAnim] = useState(false);
 
-  const userAnimation = () => {
-    const playerStart = setTimeout(() => setPlayerAttackAnim(true), 200);
-    const playerEnd = setTimeout(() => setPlayerAttackAnim(false), 700);
-    return () => {
-      clearTimeout(playerStart);
-      clearTimeout(playerEnd);
-    };
-  };
-
-  const enemyAnimation = () => {
-    const enemyStart = setTimeout(() => setEnemyAttackAnim(true), 950);
-    const enemyEnd = setTimeout(() => setEnemyAttackAnim(false), 1500);
-    return () => {
-      clearTimeout(enemyStart);
-      clearTimeout(enemyEnd);
-    };
-  };
+  const { userAnimation, enemyAnimation } = useBattleAnimation(
+    setPlayerAttackAnim,
+    setEnemyAttackAnim
+  );
 
   const handleAttack = async () => {
     userAnimation();
