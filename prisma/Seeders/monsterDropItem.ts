@@ -1,7 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { enemiesData } from "@/constant/enemies";
 import { enemyDropItemsData } from "@/constant/enemyDropitem";
-import { normalDropItemsData } from "@/constant/nomalDropItem";
 
 
 export default async function seedEnemiesAndDrops() {

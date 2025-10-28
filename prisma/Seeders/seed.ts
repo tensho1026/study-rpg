@@ -1,10 +1,12 @@
 import { prisma } from "@/lib/prisma";
 import seedEquipmentData from "./equipment";
-import seedEnemyData from "./enemy";
+import seedEnemiesAndDrops from "./monsterDropItem";
+import seedNormalDropItems from "./nomalDropItem";
 
 async function main() {
   await seedEquipmentData();
-  await seedEnemyData();
+  await seedNormalDropItems();
+  await seedEnemiesAndDrops();
 }
 main()
   .then(async () => {
