@@ -15,15 +15,6 @@ export default async function seedEnemiesAndDrops() {
     });
   }
 
-  // 2. 共通素材登録
-  for (const item of normalDropItemsData) {
-    await prisma.mstNomalDropitem.upsert({
-      where: { id: item.id },
-      update: item,
-      create: item,
-    });
-  }
-
   // 3. 敵登録＋ドロップ素材紐付け
   for (const enemy of enemiesData) {
     const drop = enemyDropItemsData.find((d) => d.enemyId === enemy.id);
