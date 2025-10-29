@@ -10,28 +10,26 @@ import { useBattleAnimation } from "@/hooks/useBattleAnimation";
 import BattleVictoryResult from "@/components/battle/BattleVictoryResult";
 import BattleDefeatResult from "@/components/battle/BattleDefeatResult";
 
+type DropDetail = {
+  id: string;
+  name: string;
+  rare: number;
+  description: string;
+};
+
 type Props = {
   enemyData: Enemy | null;
   userInfo: BattleStatusType | null;
   dropItems: {
-    monsterDrop: {
-      id: string;
-      name: string;
-      rare: number;
-      description: string;
-    };
-    nomalDrop: {
-      id: string;
-      name: string;
-      rare: number;
-      description: string;
-    };
+    monsterDrop: DropDetail;
+    nomalDrop: DropDetail;
   };
 };
-function Battle({ userInfo, enemyData,dropItems }: Props) {
+
+function Battle({ userInfo, enemyData, dropItems }: Props) {
   const [status, setStatus] = useState<BattleStatusType | null>(userInfo);
   const [enemy, setEnemy] = useState<Enemy | null>(enemyData);
-  const [dropItem, setDropItem] = useState(dropItems);
+  const [dropItem] = useState(dropItems);
   const [battleLog, setBattleLog] = useState<string>(`${enemy?.name}が現れた`);
   const [playerAttackAnim, setPlayerAttackAnim] = useState(false);
   const [enemyAttackAnim, setEnemyAttackAnim] = useState(false);
@@ -47,7 +45,7 @@ function Battle({ userInfo, enemyData,dropItems }: Props) {
     userAnimation();
     setEnemy((prevEnemy) => {
       if (!prevEnemy) return null;
-      const newEnemyHp = Math.max(0, prevEnemy.hp - 10);
+      const newEnemyHp = Math.max(0, prevEnemy.hp - 1000);
       const newEnemy = { ...prevEnemy, hp: newEnemyHp };
       setBattleLog(
         `${status?.user.name}の攻撃！敵の${enemy?.name}に10の攻撃！`
@@ -221,7 +219,15 @@ function Battle({ userInfo, enemyData,dropItems }: Props) {
       {(victory || defeat) && (
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/70 backdrop-blur-sm">
           <div className="max-w-md w-full px-4">
-            {victory ? <BattleVictoryResult /> : <BattleDefeatResult />}
+            {victory ? (
+              <BattleVictoryResult
+                drops={[dropItem.monsterDrop, dropItem.nomalDrop].filter(
+                  (item) => item && item.name !== "ドロップなし"
+                )}
+              />
+            ) : (
+              <BattleDefeatResult />
+            )}
           </div>
         </div>
       )}

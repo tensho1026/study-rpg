@@ -16,12 +16,9 @@ type VictoryResultProps = {
 };
 
 export default function BattleVictoryResult({
-  exp = 150,
-  gold = 250,
-  drops = [
-    { id: "drop-1", name: "ポーション" },
-    { id: "drop-2", name: "ブロンズソード" },
-  ],
+  exp,
+  gold,
+  drops,
   onContinue,
 }: VictoryResultProps) {
   return (
@@ -46,7 +43,7 @@ export default function BattleVictoryResult({
           ドロップアイテム
         </p>
         <div className="rounded border border-emerald-400/20 bg-slate-900/80 p-3">
-          {drops.length ? (
+          {drops?.length ? (
             <ul className="space-y-1">
               {drops.map((item) => (
                 <li
@@ -58,7 +55,9 @@ export default function BattleVictoryResult({
               ))}
             </ul>
           ) : (
-            <p className="text-xs text-slate-400">ドロップはありませんでした。</p>
+            <p className="text-xs text-slate-400">
+              ドロップはありませんでした。
+            </p>
           )}
         </div>
       </section>
