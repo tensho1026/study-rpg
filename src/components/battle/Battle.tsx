@@ -9,13 +9,7 @@ import { Enemy } from "@/types/enemy";
 import { useBattleAnimation } from "@/hooks/useBattleAnimation";
 import BattleVictoryResult from "@/components/battle/BattleVictoryResult";
 import BattleDefeatResult from "@/components/battle/BattleDefeatResult";
-
-type DropDetail = {
-  id: string;
-  name: string;
-  rare: number;
-  description: string;
-};
+import { DropDetail } from "@/types/dropItem";
 
 type Props = {
   enemyData: Enemy | null;
