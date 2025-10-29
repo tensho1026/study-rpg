@@ -7,6 +7,8 @@ import { useState } from "react";
 import { BattleStatusType } from "@/types/battleStatus";
 import { Enemy } from "@/types/enemy";
 import { useBattleAnimation } from "@/hooks/useBattleAnimation";
+import BattleVictoryResult from "@/components/battle/BattleVictoryResult";
+import BattleDefeatResult from "@/components/battle/BattleDefeatResult";
 
 type Props = {
   enemyData: Enemy | null;
@@ -18,6 +20,8 @@ function Battle({ userInfo, enemyData }: Props) {
   const [battleLog, setBattleLog] = useState<string>(`${enemy?.name}が現れた`);
   const [playerAttackAnim, setPlayerAttackAnim] = useState(false);
   const [enemyAttackAnim, setEnemyAttackAnim] = useState(false);
+  const [defeat, setDefeat] = useState(false);
+  const [victory, setVictory] = useState(false);
 
   const { userAnimation, enemyAnimation } = useBattleAnimation(
     setPlayerAttackAnim,
@@ -30,13 +34,18 @@ function Battle({ userInfo, enemyData }: Props) {
       if (!prevEnemy) return null;
       const newEnemyHp = Math.max(0, prevEnemy.hp - 10);
       const newEnemy = { ...prevEnemy, hp: newEnemyHp };
-      if (newEnemyHp <= 0) {
-        setBattleLog("君の勝利だ！");
-        return newEnemy;
-      }
       setBattleLog(
         `${status?.user.name}の攻撃！敵の${enemy?.name}に10の攻撃！`
       );
+
+      if (newEnemyHp <= 0) {
+        setTimeout(() => {
+          setBattleLog("君の勝利だ！");
+          setVictory(true);
+        }, 2000);
+
+        return newEnemy;
+      }
 
       setTimeout(() => {
         enemyAnimation();
@@ -51,6 +60,7 @@ function Battle({ userInfo, enemyData }: Props) {
           if (newStatusHp <= 0) {
             setTimeout(() => {
               setBattleLog("君の負けだ...");
+              setDefeat(true);
               return newStatus;
             }, 3000);
           }
@@ -193,6 +203,17 @@ function Battle({ userInfo, enemyData }: Props) {
           </Card>
         </div>
       </div>
+      {(victory || defeat) && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+          <div className="max-w-md w-full px-4">
+            {victory ? (
+              <BattleVictoryResult />
+            ) : (
+              <BattleDefeatResult />
+            )}
+          </div>
+        </div>
+      )}
     </main>
   );
 }
