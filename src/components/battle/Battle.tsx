@@ -10,6 +10,7 @@ import { useBattleAnimation } from "@/hooks/useBattleAnimation";
 import BattleVictoryResult from "@/components/battle/BattleVictoryResult";
 import BattleDefeatResult from "@/components/battle/BattleDefeatResult";
 import { DropDetail } from "@/types/dropItem";
+import Log from "./Log";
 
 type Props = {
   enemyData: Enemy | null;
@@ -88,14 +89,7 @@ function Battle({ userInfo, enemyData, dropItems }: Props) {
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_center,rgba(30,30,50,1),rgba(5,10,20,1))] p-4 md:p-8 font-mono">
       <div className="mx-auto flex max-w-5xl flex-col gap-6">
-        <Card className="relative overflow-hidden border-2 border-slate-700 bg-slate-950/90 p-4 text-slate-100 shadow-[0_10px_40px_rgba(15,23,42,0.65)]">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.12),_transparent_70%)]" />
-          <div className="relative flex max-h-32 flex-col gap-2 overflow-hidden">
-            <div className="rounded-sm border border-white/10 bg-white/5 px-3 py-2 text-[11px] uppercase tracking-[0.12em] text-cyan-100/90 shadow-inner">
-              {battleLog}
-            </div>
-          </div>
-        </Card>
+        <Log battleLog={battleLog} />
 
         {/* バトルエリア */}
         <section className="relative overflow-hidden rounded-md border-2 border-slate-700 bg-gradient-to-b from-slate-900 to-slate-950 p-6 shadow-[inset_0_0_10px_rgba(0,0,0,0.8)]">
