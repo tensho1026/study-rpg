@@ -221,6 +221,8 @@ function Battle({ userInfo, enemyData, dropItems }: Props) {
           <div className="max-w-md w-full px-4">
             {victory ? (
               <BattleVictoryResult
+                exp={enemy?.exp}
+                gold={enemy?.gold}
                 drops={[dropItem.monsterDrop, dropItem.nomalDrop].filter(
                   (item) => item && item.name !== "ドロップなし"
                 )}

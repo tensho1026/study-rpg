@@ -13,6 +13,8 @@ export default async function BattlePage() {
     hp: data.enemyData.hp,
     maxHp: data.enemyData.maxHp,
     attack: data.enemyData.attack,
+    exp: data.enemyData.exp,
+    gold: data.enemyData.gold,
   };
 
   console.log(enemy, "enemy");
