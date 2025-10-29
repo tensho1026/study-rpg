@@ -3,4 +3,6 @@ export type Enemy = {
   hp: number;
   maxHp: number;
   attack: number;
+  exp:number,
+  gold:number
 };

@@ -2,6 +2,7 @@
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 type DropItem = {
   id: string;
@@ -12,14 +13,12 @@ type VictoryResultProps = {
   exp?: number;
   gold?: number;
   drops?: DropItem[];
-  onContinue?: () => void;
 };
 
 export default function BattleVictoryResult({
   exp,
   gold,
   drops,
-  onContinue,
 }: VictoryResultProps) {
   return (
     <Card className="space-y-4 border-2 border-emerald-500/40 bg-slate-950/80 p-6 text-slate-100">
@@ -63,12 +62,11 @@ export default function BattleVictoryResult({
       </section>
 
       <footer className="flex justify-end">
-        <Button
-          className="bg-emerald-500 text-slate-900 hover:bg-emerald-400"
-          onClick={onContinue}
-        >
-          次へ進む
-        </Button>
+        <Link href="/home">
+          <Button className="bg-emerald-500 text-slate-900 hover:bg-emerald-400">
+            次へ進む
+          </Button>
+        </Link>
       </footer>
     </Card>
   );

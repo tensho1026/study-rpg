@@ -2,6 +2,7 @@
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 type DefeatResultProps = {
   onReturnToTown?: () => void;
@@ -25,19 +26,23 @@ export default function BattleDefeatResult({
       </p>
 
       <footer className="flex flex-col gap-2 md:flex-row md:justify-center">
-        <Button
-          variant="outline"
-          className="border border-slate-600 text-slate-200 hover:bg-slate-800"
-          onClick={onReturnToTown}
-        >
-          街へ戻る
-        </Button>
-        <Button
-          className="bg-rose-500 text-slate-950 hover:bg-rose-400"
-          onClick={onGoHome}
-        >
-          ホームへ戻る
-        </Button>
+        <Link href="/home">
+          <Button
+            variant="outline"
+            className="border border-slate-600 text-slate-200 hover:bg-slate-800"
+            onClick={onReturnToTown}
+          >
+            街へ戻る
+          </Button>
+        </Link>
+        <Link href="/home">
+          <Button
+            className="bg-rose-500 text-slate-950 hover:bg-rose-400"
+            onClick={onGoHome}
+          >
+            ホームへ戻る
+          </Button>
+        </Link>
       </footer>
     </Card>
   );
