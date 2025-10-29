@@ -4,12 +4,11 @@ import { useState } from "react";
 import { BattleStatusType } from "@/types/battleStatus";
 import { Enemy } from "@/types/enemy";
 import { useBattleAnimation } from "@/hooks/useBattleAnimation";
-import BattleVictoryResult from "@/components/battle/BattleVictoryResult";
-import BattleDefeatResult from "@/components/battle/BattleDefeatResult";
 import { DropDetail } from "@/types/dropItem";
 import Log from "./Log";
 import EnemyStatus from "./EnemyStatus";
 import PlayerStatus from "./PlayerStatus";
+import Result from "./Result";
 
 type Props = {
   enemyData: Enemy | null;
@@ -39,7 +38,7 @@ function Battle({ userInfo, enemyData, dropItems }: Props) {
     userAnimation();
     setEnemy((prevEnemy) => {
       if (!prevEnemy) return null;
-      const newEnemyHp = Math.max(0, prevEnemy.hp - 1000);
+      const newEnemyHp = Math.max(0, prevEnemy.hp - 10);
       const newEnemy = { ...prevEnemy, hp: newEnemyHp };
       setBattleLog(
         `${status?.user.name}の攻撃！敵の${enemy?.name}に10の攻撃！`
@@ -147,21 +146,13 @@ function Battle({ userInfo, enemyData, dropItems }: Props) {
         </div>
       </div>
       {(victory || defeat) && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-          <div className="max-w-md w-full px-4">
-            {victory ? (
-              <BattleVictoryResult
-                exp={enemy?.exp}
-                gold={enemy?.gold}
-                drops={[dropItem.monsterDrop, dropItem.nomalDrop].filter(
-                  (item) => item && item.name !== "ドロップなし"
-                )}
-              />
-            ) : (
-              <BattleDefeatResult />
-            )}
-          </div>
-        </div>
+        <Result
+          victory={victory}
+          exp={enemy?.exp ?? 0}
+          gold={enemy?.gold ?? 0}
+          monsterDrop={dropItem.monsterDrop}
+          nomalDrop={dropItem.nomalDrop}
+        />
       )}
     </main>
   );
