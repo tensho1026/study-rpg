@@ -19,6 +19,7 @@ model User {
   studyRecord   StudyRecord[]
   userStatus    UserStatus?
   battleStatus  BattleStatus[]
+  dropItem      UserHasDropItems[]
 }
 
 model Account {
@@ -114,6 +115,7 @@ model MstMonsterDropItem {
   description String
 
   enemy MstEnemies?
+  userHas UserHasDropItems[]
 }
 
 model MstNomalDropitem {
@@ -121,6 +123,7 @@ model MstNomalDropitem {
   name      String
   rare      Int
   description String
+  userHas UserHasDropItems[]
 
 }
 
@@ -142,6 +145,7 @@ enum EquipmentType {
   accessory
 }
 
+
 model BattleStatus {
   id           String  @id @default(cuid())
   userId       String
@@ -156,6 +160,19 @@ model BattleStatus {
   user         User     @relation(fields: [userId], references: [id])
 } 
 
+model UserHasDropItems {
+  id String @id @default(cuid())
+  userId String 
+  nomalItemId String? 
+  monsterItemId String? 
+  quantity Int      @default(1)
+  obtainedAt DateTime @default(now())
 
+  user         User     @relation(fields: [userId], references: [id])
+  monster   MstMonsterDropItem?    @relation(fields: [monsterItemId], references: [id])
+  nomal   MstNomalDropitem?     @relation(fields: [nomalItemId], references: [id])
+  
+    
+}
 
 
