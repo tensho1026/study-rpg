@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import CreateFirstBattleStatus from "@/lib/battle/createFirstBattleStatus";
 import getBattleStatus from "@/lib/battle/getBattleStatus";
 import getEnemy from "@/lib/battle/getEnemy";
+import getRandomDropItem from "@/lib/battle/getRandomDropItem";
 import { getServerSession } from "next-auth";
 
 export default async function getBattleData() {
@@ -19,5 +20,7 @@ export default async function getBattleData() {
 
   const enemyData = await getEnemy();
 
-  return { battleStatus, enemyData };
+  const dropItem = await getRandomDropItem()
+
+  return { battleStatus, enemyData,dropItem };
 }

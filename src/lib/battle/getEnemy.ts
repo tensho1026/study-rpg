@@ -10,6 +10,9 @@ export default async function getEnemy() {
     where: {
       id: randomIndex,
     },
+    include: {
+      dropItem: true,
+    },
   });
 
   return data;

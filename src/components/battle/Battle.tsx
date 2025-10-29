@@ -13,10 +13,25 @@ import BattleDefeatResult from "@/components/battle/BattleDefeatResult";
 type Props = {
   enemyData: Enemy | null;
   userInfo: BattleStatusType | null;
+  dropItems: {
+    monsterDrop: {
+      id: string;
+      name: string;
+      rare: number;
+      description: string;
+    };
+    nomalDrop: {
+      id: string;
+      name: string;
+      rare: number;
+      description: string;
+    };
+  };
 };
-function Battle({ userInfo, enemyData }: Props) {
+function Battle({ userInfo, enemyData,dropItems }: Props) {
   const [status, setStatus] = useState<BattleStatusType | null>(userInfo);
   const [enemy, setEnemy] = useState<Enemy | null>(enemyData);
+  const [dropItem, setDropItem] = useState(dropItems);
   const [battleLog, setBattleLog] = useState<string>(`${enemy?.name}が現れた`);
   const [playerAttackAnim, setPlayerAttackAnim] = useState(false);
   const [enemyAttackAnim, setEnemyAttackAnim] = useState(false);
@@ -206,11 +221,7 @@ function Battle({ userInfo, enemyData }: Props) {
       {(victory || defeat) && (
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/70 backdrop-blur-sm">
           <div className="max-w-md w-full px-4">
-            {victory ? (
-              <BattleVictoryResult />
-            ) : (
-              <BattleDefeatResult />
-            )}
+            {victory ? <BattleVictoryResult /> : <BattleDefeatResult />}
           </div>
         </div>
       )}
