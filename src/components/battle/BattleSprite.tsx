@@ -21,7 +21,7 @@ export default function BattleSprite({
         {/* 簡易ドット模様 */}
         <div className="absolute inset-0  opacity-20 mix-blend-overlay" />
       </div>
-      <span className="mt-2 rounded-sm border border-slate-700 bg-slate-900/80 px-3 py-1 text-amber-200">
+      <span className="mt-2 rounded-sm border border-slate-700 bg-slate-900/80 px-3 py-1 text-amber-200 whitespace-nowrap">
         {label}
       </span>
     </div>
