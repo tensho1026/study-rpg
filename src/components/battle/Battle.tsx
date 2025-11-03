@@ -1,5 +1,4 @@
 "use client";
-import BattleSprite from "@/components/battle/BattleSprite";
 import { useState } from "react";
 import { BattleStatusType } from "@/types/battleStatus";
 import { Enemy } from "@/types/enemy";

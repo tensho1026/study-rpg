@@ -1,7 +1,8 @@
 "use server";
 
 import { authOptions } from "@/lib/auth";
-import saveDropItem from "@/lib/battle/saveDropItem";
+import saveMonsterItem from "@/lib/battle/saveMonsterDropItem";
+import saveNomalItem from "@/lib/battle/saveNomalItem";
 import { getServerSession } from "next-auth";
 
 export default async function saveDropItems(
@@ -10,5 +11,6 @@ export default async function saveDropItems(
 ) {
   const session = await getServerSession(authOptions);
   if (!session) return;
-  await saveDropItem(session.user.id, nomalId, monsterId);
+  await saveNomalItem(session.user.id, nomalId);
+  await saveMonsterItem(session.user.id, monsterId);
 }
