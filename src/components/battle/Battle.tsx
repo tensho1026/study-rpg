@@ -10,6 +10,7 @@ import EnemyStatus from "./EnemyStatus";
 import PlayerStatus from "./PlayerStatus";
 import Result from "./Result";
 import BattleArea from "./BattleArea";
+import saveDropItems from "@/app/actions/battle/saveDropItems";
 
 type Props = {
   enemyData: Enemy | null;
@@ -39,16 +40,17 @@ function Battle({ userInfo, enemyData, dropItems }: Props) {
     userAnimation();
     setEnemy((prevEnemy) => {
       if (!prevEnemy) return null;
-      const newEnemyHp = Math.max(0, prevEnemy.hp - 10);
+      const newEnemyHp = Math.max(0, prevEnemy.hp - 10000);
       const newEnemy = { ...prevEnemy, hp: newEnemyHp };
       setBattleLog(
         `${status?.user.name}の攻撃！敵の${enemy?.name}に10の攻撃！`
       );
 
       if (newEnemyHp <= 0) {
-        setTimeout(() => {
+        setTimeout(async () => {
           setBattleLog("君の勝利だ！");
           setVictory(true);
+          await saveDropItems(dropItem.nomalDrop.id, dropItem.monsterDrop.id);
         }, 2000);
 
         return newEnemy;
