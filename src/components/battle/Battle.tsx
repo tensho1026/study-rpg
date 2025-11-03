@@ -64,7 +64,8 @@ function Battle({
           dropItem.nomalDrop.id,
           dropItem.monsterDrop.id,
           currentEnemy.coin ?? 0,
-          currentEnemy.exp ?? 0
+          currentEnemy.exp ?? 0,
+          status?.hp ?? 0
         );
       }, 2000);
 

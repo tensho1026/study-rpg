@@ -2,6 +2,7 @@
 
 import { authOptions } from "@/lib/auth";
 import saveBattleCoin from "@/lib/battle/saveBattleCoin";
+import saveCurrentHp from "@/lib/battle/saveCurrentHp";
 import saveExp from "@/lib/battle/saveExp";
 import saveMonsterItem from "@/lib/battle/saveMonsterDropItem";
 import saveNomalItem from "@/lib/battle/saveNomalItem";
@@ -13,7 +14,8 @@ export default async function saveRewards(
   nomalId: string,
   monsterId: string,
   coin: number,
-  exp: number
+  exp: number,
+  currentHp: number
 ) {
   const session = await getServerSession(authOptions);
   if (!session) return;
@@ -24,4 +26,5 @@ export default async function saveRewards(
   const totalExp = await saveExp(userId, exp);
   const newLevel = await updateBattleLevel(userId, totalExp);
   await updateBattleStatus(userId, newLevel);
+  await saveCurrentHp(userId, currentHp);
 }
