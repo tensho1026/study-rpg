@@ -15,6 +15,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { signOut } from "next-auth/react";
 
 const sideMenu: Array<{
   label: string;
@@ -99,10 +100,7 @@ export function AppSidebar({
             <Button
               variant="destructive"
               className="w-full py-4 text-sm font-semibold"
-              onClick={() => {
-                onNavigate?.();
-                // TODO: implement logout action
-              }}
+              onClick={() => signOut({ callbackUrl: "/auth/signin" })}
             >
               ログアウト
             </Button>
