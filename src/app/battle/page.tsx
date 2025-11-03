@@ -14,7 +14,7 @@ export default async function BattlePage() {
     maxHp: data.enemyData.maxHp,
     attack: data.enemyData.attack,
     exp: data.enemyData.exp,
-    gold: data.enemyData.gold,
+    coin: data.enemyData.gold,
   };
 
   console.log(enemy, "enemy");

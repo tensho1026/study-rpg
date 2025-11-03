@@ -9,7 +9,7 @@ import EnemyStatus from "./EnemyStatus";
 import PlayerStatus from "./PlayerStatus";
 import Result from "./Result";
 import BattleArea from "./BattleArea";
-import saveDropItems from "@/app/actions/battle/saveDropItems";
+import saveRewards from "@/app/actions/battle/saveRewards";
 
 type Props = {
   enemyData: Enemy | null;
@@ -49,7 +49,12 @@ function Battle({ userInfo, enemyData, dropItems }: Props) {
         setTimeout(async () => {
           setBattleLog("君の勝利だ！");
           setVictory(true);
-          await saveDropItems(dropItem.nomalDrop.id, dropItem.monsterDrop.id);
+          await saveRewards(
+            dropItem.nomalDrop.id,
+            dropItem.monsterDrop.id,
+            enemy?.coin ?? 0,
+            enemy?.exp ?? 0
+          );
         }, 2000);
 
         return newEnemy;
@@ -118,7 +123,7 @@ function Battle({ userInfo, enemyData, dropItems }: Props) {
         <Result
           victory={victory}
           exp={enemy?.exp ?? 0}
-          gold={enemy?.gold ?? 0}
+          gold={enemy?.coin ?? 0}
           monsterDrop={dropItem.monsterDrop}
           nomalDrop={dropItem.nomalDrop}
         />
