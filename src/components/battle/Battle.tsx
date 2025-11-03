@@ -35,6 +35,29 @@ function Battle({ userInfo, enemyData, dropItems }: Props) {
     setEnemyAttackAnim
   );
 
+  console.log(status?.user.equipments);
+  const userEquioments = status?.user.equipments;
+  const userWeapon = userEquioments?.filter(
+    (equip) => equip.mstEquipment.type === "weapon"
+  );
+  const userArmor = userEquioments?.filter(
+    (equip) => equip.mstEquipment.type === "armor"
+  );
+  // const userAccessory = userEquioments?.filter(
+  //   (equip) => equip.mstEquipment.type === "accessory"
+  // );
+
+  const userAttackStatus =
+    (status?.attack ?? 0) +
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ((userWeapon as any)?.[0]?.mstEquipment?.attack ?? 0);
+
+  const userDefenseStatus =
+    (status?.defense ?? 0) +
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ((userArmor as any)?.[0]?.mstEquipment.defense ?? 0);
+  console.log(userDefenseStatus, userAttackStatus);
+
   const handleAttack = async () => {
     if (!enemy) return;
 
@@ -42,13 +65,11 @@ function Battle({ userInfo, enemyData, dropItems }: Props) {
     const attackerName = status?.user.name ?? "";
 
     userAnimation();
-    const newEnemyHp = Math.max(0, currentEnemy.hp - 10000);
+    const newEnemyHp = Math.max(0, currentEnemy.hp - userAttackStatus);
     const updatedEnemy = { ...currentEnemy, hp: newEnemyHp };
 
     setEnemy(updatedEnemy);
-    setBattleLog(
-      `${attackerName}の攻撃！敵の${currentEnemy.name}に10の攻撃！`
-    );
+    setBattleLog(`${attackerName}の攻撃！敵の${currentEnemy.name}に10の攻撃！`);
 
     if (newEnemyHp <= 0) {
       setTimeout(async () => {
@@ -69,7 +90,7 @@ function Battle({ userInfo, enemyData, dropItems }: Props) {
       enemyAnimation();
       setStatus((prevStatus) => {
         if (!prevStatus) return null;
-        const newStatusHp = Math.max(0, prevStatus.hp - 600);
+        const newStatusHp = Math.max(0, prevStatus.hp - 10);
         const newStatus = { ...prevStatus, hp: newStatusHp };
         const defenderName = prevStatus.user?.name ?? "";
         setBattleLog(
