@@ -172,6 +172,8 @@ model UserHasDropItems {
   monster   MstMonsterDropItem?    @relation(fields: [monsterItemId], references: [id])
   nomal   MstNomalDropitem?     @relation(fields: [nomalItemId], references: [id])
   
+  @@unique([userId,nomalItemId])
+  @@unique([userId,monsterItemId])
     
 }
 
