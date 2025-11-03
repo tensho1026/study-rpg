@@ -1,6 +1,7 @@
 "use server";
 
 import { authOptions } from "@/lib/auth";
+import calcUserBattleStatus from "@/lib/battle/calcUserBattleStatus";
 import CreateFirstBattleStatus from "@/lib/battle/createFirstBattleStatus";
 import getBattleStatus from "@/lib/battle/getBattleStatus";
 import getEnemy from "@/lib/battle/getEnemy";
@@ -18,9 +19,12 @@ export default async function getBattleData() {
     battleStatus = await getBattleStatus(session.user.id);
   }
 
+  const userEquipments = await battleStatus?.user.equipments;
+  const userBattleStatus = calcUserBattleStatus(battleStatus, userEquipments);
+
   const enemyData = await getEnemy();
 
-  const dropItem = await getRandomDropItem()
+  const dropItem = await getRandomDropItem();
 
-  return { battleStatus, enemyData,dropItem };
+  return { battleStatus, enemyData, dropItem, userBattleStatus };
 }

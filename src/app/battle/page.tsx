@@ -51,11 +51,15 @@ export default async function BattlePage() {
       };
   console.log(normalDrop, "ノーマルドロップ");
 
+  console.log(data.userBattleStatus);
+
   return (
     <Battle
       userInfo={data.battleStatus}
       enemyData={enemy}
       dropItems={{ monsterDrop: monsterDrop, nomalDrop: normalDrop }}
+      userAttackStatus={data.userBattleStatus.attack}
+      userDefenseStatus={data.userBattleStatus.defense}
     />
   );
 }

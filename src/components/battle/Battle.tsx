@@ -18,9 +18,17 @@ type Props = {
     monsterDrop: DropDetail;
     nomalDrop: DropDetail;
   };
+  userAttackStatus: number;
+  userDefenseStatus: number;
 };
 
-function Battle({ userInfo, enemyData, dropItems }: Props) {
+function Battle({
+  userInfo,
+  enemyData,
+  dropItems,
+  userAttackStatus,
+  userDefenseStatus,
+}: Props) {
   const [status, setStatus] = useState<BattleStatusType | null>(userInfo);
   const [enemy, setEnemy] = useState<Enemy | null>(enemyData);
   const [dropItem] = useState(dropItems);
@@ -34,29 +42,6 @@ function Battle({ userInfo, enemyData, dropItems }: Props) {
     setPlayerAttackAnim,
     setEnemyAttackAnim
   );
-
-  console.log(status?.user.equipments);
-  const userEquioments = status?.user.equipments;
-  const userWeapon = userEquioments?.filter(
-    (equip) => equip.mstEquipment.type === "weapon"
-  );
-  const userArmor = userEquioments?.filter(
-    (equip) => equip.mstEquipment.type === "armor"
-  );
-  // const userAccessory = userEquioments?.filter(
-  //   (equip) => equip.mstEquipment.type === "accessory"
-  // );
-
-  const userAttackStatus =
-    (status?.attack ?? 0) +
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ((userWeapon as any)?.[0]?.mstEquipment?.attack ?? 0);
-
-  const userDefenseStatus =
-    (status?.defense ?? 0) +
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ((userArmor as any)?.[0]?.mstEquipment.defense ?? 0);
-  console.log(userDefenseStatus, userAttackStatus);
 
   const handleAttack = async () => {
     if (!enemy) return;
