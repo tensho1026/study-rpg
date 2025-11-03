@@ -148,7 +148,7 @@ enum EquipmentType {
 
 model BattleStatus {
   id           String  @id @default(cuid())
-  userId       String
+  userId       String @unique
   maxHp        Int @default(100)
   hp           Int @default(100)
   attack Int @default(1)
