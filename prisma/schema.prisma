@@ -155,6 +155,7 @@ model BattleStatus {
   defense Int @default(1)
   level Int @default(1)
   exp Int @default(0)
+  battleCoin Int @default(0)
 
 
   user         User     @relation(fields: [userId], references: [id])
