@@ -5,6 +5,7 @@ import saveBattleCoin from "@/lib/battle/saveBattleCoin";
 import saveExp from "@/lib/battle/saveExp";
 import saveMonsterItem from "@/lib/battle/saveMonsterDropItem";
 import saveNomalItem from "@/lib/battle/saveNomalItem";
+import updateBattleLevel from "@/lib/battle/updateBattleLevel";
 import { getServerSession } from "next-auth";
 
 export default async function saveRewards(
@@ -19,5 +20,6 @@ export default async function saveRewards(
   await saveNomalItem(userId, nomalId);
   await saveMonsterItem(userId, monsterId);
   await saveBattleCoin(userId, coin);
-  await saveExp(userId, exp);
+  const totalExp = await saveExp(userId, exp);
+  const newLevel = await updateBattleLevel(session.user.id, totalExp);
 }
