@@ -22,6 +22,6 @@ export default async function saveRewards(
   await saveMonsterItem(userId, monsterId);
   await saveBattleCoin(userId, coin);
   const totalExp = await saveExp(userId, exp);
-  const newLevel = await updateBattleLevel(session.user.id, totalExp);
-  await updateBattleStatus(session.user.id, newLevel);
+  const newLevel = await updateBattleLevel(userId, totalExp);
+  await updateBattleStatus(userId, newLevel);
 }
