@@ -90,7 +90,10 @@ function Battle({ userInfo, enemyData, dropItems }: Props) {
       enemyAnimation();
       setStatus((prevStatus) => {
         if (!prevStatus) return null;
-        const newStatusHp = Math.max(0, prevStatus.hp - 10);
+        const newStatusHp = Math.max(
+          0,
+          prevStatus.hp - (100 - userDefenseStatus)
+        );
         const newStatus = { ...prevStatus, hp: newStatusHp };
         const defenderName = prevStatus.user?.name ?? "";
         setBattleLog(
