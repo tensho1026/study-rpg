@@ -20,6 +20,7 @@ model User {
   userStatus    UserStatus?
   battleStatus  BattleStatus[]
   dropItem      UserHasDropItems[]
+  battleItem    UserHasBattleItem[]
 }
 
 model Account {
@@ -127,6 +128,27 @@ model MstNomalDropitem {
 
 }
 
+model MstBattleItem {
+  id           String       @id 
+  name         String    @unique
+  description  String    // UIやログで表示する説明
+  type         String    // "heal" | "attack" | "buff" | "material" | "key" など
+  healHp       Int?      // HP回復量（回復アイテムのみ）
+  healMp       Int?      // MP回復量
+  removeStatus String[] @default([]) // 回復する状態異常の配列（例: ["毒", "石化"]）
+  element      String?   // 攻撃属性（fire, ice, thunderなど）
+  power        Int?      // 攻撃威力
+  durationTurn Int?      // 効果が続くターン（バフ・デバフ用）
+  targetType   String?   // "self" | "ally" | "enemy" | "allEnemies" など
+  price        Int?      // ショップでの価格
+  rarity       Int?      // レア度 (1〜5)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  userHas UserHasBattleItem[]
+}
+
+
 model Equipment {
   id           String       @id @default(cuid())
   equipmentId  String
@@ -176,6 +198,20 @@ model UserHasDropItems {
   @@unique([userId,nomalItemId])
   @@unique([userId,monsterItemId])
     
+}
+
+model UserHasBattleItem {
+  id String @id @default(cuid())
+  userId String 
+  battleItemId String
+  quantity Int      @default(1)
+  obtainedAt DateTime @default(now())
+
+  user         User     @relation(fields: [userId], references: [id])
+  battleItem MstBattleItem @relation(fields: [battleItemId], references: [id])
+
+  @@unique([userId,battleItemId])
+  
 }
 
 
