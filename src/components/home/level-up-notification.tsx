@@ -11,7 +11,7 @@ interface LevelUpNotificationProps {
 
 export function LevelUpNotification({ level }: LevelUpNotificationProps) {
   const prevLevelRef = useRef(level);
-  const hideTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {

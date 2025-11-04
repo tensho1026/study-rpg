@@ -19,7 +19,7 @@ export default async function StudyQuestPage() {
   const { todayMinutes, totalHours, restMinutes } = todayStudyTime(
     homeData?.todayStudyRecord?.minutes ?? 0
   );
-
+  console.log(homeData?.userStatus?.level);
   return (
     <>
       <LevelUpNotification level={homeData?.userStatus?.level ?? 0} />
