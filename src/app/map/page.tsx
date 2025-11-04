@@ -2,7 +2,13 @@
 
 import ControlButton from "@/components/map/ControllButton";
 import Image from "next/image";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 const HERO_WIDTH = 90;
 const HERO_HEIGHT = 200;
@@ -35,7 +41,7 @@ export default function Page() {
       const availableVerticalSpace = bounds.height - HERO_HEIGHT;
       const maxY = Math.max(
         SAFE_TOP_OFFSET,
-        availableVerticalSpace - safeBottomOffset,
+        availableVerticalSpace - safeBottomOffset
       );
 
       return {
@@ -43,7 +49,7 @@ export default function Page() {
         y: Math.min(Math.max(y, SAFE_TOP_OFFSET), maxY),
       };
     },
-    [bounds.height, bounds.width, safeBottomOffset],
+    [bounds.height, bounds.width, safeBottomOffset]
   );
 
   useEffect(() => {
@@ -80,7 +86,9 @@ export default function Page() {
     if (typeof window === "undefined") {
       return;
     }
-    const isMobile = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`).matches;
+    const isMobile = window.matchMedia(
+      `(max-width: ${MOBILE_BREAKPOINT}px)`
+    ).matches;
     if (!isMobile) {
       return;
     }
@@ -102,7 +110,7 @@ export default function Page() {
       });
       followHeroOnMobile();
     },
-    [clampPosition, followHeroOnMobile],
+    [clampPosition, followHeroOnMobile]
   );
 
   return (

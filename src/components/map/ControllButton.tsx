@@ -1,3 +1,7 @@
+"use client";
+import encounter from "@/utils/encounter";
+import { useRouter } from "next/navigation";
+
 import React, { ReactNode, useMemo, useRef } from "react";
 
 type ControlButtonProps = {
@@ -16,20 +20,27 @@ function ControlButton({ onMove, step = 30 }: ControlButtonProps) {
       left: [-step, 0] as const,
       right: [step, 0] as const,
     }),
-    [step],
+    [step]
   );
+  const router = useRouter();
 
   const touchActivatedRef = useRef(false);
 
   const handleTouch =
-    (dx: number, dy: number) => (event: React.TouchEvent<HTMLButtonElement>) => {
+    (dx: number, dy: number) =>
+    (event: React.TouchEvent<HTMLButtonElement>) => {
       event.preventDefault();
       touchActivatedRef.current = true;
       onMove(dx, dy);
+      const randomNum = encounter();
+      if (randomNum === 10) {
+        router.push("/battle");
+      }
     };
 
   const handleClick =
-    (dx: number, dy: number) => (event: React.MouseEvent<HTMLButtonElement>) => {
+    (dx: number, dy: number) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
       event.preventDefault();
       if (touchActivatedRef.current) {
         touchActivatedRef.current = false;
@@ -40,7 +51,7 @@ function ControlButton({ onMove, step = 30 }: ControlButtonProps) {
 
   const renderButton = (
     direction: "up" | "down" | "left" | "right",
-    [dx, dy]: readonly [number, number],
+    [dx, dy]: readonly [number, number]
   ) => (
     <button
       key={direction}
@@ -82,12 +93,13 @@ type ButtonChromeProps = {
 function ButtonChrome({ direction, children }: ButtonChromeProps) {
   const glyph =
     children ??
-    ({
+    {
       up: "↑",
       down: "↓",
       left: "←",
       right: "→",
-    }[direction] ?? direction);
+    }[direction] ??
+    direction;
 
   return (
     <>
