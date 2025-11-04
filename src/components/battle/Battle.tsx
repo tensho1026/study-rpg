@@ -45,62 +45,77 @@ function Battle({
     setEnemyAttackAnim
   );
 
-  const handleAttack = async () => {
+  const userAttack = () => {
     if (!enemy) return;
-
-    const currentEnemy = enemy;
-    const attackerName = status?.user.name ?? "";
-
     userAnimation();
-    const newEnemyHp = Math.max(0, currentEnemy.hp - userAttackStatus);
-    const updatedEnemy = { ...currentEnemy, hp: newEnemyHp };
+    const newEnemyHp = Math.max(0, enemy.hp - userAttackStatus);
+    const updatedEnemy = { ...enemy, hp: newEnemyHp };
 
     setEnemy(updatedEnemy);
-    setBattleLog(`${attackerName}の攻撃！敵の${currentEnemy.name}に10の攻撃！`);
+    setBattleLog(`${status?.user.name}の攻撃！敵の${enemy.name}に10の攻撃！`);
+    return updatedEnemy;
+  };
 
-    if (newEnemyHp <= 0) {
-      setTimeout(async () => {
-        setBattleLog("君の勝利だ！");
-        setVictory(true);
-        const newLevel = await saveRewards(
-          dropItem.nomalDrop.id,
-          dropItem.monsterDrop.id,
-          currentEnemy.coin ?? 0,
-          currentEnemy.exp,
-          status?.hp ?? 0
-        );
-        if (typeof newLevel === "number") {
-          setUserLevel(newLevel);
-        }
-      }, 2000);
+  const handleVictory = () => {
+    if (!enemy) return;
+    setTimeout(async () => {
+      setBattleLog("君の勝利だ！");
+      setVictory(true);
+      const newLevel = await saveRewards(
+        dropItem.nomalDrop.id,
+        dropItem.monsterDrop.id,
+        enemy.coin ?? 0,
+        enemy.exp,
+        status?.hp ?? 0
+      );
+      if (typeof newLevel === "number") {
+        setUserLevel(newLevel);
+      }
+    }, 2000);
 
+    return;
+  };
+
+  const enemyAttack = () => {
+    if (!enemy) return;
+    enemyAnimation();
+    setStatus((prevStatus) => {
+      if (!prevStatus) return null;
+      const newStatusHp = Math.max(
+        0,
+        prevStatus.hp - (100 - userDefenseStatus)
+      );
+      const newStatus = { ...prevStatus, hp: newStatusHp };
+
+      if (newStatus.hp <= 0) {
+        // HPが0以下になった時点でのみ敗北判定
+        handleDefeat();
+      }
+
+      const defenderName = prevStatus.user?.name ?? "";
+      setBattleLog(`敵の${enemy.name}の攻撃！${defenderName}に10の攻撃！`);
+
+      return newStatus;
+    });
+  };
+
+  const handleDefeat = () => {
+    setTimeout(() => {
+      setBattleLog("君の負けだ...");
+      setDefeat(true);
+    }, 3000);
+  };
+
+  const handleAttack = async () => {
+    if (!enemy) return;
+    const updatedEnemy = userAttack();
+    if (updatedEnemy!.hp <= 0) {
+      handleVictory();
       return;
     }
-
     setTimeout(() => {
-      enemyAnimation();
-      setStatus((prevStatus) => {
-        if (!prevStatus) return null;
-        const newStatusHp = Math.max(
-          0,
-          prevStatus.hp - (100 - userDefenseStatus)
-        );
-        const newStatus = { ...prevStatus, hp: newStatusHp };
-        const defenderName = prevStatus.user?.name ?? "";
-        setBattleLog(
-          `敵の${currentEnemy.name}の攻撃！${defenderName}に10の攻撃！`
-        );
-
-        if (newStatusHp <= 0) {
-          setTimeout(() => {
-            setBattleLog("君の負けだ...");
-            setDefeat(true);
-          }, 3000);
-        }
-
-        return newStatus;
-      });
-    }, 3000);
+      enemyAttack();
+    }, 2000);
   };
   const userStatusComponentData = {
     name: status?.user.name ?? "",
