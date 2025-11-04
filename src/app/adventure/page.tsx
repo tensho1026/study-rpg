@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { ReactNode, useEffect, useRef } from "react";
+import type { MouseEvent, TouchEvent } from "react";
 import {
   Application,
   Container,
@@ -21,9 +22,7 @@ type TileType =
   | "sand";
 
 type DecorationType = "hero";
-
-type DecorationSpec = {
-  type: DecorationType;
+type Position = {
   x: number;
   y: number;
 };
@@ -85,10 +84,20 @@ const MAP_TEMPLATE = [
 ] as const;
 
 const MAP_BLUEPRINT: TileType[][] = MAP_TEMPLATE.map((row) =>
-  row.split("").map((symbol) => TILE_SYMBOLS[symbol] ?? "grass"),
+  row.split("").map((symbol) => TILE_SYMBOLS[symbol] ?? "grass")
 );
 
-const DECORATIONS: DecorationSpec[] = [{ type: "hero", x: 20, y: 24 }];
+const MAP_WIDTH = MAP_BLUEPRINT[0]?.length ?? 0;
+const MAP_HEIGHT = MAP_BLUEPRINT.length;
+const HERO_START_POSITION: Position = { x: 20, y: 24 };
+const WALKABLE_TILES = new Set<TileType>([
+  "grass",
+  "forest",
+  "fields",
+  "bridge",
+  "path",
+  "sand",
+]);
 
 const DECORATION_PATTERNS: Record<DecorationType, PixelArtPattern> = {
   hero: {
@@ -118,6 +127,9 @@ const DECORATION_PATTERNS: Record<DecorationType, PixelArtPattern> = {
 
 export default function AdventurePage() {
   const canvasHostRef = useRef<HTMLDivElement | null>(null);
+  const heroGraphicRef = useRef<Graphics | null>(null);
+  const heroPositionRef = useRef<Position>({ ...HERO_START_POSITION });
+  const moveHeroRef = useRef<(dx: number, dy: number) => void | null>(null);
 
   useEffect(() => {
     let isDisposed = false;
@@ -159,13 +171,75 @@ export default function AdventurePage() {
       app.stage.addChild(decorationLayer);
 
       drawMap(tileLayer, textures);
-      placeDecorations(decorationLayer);
+      heroGraphicRef.current = placeDecorations(
+        decorationLayer,
+        heroPositionRef.current
+      );
+
+      moveHeroRef.current = (dx, dy) => {
+        const graphic = heroGraphicRef.current;
+        if (!graphic) {
+          return;
+        }
+
+        const current = heroPositionRef.current;
+        const nextX = Math.min(
+          Math.max(current.x + dx, 0),
+          Math.max(MAP_WIDTH - 1, 0)
+        );
+        const nextY = Math.min(
+          Math.max(current.y + dy, 0),
+          Math.max(MAP_HEIGHT - 1, 0)
+        );
+
+        if (nextX === current.x && nextY === current.y) {
+          return;
+        }
+
+        const targetTile = MAP_BLUEPRINT[nextY]?.[nextX];
+        if (!targetTile || !WALKABLE_TILES.has(targetTile)) {
+          return;
+        }
+
+        heroPositionRef.current = { x: nextX, y: nextY };
+        graphic.position.set(nextX * TILE_SIZE, nextY * TILE_SIZE);
+      };
     };
 
     init();
 
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const key = event.key;
+      const lower = key.toLowerCase();
+      const keyMap: Record<string, [number, number]> = {
+        ArrowUp: [0, -1],
+        ArrowDown: [0, 1],
+        ArrowLeft: [-1, 0],
+        ArrowRight: [1, 0],
+        w: [0, -1],
+        s: [0, 1],
+        a: [-1, 0],
+        d: [1, 0],
+      };
+
+      const direction =
+        keyMap[key] ?? (key !== lower ? keyMap[lower] : undefined);
+
+      if (!direction) {
+        return;
+      }
+
+      event.preventDefault();
+      moveHeroRef.current?.(direction[0], direction[1]);
+    };
+
+    window.addEventListener("keydown", handleKeyDown, { passive: false });
+
     return () => {
       isDisposed = true;
+      window.removeEventListener("keydown", handleKeyDown);
+      moveHeroRef.current = undefined;
+      heroGraphicRef.current = null;
       app.destroy(true, {
         children: true,
         texture: true,
@@ -183,7 +257,79 @@ export default function AdventurePage() {
         ref={canvasHostRef}
         className="h-full w-full overflow-auto px-8 pb-12 pt-24 sm:px-12 lg:px-16"
       />
+      <div className="pointer-events-none absolute bottom-12 left-1/2 z-20 -translate-x-1/2 sm:bottom-16">
+        <div className="flex flex-col items-center gap-3">
+          <span className="text-center text-xs uppercase tracking-[0.3em] text-slate-200/80">
+            MOVE
+          </span>
+          <div className="grid grid-cols-3 gap-3">
+            <span />
+            <DirectionalButton
+              label="Move up"
+              onMove={() => moveHeroRef.current?.(0, -1)}
+            >
+              ↑
+            </DirectionalButton>
+            <span />
+            <DirectionalButton
+              label="Move left"
+              onMove={() => moveHeroRef.current?.(-1, 0)}
+            >
+              ←
+            </DirectionalButton>
+            <span />
+            <DirectionalButton
+              label="Move right"
+              onMove={() => moveHeroRef.current?.(1, 0)}
+            >
+              →
+            </DirectionalButton>
+            <span />
+            <DirectionalButton
+              label="Move down"
+              onMove={() => moveHeroRef.current?.(0, 1)}
+            >
+              ↓
+            </DirectionalButton>
+            <span />
+          </div>
+        </div>
+      </div>
     </div>
+  );
+}
+
+type DirectionalButtonProps = {
+  onMove: () => void;
+  children: ReactNode;
+  label: string;
+};
+
+function DirectionalButton({
+  onMove,
+  children,
+  label,
+}: DirectionalButtonProps) {
+  const handleTouchStart = (event: TouchEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    onMove();
+  };
+
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    onMove();
+  };
+
+  return (
+    <button
+      type="button"
+      className="pointer-events-auto flex h-14 w-14 select-none items-center justify-center rounded-full bg-slate-900/80 text-xl font-semibold text-slate-100 shadow-[0_8px_20px_rgba(15,23,42,0.45)] ring-1 ring-white/10 backdrop-blur transition active:scale-95 sm:h-16 sm:w-16"
+      onClick={handleClick}
+      onTouchStart={handleTouchStart}
+      aria-label={label}
+    >
+      {children}
+    </button>
   );
 }
 
@@ -215,14 +361,13 @@ function drawMap(layer: Container, textures: Record<TileType, Texture>) {
   });
 }
 
-function placeDecorations(layer: Container) {
+function placeDecorations(layer: Container, heroPosition: Position): Graphics {
   layer.removeChildren();
 
-  DECORATIONS.forEach((decor) => {
-    const graphic = createDecorationGraphic(decor.type);
-    graphic.position.set(decor.x * TILE_SIZE, decor.y * TILE_SIZE);
-    layer.addChild(graphic);
-  });
+  const graphic = createDecorationGraphic("hero");
+  graphic.position.set(heroPosition.x * TILE_SIZE, heroPosition.y * TILE_SIZE);
+  layer.addChild(graphic);
+  return graphic;
 }
 
 function createDecorationGraphic(type: DecorationType): Graphics {
@@ -277,7 +422,7 @@ function createSandTexture(app: Application) {
 
 function textureFromGraphics(
   app: Application,
-  draw: (graphics: Graphics) => void,
+  draw: (graphics: Graphics) => void
 ): Texture {
   const graphics = new Graphics();
   draw(graphics);
@@ -293,14 +438,14 @@ function drawPixel(
   gridY: number,
   color: number,
   width = 1,
-  height = 1,
+  height = 1
 ) {
   graphics
     .rect(
       gridX * PIXEL_SIZE,
       gridY * PIXEL_SIZE,
       width * PIXEL_SIZE,
-      height * PIXEL_SIZE,
+      height * PIXEL_SIZE
     )
     .fill(color);
 }
@@ -428,8 +573,7 @@ function paintBridgePattern(graphics: Graphics) {
 
   const deckTop = Math.floor(GRID_SIZE / 2) - 2;
   for (let y = deckTop; y < deckTop + 4; y += 1) {
-    const plankColor =
-      y === deckTop || y === deckTop + 3 ? 0xe0c38a : 0xba843c;
+    const plankColor = y === deckTop || y === deckTop + 3 ? 0xe0c38a : 0xba843c;
     for (let x = 1; x < GRID_SIZE - 1; x += 1) {
       drawPixel(graphics, x, y, plankColor);
       if (y === deckTop + 1 && x % 2 === 0) {
