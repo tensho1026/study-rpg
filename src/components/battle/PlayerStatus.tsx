@@ -10,10 +10,10 @@ type UserStatus = {
 };
 
 type Props = {
-  userStatus:UserStatus
-}
+  userStatus: UserStatus;
+};
 
-function PlayerStatus({ userStatus}: Props) {
+function PlayerStatus({ userStatus }: Props) {
   return (
     <Card className="space-y-4 bg-slate-900/80 border-2 border-slate-700 p-4 rounded-sm">
       <h2 className="text-sm font-bold tracking-wider text-cyan-300">PLAYER</h2>
@@ -22,7 +22,11 @@ function PlayerStatus({ userStatus}: Props) {
           <span>{userStatus?.name}</span>
           <span>HP</span>
         </div>
-        <HpBar current={userStatus?.hp ?? 0} max={userStatus?.maxHp ?? 0} color="bg-cyan-400" />
+        <HpBar
+          current={userStatus?.hp ?? 0}
+          max={userStatus?.maxHp ?? 0}
+          color="bg-cyan-400"
+        />
       </div>
 
       <div className="grid grid-cols-2 gap-2">
@@ -34,23 +38,23 @@ function PlayerStatus({ userStatus}: Props) {
           たたかう
         </Button>
         {/* <Button
-                variant="outline"
-                className="border-2 border-slate-600 text-slate-200 hover:bg-slate-700"
-              >
-                まもる
-              </Button>
-              <Button
-                variant="outline"
-                className="border-2 border-slate-600 text-slate-200 hover:bg-slate-700"
-              >
-                スキル
-              </Button>
-              <Button
-                variant="outline"
-                className="border-2 border-slate-600 text-slate-200 hover:bg-slate-700"
-              >
-                アイテム
-              </Button> */}
+          variant="outline"
+          className="border-2 border-slate-600 text-slate-200 hover:bg-slate-700"
+        >
+          まもる
+        </Button> */}
+        {/* <Button
+          variant="outline"
+          className="border-2 border-slate-600 text-slate-200 hover:bg-slate-700"
+        >
+          スキル
+        </Button> */}
+        <Button
+          variant="outline"
+          className="border-2 border-slate-600 text-slate-200 hover:bg-slate-700"
+        >
+          アイテム
+        </Button>
       </div>
     </Card>
   );
