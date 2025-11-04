@@ -7,14 +7,26 @@ import { cn } from "@/lib/utils";
 
 interface LevelUpNotificationProps {
   level: number;
+  previousLevel?: number;
 }
 
-export function LevelUpNotification({ level }: LevelUpNotificationProps) {
-  const prevLevelRef = useRef(level);
+export function LevelUpNotification({
+  level,
+  previousLevel,
+}: LevelUpNotificationProps) {
+  const prevLevelRef = useRef(previousLevel ?? level);
+  const previousLevelPropRef = useRef(previousLevel);
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
+    if (previousLevelPropRef.current !== previousLevel) {
+      previousLevelPropRef.current = previousLevel;
+      if (previousLevel !== undefined) {
+        prevLevelRef.current = previousLevel;
+      }
+    }
+
     if (level > prevLevelRef.current) {
       setVisible(true);
       if (hideTimerRef.current) {
@@ -31,7 +43,7 @@ export function LevelUpNotification({ level }: LevelUpNotificationProps) {
         clearTimeout(hideTimerRef.current);
       }
     };
-  }, [level]);
+  }, [level, previousLevel]);
 
   return (
     <div

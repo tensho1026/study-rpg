@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { BattleStatusType } from "@/types/battleStatus";
 import { Enemy } from "@/types/enemy";
 import { useBattleAnimation } from "@/hooks/useBattleAnimation";
@@ -37,6 +37,8 @@ function Battle({
   const [enemyAttackAnim, setEnemyAttackAnim] = useState(false);
   const [defeat, setDefeat] = useState(false);
   const [victory, setVictory] = useState(false);
+  const initialLevelRef = useRef<number>(userInfo?.level ?? 0);
+  const [userLevel, setUserLevel] = useState<number>(initialLevelRef.current);
 
   const { userAnimation, enemyAnimation } = useBattleAnimation(
     setPlayerAttackAnim,
@@ -60,13 +62,16 @@ function Battle({
       setTimeout(async () => {
         setBattleLog("君の勝利だ！");
         setVictory(true);
-        await saveRewards(
+        const newLevel = await saveRewards(
           dropItem.nomalDrop.id,
           dropItem.monsterDrop.id,
           currentEnemy.coin ?? 0,
-          currentEnemy.exp ?? 0,
+          currentEnemy.exp,
           status?.hp ?? 0
         );
+        if (typeof newLevel === "number") {
+          setUserLevel(newLevel);
+        }
       }, 2000);
 
       return;
@@ -132,6 +137,8 @@ function Battle({
           gold={enemy?.coin ?? 0}
           monsterDrop={dropItem.monsterDrop}
           nomalDrop={dropItem.nomalDrop}
+          level={userLevel}
+          previousLevel={initialLevelRef.current}
         />
       )}
     </main>

@@ -26,13 +26,13 @@ export default function BattleDefeatResult({
       </p>
 
       <footer className="flex flex-col gap-2 md:flex-row md:justify-center">
-        <Link href="/home">
+        <Link href="/map">
           <Button
             variant="outline"
             className="border border-slate-600 text-slate-200 hover:bg-slate-800"
             onClick={onReturnToTown}
           >
-            街へ戻る
+            冒険を続ける
           </Button>
         </Link>
         <Link href="/home">

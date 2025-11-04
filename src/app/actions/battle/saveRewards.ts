@@ -16,7 +16,7 @@ export default async function saveRewards(
   coin: number,
   exp: number,
   currentHp: number
-) {
+): Promise<number | undefined> {
   const session = await getServerSession(authOptions);
   if (!session) return;
   const userId = session.user.id;
@@ -27,4 +27,5 @@ export default async function saveRewards(
   const newLevel = await updateBattleLevel(userId, totalExp);
   await updateBattleStatus(userId, newLevel);
   await saveCurrentHp(userId, currentHp);
+  return newLevel;
 }

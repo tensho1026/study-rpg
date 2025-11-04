@@ -62,7 +62,7 @@ export default function BattleVictoryResult({
       </section>
 
       <footer className="flex justify-end">
-        <Link href="/home">
+        <Link href="/map">
           <Button className="bg-emerald-500 text-slate-900 hover:bg-emerald-400">
             次へ進む
           </Button>
