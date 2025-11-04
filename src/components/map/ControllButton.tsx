@@ -25,29 +25,33 @@ function ControlButton({ onMove, step = 30 }: ControlButtonProps) {
   const router = useRouter();
 
   const touchActivatedRef = useRef(false);
+  const maybeTriggerEncounter = () => {
+    const randomNum = encounter();
+    if (randomNum === 10) {
+      router.push("/battle");
+    }
+  };
 
   const handleTouch =
     (dx: number, dy: number) =>
-    (event: React.TouchEvent<HTMLButtonElement>) => {
-      event.preventDefault();
-      touchActivatedRef.current = true;
-      onMove(dx, dy);
-      const randomNum = encounter();
-      if (randomNum === 10) {
-        router.push("/battle");
-      }
-    };
+      (event: React.TouchEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        touchActivatedRef.current = true;
+        onMove(dx, dy);
+        maybeTriggerEncounter();
+      };
 
   const handleClick =
     (dx: number, dy: number) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      event.preventDefault();
-      if (touchActivatedRef.current) {
-        touchActivatedRef.current = false;
-        return;
-      }
-      onMove(dx, dy);
-    };
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        if (touchActivatedRef.current) {
+          touchActivatedRef.current = false;
+          return;
+        }
+        onMove(dx, dy);
+        maybeTriggerEncounter();
+      };
 
   const renderButton = (
     direction: "up" | "down" | "left" | "right",

@@ -1,7 +1,10 @@
 "use client";
 
 import ControlButton from "@/components/map/ControllButton";
+import { AppMenuButton } from "@/components/common/app-menu-button";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 import React, {
   useCallback,
   useEffect,
@@ -13,7 +16,7 @@ import React, {
 const HERO_WIDTH = 90;
 const HERO_HEIGHT = 200;
 const STEP_SIZE = 30;
-const SAFE_TOP_OFFSET = 16;
+const SAFE_TOP_OFFSET = 96;
 const MOBILE_BREAKPOINT = 640;
 
 export default function Page() {
@@ -118,6 +121,23 @@ export default function Page() {
       ref={containerRef}
       className="relative h-screen w-full overflow-hidden"
     >
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-30 flex items-center justify-between px-4 py-4 sm:px-8">
+        <div className="pointer-events-auto">
+          <AppMenuButton className="border-white/20 bg-slate-900/80 text-white/80 hover:bg-slate-900/60 hover:text-white" />
+        </div>
+        <div className="pointer-events-auto rounded-xl border border-white/15 bg-slate-900/70 px-4 py-2 text-center text-xs uppercase tracking-[0.35em] text-white/70 backdrop-blur">
+          Adventure Map
+        </div>
+        <div className="pointer-events-auto">
+          <Button
+            asChild
+            className="rounded-xl border border-white/15 bg-white/10 px-5 py-2 text-sm font-semibold text-white/80 hover:bg-white/20 hover:text-white"
+          >
+            <Link href="/home">戻る</Link>
+          </Button>
+        </div>
+      </div>
+
       <Image
         src="/maps/grassland.png"
         alt="map"
