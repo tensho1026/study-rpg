@@ -49,12 +49,12 @@ export function AppSidebar({
   return (
     <aside className={cn("w-full max-w-sm", className)}>
       <div className={cn("m-4", contentClassName)}>
-        <div className="rpg-window flex w-full min-h-[26rem] flex-col gap-8 bg-card px-5 py-8 md:min-h-[30rem] md:gap-10 md:px-8 md:py-12 lg:min-h-[32rem] lg:gap-12">
+        <div className="rpg-window flex w-full min-h-[26rem] flex-col gap-8 rounded-2xl border border-white/15 bg-slate-900/80 px-5 py-8 shadow-[0_25px_60px_rgba(15,23,42,0.35)] backdrop-blur md:min-h-[30rem] md:gap-10 md:px-8 md:py-12 lg:min-h-[32rem] lg:gap-12">
           <div className="text-center space-y-2">
-            <p className="text-xs text-muted-foreground tracking-[0.3em] uppercase">
+            <p className="text-xs text-slate-200/80 tracking-[0.3em] uppercase">
               Menu
             </p>
-            <h2 className="text-xl font-semibold text-card-foreground">
+            <h2 className="text-xl font-semibold text-white">
               冒険メニュー
             </h2>
           </div>
@@ -74,8 +74,8 @@ export function AppSidebar({
                       className={cn(
                         "flex w-full items-center justify-between rounded-xl border px-5 py-5 text-left transition",
                         isActive
-                          ? "border-cyan-400/60 bg-cyan-500/20 text-white shadow-[0_0_18px_rgba(14,165,233,0.25)]"
-                          : "border-white/5 bg-white/5 text-white/70 hover:border-cyan-400/40 hover:bg-cyan-500/10 hover:text-white"
+                          ? "border-cyan-300/70 bg-cyan-400/25 text-white shadow-[0_0_22px_rgba(34,211,238,0.35)]"
+                          : "border-white/20 bg-white/10 text-white/85 hover:border-cyan-300/60 hover:bg-cyan-400/20 hover:text-white"
                       )}
                     >
                       <Link
@@ -86,7 +86,7 @@ export function AppSidebar({
                         className="flex w-full items-center justify-between"
                       >
                         <span className="flex items-center gap-3">
-                          <span className="inline-flex size-10 items-center justify-center rounded-full border border-white/10 bg-white/10">
+                          <span className="inline-flex size-10 items-center justify-center rounded-full border border-white/20 bg-white/20">
                             <Icon className="size-5" />
                           </span>
                           {item.label}
