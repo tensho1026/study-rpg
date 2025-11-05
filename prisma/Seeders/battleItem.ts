@@ -7,7 +7,7 @@ export default async function seedBattleItemData() {
       where: { id: item.id },
       update: {
         name: item.name,
-        description: item.effect, // Prisma側ではdescription
+        description: item.description, // Prisma側ではdescription
         type: item.type,
         healHp: item.heal?.hp ?? null,
         healMp: item.heal?.mp ?? null,
@@ -17,7 +17,7 @@ export default async function seedBattleItemData() {
       create: {
         id: item.id,
         name: item.name,
-        description: item.effect,
+        description: item.description,
         type: item.type,
         healHp: item.heal?.hp ?? null,
         healMp: item.heal?.mp ?? null,

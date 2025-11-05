@@ -4,7 +4,7 @@ export const battleItems: BattleItem[] = [
   {
     id: "1",
     name: "ポーション",
-    effect: "HPを50回復",
+    description: "HPを50回復",
     type: "heal",
     heal: { hp: 50 },
     price: 50,
@@ -13,7 +13,7 @@ export const battleItems: BattleItem[] = [
   {
     id: "2",
     name: "ハイポーション",
-    effect: "HPを200回復",
+    description: "HPを200回復",
     type: "heal",
     heal: { hp: 200 },
     price: 150,
