@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import {
   ArrowRight,
   BookOpenCheck,
+  Coins,
   Compass,
   Home,
   LucideIcon,
@@ -25,10 +26,11 @@ const sideMenu: Array<{
 }> = [
   { label: "ホーム", icon: Home, href: "/home" },
   { label: "勉強記録", icon: BookOpenCheck, href: "/library" },
-  { label: "ショップ", icon: ShoppingBag, href: "/shop" },
+  { label: "装備屋", icon: ShoppingBag, href: "/shop" },
   { label: "装備", icon: Shield, href: "/equipment" },
   { label: "戦闘", icon: Swords, href: "/battle" },
   { label: "冒険", icon: Compass, href: "/map" },
+  { label: "アイテムショップ", icon: Coins, href: "/itemShop" },
 ] as const;
 
 interface AppSidebarProps {
