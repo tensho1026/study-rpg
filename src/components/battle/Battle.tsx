@@ -11,6 +11,7 @@ import Result from "./Result";
 import BattleArea from "./BattleArea";
 import saveRewards from "@/app/actions/battle/saveRewards";
 import { BattleItem } from "@/types/battleItem";
+import updateUserBattleItems from "@/app/actions/battle/updateUserItems";
 
 type Props = {
   enemyData: Enemy | null;
@@ -138,6 +139,8 @@ export default function Battle({
   const handleHeal = async () => {
     if (!enemy) return;
     healHp(10);
+    const update = await updateUserBattleItems();
+    setUserItems(update ?? []);
     setTimeout(() => {
       enemyAttack();
     }, 2000);
