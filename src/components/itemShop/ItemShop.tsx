@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import Link from "next/link";
 import ItemShopHeader from "./itemShopHeader";
 import { useState } from "react";
 import { BattleItem } from "@/types/battleItem";
@@ -50,7 +49,7 @@ export default function ItemShop({ coin, mstData }: Props) {
                   </div>
 
                   <p className="text-sm leading-relaxed text-slate-200/80">
-                    {item.effect}
+                    {item.description}
                   </p>
 
                   <div className="flex flex-wrap gap-2 text-xs text-indigo-100/90"></div>
