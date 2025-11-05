@@ -8,9 +8,14 @@ import { Button } from "../ui/button";
 type ControlButtonProps = {
   onMove: (dx: number, dy: number) => void;
   step?: number;
+  setShowEncounterAlert: (value: boolean) => void;
 };
 
-function ControlButton({ onMove, step = 30 }: ControlButtonProps) {
+function ControlButton({
+  onMove,
+  step = 30,
+  setShowEncounterAlert,
+}: ControlButtonProps) {
   const [isEncount, setIsEncount] = useState(false);
   const buttonClass =
     "relative flex h-14 w-14 select-none items-center justify-center rounded-sm border-2 border-slate-800 bg-[linear-gradient(135deg,#273449_0%,#121b2f_100%)] font-bold text-slate-100 shadow-[4px_4px_0_0_rgba(12,19,34,0.85)] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_0_rgba(12,19,34,0.85)] md:h-16 md:w-16";
@@ -30,8 +35,11 @@ function ControlButton({ onMove, step = 30 }: ControlButtonProps) {
   const maybeTriggerEncounter = () => {
     const randomNum = encounter();
     if (randomNum === 10) {
+      setShowEncounterAlert(true);
       setIsEncount(true);
-      router.push("/battle");
+      setTimeout(() => {
+        router.push("/battle");
+      }, 1500);
     }
   };
 
