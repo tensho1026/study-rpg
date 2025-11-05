@@ -9,6 +9,7 @@ type UserStatus = {
   hp: number;
   maxHp: number;
   handleAttack: () => void;
+  healHp: () => void;
 };
 
 type Props = {
@@ -32,7 +33,9 @@ function PlayerStatus({ userStatus }: Props) {
   return (
     <>
       <Card className="space-y-4 bg-slate-900/80 border-2 border-slate-700 p-4 rounded-sm">
-        <h2 className="text-sm font-bold tracking-wider text-cyan-300">PLAYER</h2>
+        <h2 className="text-sm font-bold tracking-wider text-cyan-300">
+          PLAYER
+        </h2>
         <div className="rounded-sm border border-slate-700 bg-slate-950/60 p-2">
           <div className="flex justify-between text-xs text-slate-200">
             <span>{userStatus?.name}</span>
@@ -75,9 +78,15 @@ function PlayerStatus({ userStatus }: Props) {
                 <div
                   key={item.name}
                   className="flex items-center justify-between rounded-sm border border-indigo-300/40 bg-indigo-900/60 px-3 py-2 shadow-[inset_0_0_6px_rgba(18,17,79,0.65)] transition hover:bg-indigo-200/30 hover:text-white"
+                  onClick={() => {
+                    userStatus.healHp();
+                    setIsItemWindowOpen(false);
+                  }}
                 >
                   <span className="truncate pr-2">{item.name}</span>
-                  <span className="text-right text-indigo-100">x{item.quantity}</span>
+                  <span className="text-right text-indigo-100">
+                    x{item.quantity}
+                  </span>
                 </div>
               ))}
             </div>

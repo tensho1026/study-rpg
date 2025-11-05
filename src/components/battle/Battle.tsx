@@ -45,6 +45,15 @@ function Battle({
     setEnemyAttackAnim
   );
 
+  const healHp = (amount: number) => {
+    setStatus((prev) => {
+      if (!prev) return null;
+      // ここで最大hpより回復しないようにしている
+      const newHp = Math.min(prev.maxHp, prev.hp + amount);
+      return { ...prev, hp: newHp };
+    });
+  };
+
   const userAttack = () => {
     if (!enemy) return;
     userAnimation();
@@ -122,6 +131,7 @@ function Battle({
     hp: status?.hp ?? 0,
     maxHp: status?.maxHp ?? 0,
     handleAttack: handleAttack,
+    healHp: () => healHp(10),
   };
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_center,rgba(30,30,50,1),rgba(5,10,20,1))] p-4 md:p-8 font-mono">
