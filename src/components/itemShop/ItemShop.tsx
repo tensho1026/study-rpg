@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import ItemShopHeader from "./itemShopHeader";
 import { useState } from "react";
-import { BattleItem } from "@/types/battleItem";
+import { BattleItem} from "@/types/battleItem";
 import ItemShopFooter from "./ItemShopFooter";
 
 type Props = {
@@ -58,7 +58,8 @@ export default function ItemShop({ coin, mstData }: Props) {
                     <div className="text-xs text-slate-300/80">
                       所持数
                       <span className="ml-2 text-base font-semibold text-white">
-                        0
+                        {/* {itemData.} */}
+                        {item.quantity}
                       </span>
                     </div>
                     <div className="text-right">
