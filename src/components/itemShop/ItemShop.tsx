@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import ItemShopHeader from "./itemShopHeader";
 import { useState } from "react";
-import { BattleItem} from "@/types/battleItem";
+import { BattleItem } from "@/types/battleItem";
 import ItemShopFooter from "./ItemShopFooter";
+import purchaseItem from "@/app/actions/itemShop/purchaseItem";
+import getItemShopData from "@/app/actions/itemShop/getItemShopData";
 
 type Props = {
   coin: number;
@@ -15,6 +17,13 @@ type Props = {
 export default function ItemShop({ coin, mstData }: Props) {
   const [userCoin, setUserCoin] = useState(coin);
   const [itemData, setItemData] = useState<BattleItem[] | null>(mstData ?? []);
+
+  const handlePurchase = async (itemId: string, cost: number) => {
+    await purchaseItem(itemId, cost ?? 0);
+    const update = await getItemShopData();
+    setUserCoin(update?.userCoins ?? 0);
+    setItemData(update?.howUserHas ?? []);
+  };
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
       <div className="mx-auto flex max-w-5xl flex-col gap-6">
@@ -69,6 +78,7 @@ export default function ItemShop({ coin, mstData }: Props) {
                       <Button
                         variant="outline"
                         className="mt-2 border-indigo-300/40 bg-indigo-500/10 text-indigo-100 hover:bg-indigo-500/30"
+                        onClick={() => handlePurchase(item.id, item.price ?? 0)}
                       >
                         購入
                       </Button>
