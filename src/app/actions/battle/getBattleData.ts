@@ -6,6 +6,7 @@ import CreateFirstBattleStatus from "@/lib/battle/createFirstBattleStatus";
 import getBattleStatus from "@/lib/battle/getBattleStatus";
 import getEnemy from "@/lib/battle/getEnemy";
 import getRandomDropItem from "@/lib/battle/getRandomDropItem";
+import getUserHasItems from "@/lib/battle/getUserHasItems";
 import { getServerSession } from "next-auth";
 
 export default async function getBattleData() {
@@ -27,5 +28,7 @@ export default async function getBattleData() {
     getRandomDropItem(),
   ]);
 
-  return { battleStatus, enemyData, dropItem, userBattleStatus };
+  const battleItems = await getUserHasItems(session.user.id);
+
+  return { battleStatus, enemyData, dropItem, userBattleStatus, battleItems };
 }

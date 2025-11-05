@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import HpBar from "./HpBar";
+import { BattleItem } from "@/types/battleItem";
 
 type UserStatus = {
   name: string;
@@ -14,21 +15,11 @@ type UserStatus = {
 
 type Props = {
   userStatus: UserStatus;
+  items: BattleItem[];
 };
 
-function PlayerStatus({ userStatus }: Props) {
+function PlayerStatus({ userStatus, items }: Props) {
   const [isItemWindowOpen, setIsItemWindowOpen] = useState(false);
-
-  const inventory = [
-    { name: "ポーション", quantity: 12 },
-    { name: "ハイポーション", quantity: 5 },
-    { name: "フェニックスの尾", quantity: 3 },
-    { name: "エリクサー", quantity: 1 },
-    { name: "きんのはり", quantity: 8 },
-    { name: "聖水", quantity: 6 },
-    { name: "ギサールのやさい", quantity: 22 },
-    { name: "トリトンハンマー", quantity: 11 },
-  ];
 
   return (
     <>
@@ -74,7 +65,7 @@ function PlayerStatus({ userStatus }: Props) {
             </div>
 
             <div className="grid grid-cols-2 gap-4 pt-2 font-mono text-sm">
-              {inventory.map((item) => (
+              {items.map((item) => (
                 <div
                   key={item.name}
                   className="flex items-center justify-between rounded-sm border border-indigo-300/40 bg-indigo-900/60 px-3 py-2 shadow-[inset_0_0_6px_rgba(18,17,79,0.65)] transition hover:bg-indigo-200/30 hover:text-white"
