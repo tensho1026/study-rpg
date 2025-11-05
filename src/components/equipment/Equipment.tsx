@@ -1,22 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { Equipment as EquipmentItem } from "@/types/equipment";
 import CurrentEquipment from "@/components/equipment/CurrentEquipment";
 import Title from "@/components/equipment/Title";
 import BattleStatus from "@/components/equipment/BattleStatus";
 import Inventory from "@/components/equipment/Inventory";
-import getEquipmentData from "@/app/actions/equipment/getEquipmentData";
-function Equipment() {
-  const [equipments, setEquipments] = useState<EquipmentItem[]>([]);
-  useEffect(() => {
-    const fetchUserEquipments = async () => {
-      const data = await getEquipmentData();
-      console.log(data, "装備情報");
-      setEquipments(data ?? []);
-    };
-    fetchUserEquipments();
-  }, []);
+
+type Props = {
+  userEquipments: EquipmentItem[];
+};
+
+export default function Equipment({ userEquipments }: Props) {
+  const [equipments, setEquipments] = useState<EquipmentItem[]>(
+    userEquipments ?? []
+  );
 
   const equippedWeapon = equipments.find(
     (item) => item.mstEquipment.type === "weapon" && item.isDraft
@@ -64,5 +62,3 @@ function Equipment() {
     </main>
   );
 }
-
-export default Equipment;
