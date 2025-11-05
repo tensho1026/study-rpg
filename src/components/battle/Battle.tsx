@@ -46,6 +46,8 @@ function Battle({
   );
 
   const healHp = (amount: number) => {
+    userAnimation();
+    setBattleLog(`${status?.user.name}のHPが10回復した`);
     setStatus((prev) => {
       if (!prev) return null;
       // ここで最大hpより回復しないようにしている
@@ -92,7 +94,7 @@ function Battle({
       if (!prevStatus) return null;
       const newStatusHp = Math.max(
         0,
-        prevStatus.hp - (100 - userDefenseStatus)
+        prevStatus.hp - (200 - userDefenseStatus)
       );
       const newStatus = { ...prevStatus, hp: newStatusHp };
 
@@ -126,12 +128,20 @@ function Battle({
       enemyAttack();
     }, 2000);
   };
+
+  const handleHeal = async () => {
+    if (!enemy) return;
+    healHp(10);
+    setTimeout(() => {
+      enemyAttack();
+    }, 2000);
+  };
   const userStatusComponentData = {
     name: status?.user.name ?? "",
     hp: status?.hp ?? 0,
     maxHp: status?.maxHp ?? 0,
     handleAttack: handleAttack,
-    healHp: () => healHp(10),
+    healHp: handleHeal,
   };
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_center,rgba(30,30,50,1),rgba(5,10,20,1))] p-4 md:p-8 font-mono">

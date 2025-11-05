@@ -3,7 +3,7 @@ import getBattleData from "../actions/battle/getBattleData";
 
 export default async function BattlePage() {
   const data = await getBattleData();
-  console.log(data?.battleStatus?.user.equipments, "デーーーーーーーーーた");
+  console.log(data?.userBattleStatus, "デーーーーーーーーーた");
 
   if (!data || !data.battleStatus || !data.enemyData) {
     return null;
