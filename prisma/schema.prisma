@@ -132,7 +132,7 @@ model MstBattleItem {
   id           String       @id 
   name         String    @unique
   description  String    // UIやログで表示する説明
-  type         String    // "heal" | "attack" | "buff" | "material" | "key" など
+  type         BattleItemType    // "heal" | "attack" | "buff" | "material" | "key" など
   healHp       Int?      // HP回復量（回復アイテムのみ）
   healMp       Int?      // MP回復量
   removeStatus String[] @default([]) // 回復する状態異常の配列（例: ["毒", "石化"]）
@@ -147,6 +147,15 @@ model MstBattleItem {
 
   userHas UserHasBattleItem[]
 }
+
+enum BattleItemType {
+  attack
+  heal
+  buff
+  material
+  key
+}
+
 
 
 model Equipment {

@@ -3,6 +3,7 @@
 import ControlButton from "@/components/map/ControllButton";
 import { AppMenuButton } from "@/components/common/app-menu-button";
 import { Button } from "@/components/ui/button";
+import { EncounterAlert } from "@/components/map/EncounterAlert";
 import Image from "next/image";
 import Link from "next/link";
 import React, {
@@ -26,6 +27,7 @@ export default function Page() {
 
   const [bounds, setBounds] = useState({ width: 0, height: 0 });
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [showEncounterAlert, setShowEncounterAlert] = useState(false);
 
   const safeBottomOffset = useMemo(() => {
     if (!bounds.width) {
@@ -121,6 +123,10 @@ export default function Page() {
       ref={containerRef}
       className="relative h-screen w-full overflow-hidden"
     >
+      <EncounterAlert
+        visible={showEncounterAlert}
+        onHide={() => setShowEncounterAlert(true)}
+      />
       <div className="pointer-events-none absolute inset-x-0 top-0 z-30 flex items-center justify-between px-4 py-4 sm:px-8">
         <div className="pointer-events-auto">
           <AppMenuButton className="border-white/20 bg-slate-900/80 text-white/80 hover:bg-slate-900/60 hover:text-white" />
@@ -159,7 +165,11 @@ export default function Page() {
         }}
       />
 
-      <ControlButton onMove={moveHero} step={STEP_SIZE} />
+      <ControlButton
+        onMove={moveHero}
+        step={STEP_SIZE}
+        setShowEncounterAlert={setShowEncounterAlert}
+      />
     </div>
   );
 }
