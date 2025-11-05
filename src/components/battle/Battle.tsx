@@ -24,7 +24,7 @@ type Props = {
   items: BattleItem[];
 };
 
-function Battle({
+export default function Battle({
   userInfo,
   enemyData,
   dropItems,
@@ -188,5 +188,3 @@ function Battle({
     </main>
   );
 }
-
-export default Battle;
