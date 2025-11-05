@@ -2,7 +2,8 @@
 import encounter from "@/utils/encounter";
 import { useRouter } from "next/navigation";
 
-import React, { ReactNode, useMemo, useRef } from "react";
+import React, { ReactNode, useMemo, useRef, useState } from "react";
+import { Button } from "../ui/button";
 
 type ControlButtonProps = {
   onMove: (dx: number, dy: number) => void;
@@ -10,6 +11,7 @@ type ControlButtonProps = {
 };
 
 function ControlButton({ onMove, step = 30 }: ControlButtonProps) {
+  const [isEncount, setIsEncount] = useState(false);
   const buttonClass =
     "relative flex h-14 w-14 select-none items-center justify-center rounded-sm border-2 border-slate-800 bg-[linear-gradient(135deg,#273449_0%,#121b2f_100%)] font-bold text-slate-100 shadow-[4px_4px_0_0_rgba(12,19,34,0.85)] transition active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_0_rgba(12,19,34,0.85)] md:h-16 md:w-16";
 
@@ -28,36 +30,37 @@ function ControlButton({ onMove, step = 30 }: ControlButtonProps) {
   const maybeTriggerEncounter = () => {
     const randomNum = encounter();
     if (randomNum === 10) {
+      setIsEncount(true);
       router.push("/battle");
     }
   };
 
   const handleTouch =
     (dx: number, dy: number) =>
-      (event: React.TouchEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-        touchActivatedRef.current = true;
-        onMove(dx, dy);
-        maybeTriggerEncounter();
-      };
+    (event: React.TouchEvent<HTMLButtonElement>) => {
+      touchActivatedRef.current = true;
+      onMove(dx, dy);
+      maybeTriggerEncounter();
+    };
 
   const handleClick =
     (dx: number, dy: number) =>
-      (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-        if (touchActivatedRef.current) {
-          touchActivatedRef.current = false;
-          return;
-        }
-        onMove(dx, dy);
-        maybeTriggerEncounter();
-      };
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+      if (touchActivatedRef.current) {
+        touchActivatedRef.current = false;
+        return;
+      }
+      onMove(dx, dy);
+      maybeTriggerEncounter();
+    };
 
   const renderButton = (
     direction: "up" | "down" | "left" | "right",
     [dx, dy]: readonly [number, number]
   ) => (
-    <button
+    <Button
+      disabled={isEncount}
       key={direction}
       type="button"
       onClick={handleClick(dx, dy)}
@@ -66,7 +69,7 @@ function ControlButton({ onMove, step = 30 }: ControlButtonProps) {
       aria-label={`Move ${direction}`}
     >
       <ButtonChrome direction={direction} />
-    </button>
+    </Button>
   );
 
   return (

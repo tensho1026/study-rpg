@@ -94,6 +94,8 @@ function Battle({
       if (!prevStatus) return null;
       const newStatusHp = Math.max(
         0,
+
+        // ここで敵の攻撃力より防御が高いと敵の攻撃で回復してしまうので注意する
         prevStatus.hp - (200 - userDefenseStatus)
       );
       const newStatus = { ...prevStatus, hp: newStatusHp };
