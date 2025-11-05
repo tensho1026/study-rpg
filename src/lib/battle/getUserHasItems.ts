@@ -9,5 +9,10 @@ export default async function getUsetHasItems(userId: string) {
       battleItem: true,
     },
   });
-  return data;
+
+  const merged = data.map((entry) => ({
+    ...entry.battleItem, // マスタのデータ
+    quantity: entry.quantity, // 所持数
+  }));
+  return merged;
 }

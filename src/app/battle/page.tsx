@@ -3,6 +3,7 @@ import getBattleData from "../actions/battle/getBattleData";
 
 export default async function BattlePage() {
   const data = await getBattleData();
+
   console.log(data?.userBattleStatus, "デーーーーーーーーーた");
 
   if (!data || !data.battleStatus || !data.enemyData) {
@@ -53,6 +54,8 @@ export default async function BattlePage() {
 
   console.log(data.userBattleStatus);
 
+  console.log(data.battleItems, "バトルアイテムーーーー");
+
   return (
     <Battle
       userInfo={data.battleStatus}
@@ -60,6 +63,7 @@ export default async function BattlePage() {
       dropItems={{ monsterDrop: monsterDrop, nomalDrop: normalDrop }}
       userAttackStatus={data.userBattleStatus.attack}
       userDefenseStatus={data.userBattleStatus.defense}
+      items={data.battleItems ?? []}
     />
   );
 }

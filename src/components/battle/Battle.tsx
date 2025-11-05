@@ -10,6 +10,7 @@ import PlayerStatus from "./PlayerStatus";
 import Result from "./Result";
 import BattleArea from "./BattleArea";
 import saveRewards from "@/app/actions/battle/saveRewards";
+import { BattleItem } from "@/types/battleItem";
 
 type Props = {
   enemyData: Enemy | null;
@@ -20,6 +21,7 @@ type Props = {
   };
   userAttackStatus: number;
   userDefenseStatus: number;
+  items: BattleItem[];
 };
 
 function Battle({
@@ -28,6 +30,7 @@ function Battle({
   dropItems,
   userAttackStatus,
   userDefenseStatus,
+  items,
 }: Props) {
   const [status, setStatus] = useState<BattleStatusType | null>(userInfo);
   const [enemy, setEnemy] = useState<Enemy | null>(enemyData);
@@ -39,6 +42,7 @@ function Battle({
   const [victory, setVictory] = useState(false);
   const initialLevelRef = useRef<number>(userInfo?.level ?? 0);
   const [userLevel, setUserLevel] = useState<number>(initialLevelRef.current);
+  const [userItems, setUserItems] = useState<BattleItem[] | null>(items ?? []);
 
   const { userAnimation, enemyAnimation } = useBattleAnimation(
     setPlayerAttackAnim,
