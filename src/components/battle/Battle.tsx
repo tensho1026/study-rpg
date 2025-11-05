@@ -168,7 +168,10 @@ function Battle({
           <EnemyStatus enemy={enemy!} />
 
           {/* プレイヤー操作 */}
-          <PlayerStatus userStatus={userStatusComponentData} />
+          <PlayerStatus
+            userStatus={userStatusComponentData}
+            items={userItems ?? []}
+          />
         </div>
       </div>
       {(victory || defeat) && (
