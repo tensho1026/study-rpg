@@ -16,11 +16,12 @@ type UserStatus = {
 
 type Props = {
   userStatus: UserStatus;
-  items: BattleItem[];
+  itemsData: BattleItem[];
 };
 
-export default function PlayerStatus({ userStatus, items }: Props) {
+export default function PlayerStatus({ userStatus, itemsData }: Props) {
   const [isItemWindowOpen, setIsItemWindowOpen] = useState(false);
+  const [items, setItems] = useState(itemsData);
 
   return (
     <>
@@ -74,6 +75,14 @@ export default function PlayerStatus({ userStatus, items }: Props) {
                     userStatus.switchUseItem(item);
                     setIsItemWindowOpen(false);
                     reduceItemAmount(item.id);
+
+                    setItems((prev) =>
+                      prev.map((i) =>
+                        i.id === item.id
+                          ? { ...i, quantity: (i.quantity ?? 0) - 1 }
+                          : i
+                      )
+                    );
                   }}
                 >
                   <span className="truncate pr-2">{item.name}</span>

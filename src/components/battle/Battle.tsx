@@ -185,7 +185,7 @@ export default function Battle({
           {/* プレイヤー操作 */}
           <PlayerStatus
             userStatus={userStatusComponentData}
-            items={userItems ?? []}
+            itemsData={userItems ?? []}
           />
         </div>
       </div>
