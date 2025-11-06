@@ -31,6 +31,7 @@ const sideMenu: Array<{
   { label: "戦闘", icon: Swords, href: "/battle" },
   { label: "冒険", icon: Compass, href: "/map" },
   { label: "アイテムショップ", icon: Coins, href: "/itemShop" },
+  { label: "マップ選ぶとこ", icon: Compass, href: "/adventure" },
 ] as const;
 
 interface AppSidebarProps {
