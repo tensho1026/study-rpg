@@ -50,6 +50,18 @@ export default function Battle({
     setEnemyAttackAnim
   );
 
+  const switchUseItem = (item: BattleItem) => {
+    console.log("使用アイテム:", item);
+    switch (item.type) {
+      case "heal":
+        return healHp(item.healHp ?? 0);
+
+      // ここから下は回復以外のアイテムが出たら追加する
+      // case "attack":
+      //   return ...
+    }
+  };
+
   const healHp = (amount: number) => {
     userAnimation();
     setBattleLog(`${status?.user.name}のHPが10回復した`);
@@ -136,9 +148,9 @@ export default function Battle({
     }, 2000);
   };
 
-  const handleHeal = async () => {
+  const handleUseitem = async (item: BattleItem) => {
     if (!enemy) return;
-    healHp(10);
+    switchUseItem(item);
     const update = await updateUserBattleItems();
     setUserItems(update ?? []);
     setTimeout(() => {
@@ -150,7 +162,7 @@ export default function Battle({
     hp: status?.hp ?? 0,
     maxHp: status?.maxHp ?? 0,
     handleAttack: handleAttack,
-    healHp: handleHeal,
+    switchUseItem: handleUseitem,
   };
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_center,rgba(30,30,50,1),rgba(5,10,20,1))] p-4 md:p-8 font-mono">

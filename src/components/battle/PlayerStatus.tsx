@@ -10,7 +10,7 @@ type UserStatus = {
   hp: number;
   maxHp: number;
   handleAttack: () => void;
-  healHp: () => void;
+  switchUseItem: (item: BattleItem) => void;
 };
 
 type Props = {
@@ -18,7 +18,7 @@ type Props = {
   items: BattleItem[];
 };
 
-function PlayerStatus({ userStatus, items }: Props) {
+export default function PlayerStatus({ userStatus, items }: Props) {
   const [isItemWindowOpen, setIsItemWindowOpen] = useState(false);
 
   return (
@@ -70,7 +70,7 @@ function PlayerStatus({ userStatus, items }: Props) {
                   key={item.name}
                   className="flex items-center justify-between rounded-sm border border-indigo-300/40 bg-indigo-900/60 px-3 py-2 shadow-[inset_0_0_6px_rgba(18,17,79,0.65)] transition hover:bg-indigo-200/30 hover:text-white"
                   onClick={() => {
-                    userStatus.healHp();
+                    userStatus.switchUseItem(item);
                     setIsItemWindowOpen(false);
                   }}
                 >
@@ -97,5 +97,3 @@ function PlayerStatus({ userStatus, items }: Props) {
     </>
   );
 }
-
-export default PlayerStatus;
