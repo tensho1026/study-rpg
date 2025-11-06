@@ -7,6 +7,7 @@ import { AppMenuButton } from "@/components/common/app-menu-button";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { MAPS } from "@/constant/mapDescriptions";
+import Link from "next/link";
 
 type MapId = (typeof MAPS)[number]["id"];
 
@@ -136,9 +137,11 @@ export default function AdventurePage() {
               </div>
 
               <div className="flex flex-col gap-3 border-t border-border pt-3 md:flex-row md:items-center md:justify-center">
-                <Button className="px-6 text-sm md:text-base">
-                  {selectedMap.name} へ出発する
-                </Button>
+                <Link href={`/map/${selectedMap.id}`}>
+                  <Button className="px-6 text-sm md:text-base">
+                    {selectedMap.name} へ出発する
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
