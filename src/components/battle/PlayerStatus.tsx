@@ -4,22 +4,24 @@ import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import HpBar from "./HpBar";
 import { BattleItem } from "@/types/battleItem";
+import reduceItemAmount from "@/app/actions/battle/reduceItemAmount";
 
 type UserStatus = {
   name: string;
   hp: number;
   maxHp: number;
   handleAttack: () => void;
-  healHp: () => void;
+  switchUseItem: (item: BattleItem) => void;
 };
 
 type Props = {
   userStatus: UserStatus;
-  items: BattleItem[];
+  itemsData: BattleItem[];
 };
 
-function PlayerStatus({ userStatus, items }: Props) {
+export default function PlayerStatus({ userStatus, itemsData }: Props) {
   const [isItemWindowOpen, setIsItemWindowOpen] = useState(false);
+  const [items, setItems] = useState(itemsData);
 
   return (
     <>
@@ -66,19 +68,29 @@ function PlayerStatus({ userStatus, items }: Props) {
 
             <div className="grid grid-cols-2 gap-4 pt-2 font-mono text-sm">
               {items.map((item) => (
-                <div
+                <Button
                   key={item.name}
                   className="flex items-center justify-between rounded-sm border border-indigo-300/40 bg-indigo-900/60 px-3 py-2 shadow-[inset_0_0_6px_rgba(18,17,79,0.65)] transition hover:bg-indigo-200/30 hover:text-white"
+                  disabled={item.quantity! <= 0}
                   onClick={() => {
-                    userStatus.healHp();
+                    userStatus.switchUseItem(item);
                     setIsItemWindowOpen(false);
+                    reduceItemAmount(item.id);
+
+                    setItems((prev) =>
+                      prev.map((i) =>
+                        i.id === item.id
+                          ? { ...i, quantity: (i.quantity ?? 0) - 1 }
+                          : i
+                      )
+                    );
                   }}
                 >
                   <span className="truncate pr-2">{item.name}</span>
                   <span className="text-right text-indigo-100">
                     x{item.quantity}
                   </span>
-                </div>
+                </Button>
               ))}
             </div>
 
@@ -97,5 +109,3 @@ function PlayerStatus({ userStatus, items }: Props) {
     </>
   );
 }
-
-export default PlayerStatus;
