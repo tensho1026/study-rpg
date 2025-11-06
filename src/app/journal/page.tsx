@@ -66,55 +66,10 @@ const WEEKLY_BREAKDOWN = [
   },
 ];
 
-const SESSION_LOGS = [
-  {
-    timeframe: "05/11 09:00 - 11:00",
-    title: "図書館自習",
-    detail: "数Ⅰ・数Aの演習を2セット／英語長文1本",
-    minutes: 120,
-  },
-  {
-    timeframe: "05/10 20:00 - 21:30",
-    title: "オンライン英語",
-    detail: "リスニング + シャドーイング",
-    minutes: 90,
-  },
-  {
-    timeframe: "05/09 18:30 - 19:45",
-    title: "復習タイム",
-    detail: "数学の小テスト直し",
-    minutes: 75,
-  },
-  {
-    timeframe: "05/08 19:00 - 20:00",
-    title: "歴史暗記",
-    detail: "江戸時代の年号チェック",
-    minutes: 60,
-  },
-];
-
 const STUDY_NOTES = [
   "連続学習 9 日目達成。次は 2 桁を目指そう。",
   "図書館での午前ブロックが集中タイムとして機能している。",
   "模試の復習ノートを週末にまとめる予定。",
-];
-
-const UPCOMING_FOCUS = [
-  {
-    topic: "英語長文",
-    goal: "毎日 3 本を音読 + 要約",
-    status: "プラン作成済み",
-  },
-  {
-    topic: "数学図形",
-    goal: "苦手単元を 2 セクション復習",
-    status: "木曜の夜に着手",
-  },
-  {
-    topic: "理科実験",
-    goal: "次回の授業前に実験記録をまとめる",
-    status: "資料集読み込み中",
-  },
 ];
 
 export default function JournalPage() {
