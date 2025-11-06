@@ -15,20 +15,15 @@ import React, {
 } from "react";
 import { useParams } from "next/navigation";
 
-type Props = {
-  params: {
-    mapId: string;
-  };
-};
-
 const HERO_WIDTH = 90;
 const HERO_HEIGHT = 200;
 const STEP_SIZE = 30;
 const SAFE_TOP_OFFSET = 96;
 const MOBILE_BREAKPOINT = 640;
 
-export default function Page({ params }: Props) {
-  const { mapId } = params;
+export default function Page() {
+  const params = useParams();
+  const mapId = params.id;
   console.log(mapId);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const heroRef = useRef<HTMLImageElement | null>(null);
@@ -154,7 +149,7 @@ export default function Page({ params }: Props) {
       </div>
 
       <Image
-        src="/maps/grassland.png"
+        src={`/maps/${mapId}.png`}
         alt="map"
         fill
         className="z-0 object-cover"
