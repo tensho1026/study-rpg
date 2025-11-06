@@ -139,7 +139,7 @@ export default function Adventure({ level }: { level: number }) {
               <div className="flex flex-col gap-3 border-t border-border pt-3 md:flex-row md:items-center md:justify-center">
                 <Link href={`/map/${selectedMap.id}`}>
                   <Button className="px-6 text-sm md:text-base">
-                    {selectedMap.name} へ出発する
+                    出発する
                   </Button>
                 </Link>
               </div>
