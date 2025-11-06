@@ -68,9 +68,10 @@ export default function PlayerStatus({ userStatus, itemsData }: Props) {
 
             <div className="grid grid-cols-2 gap-4 pt-2 font-mono text-sm">
               {items.map((item) => (
-                <div
+                <Button
                   key={item.name}
                   className="flex items-center justify-between rounded-sm border border-indigo-300/40 bg-indigo-900/60 px-3 py-2 shadow-[inset_0_0_6px_rgba(18,17,79,0.65)] transition hover:bg-indigo-200/30 hover:text-white"
+                  disabled={item.quantity! <= 0}
                   onClick={() => {
                     userStatus.switchUseItem(item);
                     setIsItemWindowOpen(false);
@@ -89,7 +90,7 @@ export default function PlayerStatus({ userStatus, itemsData }: Props) {
                   <span className="text-right text-indigo-100">
                     x{item.quantity}
                   </span>
-                </div>
+                </Button>
               ))}
             </div>
 
