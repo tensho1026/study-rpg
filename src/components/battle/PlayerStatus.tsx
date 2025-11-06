@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import HpBar from "./HpBar";
 import { BattleItem } from "@/types/battleItem";
+import reduceItemAmount from "@/app/actions/battle/reduceItemAmount";
 
 type UserStatus = {
   name: string;
@@ -72,6 +73,7 @@ export default function PlayerStatus({ userStatus, items }: Props) {
                   onClick={() => {
                     userStatus.switchUseItem(item);
                     setIsItemWindowOpen(false);
+                    reduceItemAmount(item.id);
                   }}
                 >
                   <span className="truncate pr-2">{item.name}</span>
