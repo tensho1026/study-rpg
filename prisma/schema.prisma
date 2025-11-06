@@ -102,6 +102,7 @@ model MstEnemies {
   defense   Int
   exp       Int
   gold      Int
+  mapId     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

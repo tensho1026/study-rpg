@@ -25,12 +25,13 @@ const sideMenu: Array<{
   href: string;
 }> = [
   { label: "ホーム", icon: Home, href: "/home" },
-  { label: "勉強記録", icon: BookOpenCheck, href: "/library" },
-  { label: "装備屋", icon: ShoppingBag, href: "/shop" },
+  { label: "勉強記録", icon: BookOpenCheck, href: "/journal" },
+  { label: "装備ショップ", icon: ShoppingBag, href: "/shop" },
   { label: "装備", icon: Shield, href: "/equipment" },
   { label: "戦闘", icon: Swords, href: "/battle" },
   { label: "冒険", icon: Compass, href: "/map" },
   { label: "アイテムショップ", icon: Coins, href: "/itemShop" },
+  { label: "マップ選ぶとこ", icon: Compass, href: "/adventure" },
 ] as const;
 
 interface AppSidebarProps {
@@ -54,9 +55,7 @@ export function AppSidebar({
             <p className="text-xs text-slate-200/80 tracking-[0.3em] uppercase">
               Menu
             </p>
-            <h2 className="text-xl font-semibold text-white">
-              冒険メニュー
-            </h2>
+            <h2 className="text-xl font-semibold text-white">冒険メニュー</h2>
           </div>
 
           <nav className="flex-1">
