@@ -1,5 +1,3 @@
-"use server";
-
 import { prisma } from "../prisma";
 
 export async function getUserLevel(userId: string) {
@@ -10,5 +8,5 @@ export async function getUserLevel(userId: string) {
     },
   });
 
-  return level;
+  return level?.level;
 }
