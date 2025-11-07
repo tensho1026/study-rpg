@@ -1,19 +1,17 @@
+"use server";
 import { prisma } from "../prisma";
 
-export default async function getEnemy() {
-  const enemyCount = await prisma.mstEnemies.count();
-  if (enemyCount === 0) return null;
-
-  const randomIndex = String(Math.floor(Math.random() * enemyCount) + 1);
-
-  const data = await prisma.mstEnemies.findFirst({
+export default async function getEnemy(type: string) {
+  const enemys = await prisma.mstEnemies.findMany({
     where: {
-      id: randomIndex,
+      mapId: type,
     },
     include: {
       dropItem: true,
     },
   });
 
-  return data;
+  const randomEnemy = enemys[Math.floor(Math.random() * enemys.length)];
+
+  return randomEnemy;
 }
