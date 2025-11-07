@@ -98,15 +98,6 @@ const GRAPH_DATA = [
   },
 ];
 
-const GRAPH_LEGEND = [
-  { label: "英語", color: "bg-rose-400" },
-  { label: "数学", color: "bg-sky-400" },
-  { label: "理科", color: "bg-emerald-400" },
-  { label: "社会", color: "bg-violet-400" },
-  { label: "国語", color: "bg-indigo-400" },
-  { label: "その他", color: "bg-amber-300" },
-];
-
 export default function JournalPage() {
   return (
     <main className="min-h-screen bg-background p-4 md:p-8">
@@ -205,8 +196,8 @@ export default function JournalPage() {
             </p>
           </div>
 
-          <div className="overflow-x-auto pb-3">
-            <div className="flex min-w-[560px] items-end gap-4">
+          <div className="flex items-center justify-center overflow-x-auto pb-3">
+            <div className="flex  min-w-[560px] items-end gap-4">
               {GRAPH_DATA.map((item) => (
                 <div
                   key={item.date}
@@ -219,7 +210,7 @@ export default function JournalPage() {
                     {item.segments.map((segment, index) => (
                       <span
                         key={`${item.date}-${segment.label}-${index}`}
-                        className={`${segment.color} w-full`}
+                        className={`bg-red-400 w-full`}
                         style={{ height: `${segment.height}%` }}
                       />
                     ))}
@@ -230,20 +221,6 @@ export default function JournalPage() {
                 </div>
               ))}
             </div>
-          </div>
-
-          <div className="flex flex-wrap gap-4">
-            {GRAPH_LEGEND.map((legend) => (
-              <div
-                key={legend.label}
-                className="flex items-center gap-2 text-xs text-muted-foreground md:text-sm"
-              >
-                <span
-                  className={`inline-block h-3 w-3 rounded-sm ${legend.color}`}
-                />
-                {legend.label}
-              </div>
-            ))}
           </div>
         </Card>
       </div>
