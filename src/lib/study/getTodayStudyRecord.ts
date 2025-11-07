@@ -24,5 +24,5 @@ export default async function getOrCreateTodayStudyRecord(userId: string) {
       },
     });
   }
-  return record;
+  return record
 }
