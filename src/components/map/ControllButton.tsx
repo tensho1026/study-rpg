@@ -9,12 +9,14 @@ type ControlButtonProps = {
   onMove: (dx: number, dy: number) => void;
   step?: number;
   setShowEncounterAlert: (value: boolean) => void;
+  mapId: string;
 };
 
-function ControlButton({
+export default function ControlButton({
   onMove,
   step = 30,
   setShowEncounterAlert,
+  mapId,
 }: ControlButtonProps) {
   const [isEncount, setIsEncount] = useState(false);
   const buttonClass =
@@ -38,7 +40,7 @@ function ControlButton({
       setShowEncounterAlert(true);
       setIsEncount(true);
       setTimeout(() => {
-        router.push("/battle");
+        router.push(`/battle/${mapId}`);
       }, 1500);
     }
   };
@@ -132,5 +134,3 @@ function ButtonChrome({ direction, children }: ButtonChromeProps) {
     </>
   );
 }
-
-export default ControlButton;

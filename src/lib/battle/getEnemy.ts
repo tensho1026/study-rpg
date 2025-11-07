@@ -6,20 +6,12 @@ export default async function getEnemy(type: string) {
     where: {
       mapId: type,
     },
+    include: {
+      dropItem: true,
+    },
   });
 
   const randomEnemy = enemys[Math.floor(Math.random() * enemys.length)];
-
-  // const randomIndex = String(Math.floor(Math.random() * enemyCount) + 1);
-
-  // const data = await prisma.mstEnemies.findFirst({
-  //   where: {
-  //     id: randomIndex,
-  //   },
-  //   include: {
-  //     dropItem: true,
-  //   },
-  // });
 
   return randomEnemy;
 }

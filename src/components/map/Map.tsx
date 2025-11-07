@@ -23,8 +23,8 @@ const MOBILE_BREAKPOINT = 640;
 
 export default function Map() {
   const params = useParams();
-  const mapId = params.id;
-  console.log(mapId);
+  const mapId = params.id as string;
+
   const containerRef = useRef<HTMLDivElement | null>(null);
   const heroRef = useRef<HTMLImageElement | null>(null);
   const initializedRef = useRef(false);
@@ -173,6 +173,7 @@ export default function Map() {
         onMove={moveHero}
         step={STEP_SIZE}
         setShowEncounterAlert={setShowEncounterAlert}
+        mapId={mapId}
       />
     </div>
   );

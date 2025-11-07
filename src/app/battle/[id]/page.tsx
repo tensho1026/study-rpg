@@ -1,8 +1,14 @@
+import getBattleData from "@/app/actions/battle/getBattleData";
 import Battle from "@/components/battle/Battle";
-import getBattleData from "../actions/battle/getBattleData";
+type Props = {
+  params: {
+    id: string;
+  };
+};
 
-export default async function BattlePage() {
-  const data = await getBattleData();
+export default async function BattlePage({ params }: Props) {
+  const { id } = params;
+  const data = await getBattleData(id);
 
   console.log(data?.userBattleStatus, "デーーーーーーーーーた");
 
