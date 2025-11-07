@@ -10,8 +10,6 @@ export default async function BattlePage({ params }: Props) {
   const { id } = params;
   const data = await getBattleData(id);
 
-  console.log(data?.userBattleStatus, "デーーーーーーーーーた");
-
   if (!data || !data.battleStatus || !data.enemyData) {
     return null;
   }
@@ -24,8 +22,6 @@ export default async function BattlePage({ params }: Props) {
     exp: data.enemyData.exp,
     coin: data.enemyData.gold,
   };
-
-  console.log(enemy, "enemy");
 
   const monsterDrop = data.enemyData.dropItem
     ? {
@@ -41,8 +37,6 @@ export default async function BattlePage({ params }: Props) {
         description: "",
       };
 
-  console.log(monsterDrop, "敵専用ドロップ");
-
   const normalDrop = data.dropItem
     ? {
         id: data.dropItem.id,
@@ -56,11 +50,6 @@ export default async function BattlePage({ params }: Props) {
         rare: 0,
         description: "",
       };
-  console.log(normalDrop, "ノーマルドロップ");
-
-  console.log(data.userBattleStatus);
-
-  console.log(data.battleItems, "バトルアイテムーーーー");
 
   return (
     <Battle

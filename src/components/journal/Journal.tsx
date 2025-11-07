@@ -61,8 +61,6 @@ export default function Journal({ initialData }: { initialData: JournalData }) {
     total: initialData.totalStudy,
   };
 
-  console.log(dataMap, "データマップ");
-
   const totalWeekMinutes = dataMap.week.reduce(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (sum: number, item: any) => sum + item.minutes,
@@ -73,7 +71,6 @@ export default function Journal({ initialData }: { initialData: JournalData }) {
     (sum: number, item: any) => sum + item.minutes,
     0
   );
-  console.log(totalWeekMinutes, "今週の合計");
 
   const STUDY_TOTALS = [
     { label: "今日の勉強時間", value: formatMinutes(dataMap.day) },

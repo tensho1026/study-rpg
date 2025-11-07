@@ -7,7 +7,6 @@ import todayStudyTime from "@/utils/todayTime";
 
 export default async function StudyQuestPage() {
   const homeData = await getHomeData();
-  console.log(homeData);
 
   if (homeData === undefined) return;
   if (homeData?.todayStudyRecord.minutes > 1440) {
@@ -19,7 +18,7 @@ export default async function StudyQuestPage() {
   const { todayMinutes, totalHours, restMinutes } = todayStudyTime(
     homeData?.todayStudyRecord?.minutes ?? 0
   );
-  console.log(homeData?.userStatus?.level);
+
   return (
     <>
       <LevelUpNotification level={homeData?.userStatus?.level ?? 0} />

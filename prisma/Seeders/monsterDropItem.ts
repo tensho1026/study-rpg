@@ -2,7 +2,6 @@ import { prisma } from "@/lib/prisma";
 import { enemiesData } from "@/constant/enemies";
 import { enemyDropItemsData } from "@/constant/enemyDropitem";
 
-
 export default async function seedEnemiesAndDrops() {
   // 1. 固有ドロップ素材登録
   for (const mat of enemyDropItemsData) {
@@ -30,6 +29,4 @@ export default async function seedEnemiesAndDrops() {
       },
     });
   }
-
-  console.log("✅ Seeding completed successfully");
 }

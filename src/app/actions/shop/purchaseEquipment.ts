@@ -16,6 +16,4 @@ export default async function purchaseEquipment(equipmentId: string) {
   if (equipmentCost === undefined || equipmentCost === null) return;
 
   await decreaseUserCoins(session.user.id, equipmentCost);
-
-  console.log(equipmentId, "を購入しました");
 }
