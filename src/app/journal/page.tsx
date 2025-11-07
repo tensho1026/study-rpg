@@ -1,75 +1,110 @@
 "use client";
 
 import { AppMenuButton } from "@/components/common/app-menu-button";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 
-const STUDY_OVERVIEW = [
+const STUDY_TOTALS = [
+  { label: "今日の勉強時間", value: "2時間 30分" },
+  { label: "今週の勉強時間", value: "14時間 05分" },
+  { label: "今月の勉強時間", value: "52時間 40分" },
+  { label: "これまでの合計", value: "312時間 15分" },
+];
+
+const GRAPH_TABS = [
+  { id: "day", label: "日" },
+  { id: "week", label: "週" },
+  { id: "month", label: "月" },
+] as const;
+
+const ACTIVE_GRAPH_TAB: (typeof GRAPH_TABS)[number]["id"] = "week";
+
+const GRAPH_META = {
+  range: "2024年5月6日〜2024年5月12日",
+  summary: "7 件の記録",
+};
+
+const GRAPH_DATA = [
   {
-    label: "総勉強時間",
-    value: "1,245 分",
-    description: "先月から +12%",
+    date: "5/6(月)",
+    total: "6時間20分",
+    segments: [
+      { label: "英語", color: "bg-rose-400/90", height: 28 },
+      { label: "数学", color: "bg-sky-400/90", height: 22 },
+      { label: "理科", color: "bg-emerald-400/90", height: 18 },
+      { label: "その他", color: "bg-amber-300/90", height: 12 },
+    ],
   },
   {
-    label: "今週の合計",
-    value: "540 分",
-    description: "5 セッション",
+    date: "5/7(火)",
+    total: "5時間10分",
+    segments: [
+      { label: "英語", color: "bg-rose-400/90", height: 20 },
+      { label: "数学", color: "bg-sky-400/90", height: 25 },
+      { label: "社会", color: "bg-violet-400/90", height: 15 },
+      { label: "その他", color: "bg-amber-300/90", height: 10 },
+    ],
   },
   {
-    label: "今日の勉強",
-    value: "120 分",
-    description: "2 セッション",
+    date: "5/8(水)",
+    total: "4時間45分",
+    segments: [
+      { label: "英語", color: "bg-rose-400/90", height: 18 },
+      { label: "理科", color: "bg-emerald-400/90", height: 20 },
+      { label: "国語", color: "bg-indigo-400/90", height: 14 },
+      { label: "その他", color: "bg-amber-300/90", height: 10 },
+    ],
+  },
+  {
+    date: "5/9(木)",
+    total: "5時間32分",
+    segments: [
+      { label: "数学", color: "bg-sky-400/90", height: 26 },
+      { label: "英語", color: "bg-rose-400/90", height: 22 },
+      { label: "理科", color: "bg-emerald-400/90", height: 12 },
+      { label: "その他", color: "bg-amber-300/90", height: 8 },
+    ],
+  },
+  {
+    date: "5/10(金)",
+    total: "6時間02分",
+    segments: [
+      { label: "英語", color: "bg-rose-400/90", height: 24 },
+      { label: "数学", color: "bg-sky-400/90", height: 24 },
+      { label: "社会", color: "bg-violet-400/90", height: 12 },
+      { label: "その他", color: "bg-amber-300/90", height: 8 },
+    ],
+  },
+  {
+    date: "5/11(土)",
+    total: "6時間27分",
+    segments: [
+      { label: "理科", color: "bg-emerald-400/90", height: 24 },
+      { label: "数学", color: "bg-sky-400/90", height: 20 },
+      { label: "英語", color: "bg-rose-400/90", height: 16 },
+      { label: "その他", color: "bg-amber-300/90", height: 10 },
+    ],
+  },
+  {
+    date: "5/12(日)",
+    total: "5時間51分",
+    segments: [
+      { label: "英語", color: "bg-rose-400/90", height: 22 },
+      { label: "国語", color: "bg-indigo-400/90", height: 18 },
+      { label: "理科", color: "bg-emerald-400/90", height: 14 },
+      { label: "その他", color: "bg-amber-300/90", height: 10 },
+    ],
   },
 ];
 
-const WEEKLY_BREAKDOWN = [
-  {
-    dayLabel: "05/11 (土)",
-    minutes: 120,
-    focus: "図書館で数学と英語の集中学習",
-    barWidth: 96,
-  },
-  {
-    dayLabel: "05/10 (金)",
-    minutes: 90,
-    focus: "英語リスニングとシャドーイング",
-    barWidth: 82,
-  },
-  {
-    dayLabel: "05/09 (木)",
-    minutes: 75,
-    focus: "数学の復習問題を解いた",
-    barWidth: 68,
-  },
-  {
-    dayLabel: "05/08 (水)",
-    minutes: 60,
-    focus: "歴史の暗記カードを整理",
-    barWidth: 55,
-  },
-  {
-    dayLabel: "05/07 (火)",
-    minutes: 45,
-    focus: "英単語テスト対策",
-    barWidth: 42,
-  },
-  {
-    dayLabel: "05/06 (月)",
-    minutes: 30,
-    focus: "理科のワークを1章クリア",
-    barWidth: 28,
-  },
-  {
-    dayLabel: "05/05 (日)",
-    minutes: 120,
-    focus: "模試の振り返りと弱点分析",
-    barWidth: 96,
-  },
-];
-
-const STUDY_NOTES = [
-  "連続学習 9 日目達成。次は 2 桁を目指そう。",
-  "図書館での午前ブロックが集中タイムとして機能している。",
-  "模試の復習ノートを週末にまとめる予定。",
+const GRAPH_LEGEND = [
+  { label: "英語", color: "bg-rose-400" },
+  { label: "数学", color: "bg-sky-400" },
+  { label: "理科", color: "bg-emerald-400" },
+  { label: "社会", color: "bg-violet-400" },
+  { label: "国語", color: "bg-indigo-400" },
+  { label: "その他", color: "bg-amber-300" },
 ];
 
 export default function JournalPage() {
@@ -91,93 +126,126 @@ export default function JournalPage() {
                   学習ログ
                 </h1>
                 <p className="mt-2 text-xs text-muted-foreground md:text-sm">
-                  勉強時間と内容をざっくり振り返って、次の一歩につなげよう。
+                  今日からこれまでの学習時間をシンプルに記録。
                 </p>
               </div>
-            </div>
-            <div className="rounded-xl border border-border bg-background/60 px-4 py-3 text-right text-xs text-muted-foreground md:text-sm">
-              <p className="text-muted-foreground">今週の合計</p>
-              <p className="text-xl font-semibold text-card-foreground md:text-2xl">
-                {STUDY_OVERVIEW[1].value}
-              </p>
-              <p className="text-[11px] text-muted-foreground/80 md:text-xs">
-                {STUDY_OVERVIEW[1].description}
-              </p>
             </div>
           </div>
         </Card>
 
-        <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <Card className="rpg-window bg-card p-5 md:p-6 space-y-4">
-            <h2 className="text-sm text-card-foreground md:text-base">
-              学習のハイライト
-            </h2>
-            <div className="grid grid-cols-1 gap-3 text-xs md:text-sm sm:grid-cols-3">
-              {STUDY_OVERVIEW.map((item) => (
-                <div
-                  key={item.label}
-                  className="bg-background border-2 border-border p-3"
-                >
-                  <p className="text-muted-foreground">{item.label}</p>
-                  <p className="text-lg font-bold text-card-foreground md:text-xl">
-                    {item.value}
-                  </p>
-                  <p className="mt-1 text-[11px] text-muted-foreground md:text-xs">
-                    {item.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </Card>
+        <Card className="rpg-window bg-card p-5 md:p-6">
+          <div className="grid grid-cols-1 gap-3 text-xs text-muted-foreground md:grid-cols-4 md:text-sm">
+            {STUDY_TOTALS.map((item) => (
+              <div
+                key={item.label}
+                className="bg-background border-2 border-border p-4"
+              >
+                <p className="text-muted-foreground">{item.label}</p>
+                <p className="mt-2 text-2xl font-semibold text-card-foreground md:text-3xl">
+                  {item.value}
+                </p>
+              </div>
+            ))}
+          </div>
+        </Card>
 
-          <Card className="rpg-window bg-card p-5 md:p-6 space-y-4">
-            <h2 className="text-sm text-card-foreground md:text-base">
-              今週のメモ
-            </h2>
-            <div className="bg-background border-2 border-border p-4 space-y-2 text-xs text-muted-foreground md:text-sm">
-              {STUDY_NOTES.map((note) => (
-                <p key={note}>・{note}</p>
-              ))}
+        <Card className="rpg-window bg-card p-5 md:p-6 space-y-5">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div className="inline-flex items-center gap-1 rounded-xl border border-border bg-background/60 p-1">
+              {GRAPH_TABS.map((tab) => {
+                const isActive = tab.id === ACTIVE_GRAPH_TAB;
+                return (
+                  <Button
+                    key={tab.id}
+                    type="button"
+                    size="sm"
+                    variant={isActive ? "default" : "ghost"}
+                    className={
+                      isActive
+                        ? "bg-primary text-primary-foreground shadow-[0_0_18px_rgba(236,72,153,0.35)]"
+                        : "text-muted-foreground hover:bg-muted/60"
+                    }
+                  >
+                    {tab.label}
+                  </Button>
+                );
+              })}
             </div>
-          </Card>
-        </section>
-
-        <section className="grid grid-cols-1 gap-4 lg:grid-cols-[2fr_1fr]">
-          <Card className="rpg-window bg-card p-5 md:p-6 space-y-6">
-            <div className="space-y-1">
-              <h2 className="text-sm text-card-foreground md:text-base">
-                今週の勉強時間
-              </h2>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                className="text-muted-foreground hover:text-card-foreground"
+              >
+                <ChevronLeft className="size-4" />
+              </Button>
               <p className="text-xs text-muted-foreground md:text-sm">
-                日ごとの勉強量をチェック。バーが長いほど集中して取り組めた日。
+                {GRAPH_META.range}
               </p>
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                className="text-muted-foreground hover:text-card-foreground"
+              >
+                <ChevronRight className="size-4" />
+              </Button>
             </div>
+          </div>
 
-            <div className="space-y-5">
-              {WEEKLY_BREAKDOWN.map((day) => (
-                <div key={day.dayLabel} className="space-y-2">
-                  <div className="flex items-center justify-between text-xs md:text-sm">
-                    <span className="font-semibold text-card-foreground">
-                      {day.dayLabel}
-                    </span>
-                    <span className="font-semibold text-accent">
-                      {day.minutes} 分
-                    </span>
-                  </div>
-                  <div className="h-2 w-full rounded bg-muted/40">
-                    <div
-                      className="h-full rounded bg-primary transition-all"
-                      style={{ width: `${day.barWidth}%` }}
-                    />
-                  </div>
+          <div className="flex flex-col gap-3">
+            <Button
+              variant="outline"
+              className="flex w-full items-center justify-between border-dashed text-xs text-muted-foreground md:text-sm"
+            >
+              すべての記録を表示
+              <ChevronDown className="size-4" />
+            </Button>
+            <p className="text-[11px] text-muted-foreground md:text-xs">
+              {GRAPH_META.summary}
+            </p>
+          </div>
+
+          <div className="overflow-x-auto pb-3">
+            <div className="flex min-w-[560px] items-end gap-4">
+              {GRAPH_DATA.map((item) => (
+                <div
+                  key={item.date}
+                  className="flex flex-col items-center text-center"
+                >
                   <p className="text-[11px] text-muted-foreground md:text-xs">
-                    {day.focus}
+                    {item.total}
+                  </p>
+                  <div className="mt-2 flex h-40 w-10 flex-col-reverse overflow-hidden rounded-md border border-border bg-muted/30 md:w-12">
+                    {item.segments.map((segment, index) => (
+                      <span
+                        key={`${item.date}-${segment.label}-${index}`}
+                        className={`${segment.color} w-full`}
+                        style={{ height: `${segment.height}%` }}
+                      />
+                    ))}
+                  </div>
+                  <p className="mt-2 text-[11px] text-muted-foreground md:text-xs">
+                    {item.date}
                   </p>
                 </div>
               ))}
             </div>
-          </Card>
-        </section>
+          </div>
+
+          <div className="flex flex-wrap gap-4">
+            {GRAPH_LEGEND.map((legend) => (
+              <div
+                key={legend.label}
+                className="flex items-center gap-2 text-xs text-muted-foreground md:text-sm"
+              >
+                <span
+                  className={`inline-block h-3 w-3 rounded-sm ${legend.color}`}
+                />
+                {legend.label}
+              </div>
+            ))}
+          </div>
+        </Card>
       </div>
     </main>
   );
