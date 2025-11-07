@@ -1,88 +1,46 @@
 "use client";
 
 import { AppMenuButton } from "@/components/common/app-menu-button";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { formatMinutes } from "@/utils/formatMinutes";
-import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
+// import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 
-const GRAPH_META = {
-  range: "2024年5月6日〜2024年5月12日",
-  summary: "7 件の記録",
-};
+// const GRAPH_META = {
+//   range: "2024年5月6日〜2024年5月12日",
+//   summary: "7 件の記録",
+// };
 
-const GRAPH_DATA = [
-  {
-    date: "5/6(月)",
-    total: "6時間20分",
-    segments: [
-      { label: "英語", color: "bg-rose-400/90", height: 28 },
-      { label: "数学", color: "bg-sky-400/90", height: 22 },
-      { label: "理科", color: "bg-emerald-400/90", height: 18 },
-      { label: "その他", color: "bg-amber-300/90", height: 12 },
-    ],
-  },
-  {
-    date: "5/7(火)",
-    total: "5時間10分",
-    segments: [
-      { label: "英語", color: "bg-rose-400/90", height: 20 },
-      { label: "数学", color: "bg-sky-400/90", height: 25 },
-      { label: "社会", color: "bg-violet-400/90", height: 15 },
-      { label: "その他", color: "bg-amber-300/90", height: 10 },
-    ],
-  },
-  {
-    date: "5/8(水)",
-    total: "4時間45分",
-    segments: [
-      { label: "英語", color: "bg-rose-400/90", height: 18 },
-      { label: "理科", color: "bg-emerald-400/90", height: 20 },
-      { label: "国語", color: "bg-indigo-400/90", height: 14 },
-      { label: "その他", color: "bg-amber-300/90", height: 10 },
-    ],
-  },
-  {
-    date: "5/9(木)",
-    total: "5時間32分",
-    segments: [
-      { label: "数学", color: "bg-sky-400/90", height: 26 },
-      { label: "英語", color: "bg-rose-400/90", height: 22 },
-      { label: "理科", color: "bg-emerald-400/90", height: 12 },
-      { label: "その他", color: "bg-amber-300/90", height: 8 },
-    ],
-  },
-  {
-    date: "5/10(金)",
-    total: "6時間02分",
-    segments: [
-      { label: "英語", color: "bg-rose-400/90", height: 24 },
-      { label: "数学", color: "bg-sky-400/90", height: 24 },
-      { label: "社会", color: "bg-violet-400/90", height: 12 },
-      { label: "その他", color: "bg-amber-300/90", height: 8 },
-    ],
-  },
-  {
-    date: "5/11(土)",
-    total: "6時間27分",
-    segments: [
-      { label: "理科", color: "bg-emerald-400/90", height: 24 },
-      { label: "数学", color: "bg-sky-400/90", height: 20 },
-      { label: "英語", color: "bg-rose-400/90", height: 16 },
-      { label: "その他", color: "bg-amber-300/90", height: 10 },
-    ],
-  },
-  {
-    date: "5/12(日)",
-    total: "5時間51分",
-    segments: [
-      { label: "英語", color: "bg-rose-400/90", height: 22 },
-      { label: "国語", color: "bg-indigo-400/90", height: 18 },
-      { label: "理科", color: "bg-emerald-400/90", height: 14 },
-      { label: "その他", color: "bg-amber-300/90", height: 10 },
-    ],
-  },
-];
+// const GRAPH_DATA = [
+//   {
+//     date: "5/6(月)",
+//     total: "6時間20分",
+//   },
+//   {
+//     date: "5/7(火)",
+//     total: "5時間10分",
+//   },
+//   {
+//     date: "5/8(水)",
+//     total: "4時間45分",
+//   },
+//   {
+//     date: "5/9(木)",
+//     total: "5時間32分",
+//   },
+//   {
+//     date: "5/10(金)",
+//     total: "6時間02分",
+//   },
+//   {
+//     date: "5/11(土)",
+//     total: "6時間27分",
+//   },
+//   {
+//     date: "5/12(日)",
+//     total: "5時間51分",
+//   },
+// ];
 
 type JournalData = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -124,11 +82,11 @@ export default function Journal({ initialData }: { initialData: JournalData }) {
     { label: "これまでの合計", value: formatMinutes(dataMap.total) },
   ];
 
-  const GRAPH_TABS = [
-    { id: "day", label: "日" },
-    { id: "week", label: "週" },
-    { id: "month", label: "月" },
-  ] as const;
+  // const GRAPH_TABS = [
+  //   { id: "day", label: "日" },
+  //   { id: "week", label: "週" },
+  //   { id: "month", label: "月" },
+  // ] as const;
 
   return (
     <main className="min-h-screen bg-background p-4 md:p-8">
@@ -171,7 +129,7 @@ export default function Journal({ initialData }: { initialData: JournalData }) {
           </div>
         </Card>
 
-        <Card className="rpg-window bg-card p-5 md:p-6 space-y-5">
+        {/* <Card className="rpg-window bg-card p-5 md:p-6 space-y-5">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="inline-flex items-center gap-1 rounded-xl border border-border bg-background/60 p-1">
               {GRAPH_TABS.map((tab) => {
@@ -227,13 +185,10 @@ export default function Journal({ initialData }: { initialData: JournalData }) {
                     {item.total}
                   </p>
                   <div className="mt-2 flex h-40 w-10 flex-col-reverse overflow-hidden rounded-md border border-border bg-muted/30 md:w-12">
-                    {item.segments.map((segment, index) => (
-                      <span
-                        key={`${item.date}-${segment.label}-${index}`}
-                        className={`bg-red-400 w-full`}
-                        style={{ height: `${segment.height}%` }}
-                      />
-                    ))}
+                    <span
+                      className={`bg-red-400 w-full`}
+                      style={{ height: `${60}%` }}
+                    />
                   </div>
                   <p className="mt-2 text-[11px] text-muted-foreground md:text-xs">
                     {item.date}
@@ -242,7 +197,7 @@ export default function Journal({ initialData }: { initialData: JournalData }) {
               ))}
             </div>
           </div>
-        </Card>
+        </Card> */}
       </div>
     </main>
   );

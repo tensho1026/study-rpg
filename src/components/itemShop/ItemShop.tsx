@@ -44,7 +44,7 @@ export default function ItemShop({ coin, mstData }: Props) {
               return (
                 <Card
                   key={item.id}
-                  className="flex h-full flex-col gap-3 border border-indigo-300/20 bg-slate-950/80 p-5 text-slate-100 shadow-[0_12px_30px_rgba(15,23,42,0.45)]"
+                  className="flex h-full flex-col gap-3 border border-indigo-300/20 bg-slate-800/80 p-5 text-slate-100 shadow-[0_12px_30px_rgba(15,23,42,0.45)]"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
