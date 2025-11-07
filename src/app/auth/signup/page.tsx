@@ -28,7 +28,6 @@ export default function SignupPage() {
   };
 
   const { data } = useSession();
-  console.log(data);
 
   return (
     <main className="min-h-screen bg-background flex items-center justify-center p-4">

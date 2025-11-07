@@ -16,7 +16,6 @@ export default async function equipItem(
 
   // つけている装備検索
   const draftedItemId = await findDraftedEquipment(session.user.id, type);
-  console.log(draftedItemId);
 
   if (draftedItemId) {
     // つけていた装備を外す

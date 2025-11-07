@@ -18,9 +18,6 @@ export default function progressExp(userStatus?: UserStatus | null): number {
 
   // 進捗率（%）
   const progressPercent = Number(((gainedExp / requiredExp) * 100).toFixed(0));
-  console.log("必要経験値:", requiredExp);
-  console.log("現在の進捗経験値:", gainedExp);
-  console.log("進捗率:", progressPercent, "%");
 
   return Math.max(0, Math.min(100, progressPercent));
 }

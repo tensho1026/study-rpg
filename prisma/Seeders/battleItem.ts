@@ -26,6 +26,4 @@ export default async function seedBattleItemData() {
       },
     });
   }
-
-  console.log("✅ MstBattleItem seeding complete");
 }

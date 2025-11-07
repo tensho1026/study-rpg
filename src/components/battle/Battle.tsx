@@ -51,7 +51,6 @@ export default function Battle({
   );
 
   const switchUseItem = (item: BattleItem) => {
-    console.log("使用アイテム:", item);
     switch (item.type) {
       case "heal":
         return healHp(item.healHp ?? 0);
