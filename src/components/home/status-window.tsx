@@ -1,6 +1,6 @@
 "use client";
 
-import { Award, Clock, Coins } from "lucide-react";
+import {  Clock, Coins } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { AppMenuButton } from "@/components/common/app-menu-button";
 
@@ -19,14 +19,6 @@ export function StatusWindow({
 }: StatusWindowProps) {
   const studyHours = Math.floor(totalStudyTime / 60);
   const studyMinutes = totalStudyTime % 60;
-  // const title =
-  //   level >= 15
-  //     ? "学術の覇者"
-  //     : level >= 10
-  //     ? "熟練の学者"
-  //     : level >= 5
-  //     ? "冒険者見習い"
-  //     : "駆け出し冒険者";
 
   return (
     <>
@@ -45,10 +37,6 @@ export function StatusWindow({
               <p className="text-3xl font-black text-white md:text-4xl">
                 Lv.{level}
               </p>
-              {/* <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/40 bg-emerald-400/10 px-4 py-1 text-xs font-semibold text-emerald-100 shadow-inner shadow-[0_0_12px_rgba(16,185,129,0.25)]">
-                <Award className="size-4" />
-                {title}
-              </div> */}
             </div>
           </div>
 
@@ -67,13 +55,6 @@ export function StatusWindow({
               style={{ width: `${expProgress}%` }}
             />
           </div>
-          {/* <p className="text-xs text-white/60">
-            次のレベルまであと
-            <span className="mx-1 text-white">
-              {Math.max(0, 100 - expProgress)}
-            </span>
-            %のEXPが必要です。
-          </p> */}
         </div>
 
         {/* 所持金・累計 */}
@@ -99,16 +80,6 @@ export function StatusWindow({
             </p>
           </div>
         </div>
-
-        {/* <footer className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-xs text-white/70">
-          <div className="flex items-center gap-2">
-            <Sparkles className="size-4 text-emerald-300" />
-            次の称号解放条件
-          </div>
-          <p className="mt-1 leading-relaxed">
-            連続ログイン7日を達成し、毎日60分以上の学習を記録すると「学びの守護者」の称号が手に入ります。
-          </p>
-        </footer> */}
       </Card>
     </>
   );
