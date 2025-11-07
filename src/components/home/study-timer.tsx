@@ -33,9 +33,9 @@ export function StudyTimer({ total, totalMinutes, totalHours }: Props) {
     []
   );
 
-  const handleTotal = () => {
+  const handleTotal = async () => {
     const totalTime = currentHours * 60 + currentMinutes;
-    saveStudy(totalTime);
+    await saveStudy(totalTime);
     setCurrentHours(0);
     setCurrentMinutes(0);
     router.refresh();
