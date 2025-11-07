@@ -9,11 +9,13 @@ import { getServerSession } from "next-auth";
 export default async function purchaseEquipment(equipmentId: string) {
   const session = await getServerSession(authOptions);
   if (!session) return;
-
-  await createEquipment(session.user.id, equipmentId);
+  const userId = session.user.id;
 
   const equipmentCost = await getEquipmentCost(equipmentId);
-  if (equipmentCost === undefined || equipmentCost === null) return;
+  if (equipmentCost == null) return;
 
-  await decreaseUserCoins(session.user.id, equipmentCost);
+  await Promise.all([
+    createEquipment(userId, equipmentId),
+    decreaseUserCoins(userId, equipmentCost),
+  ]);
 }

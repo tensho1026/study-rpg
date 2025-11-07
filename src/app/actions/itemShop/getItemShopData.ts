@@ -8,9 +8,12 @@ import { getServerSession } from "next-auth";
 export default async function getItemShopData() {
   const session = await getServerSession(authOptions);
   if (!session) return;
+  const userId = session.user.id;
 
-  const howUserHas = await getUserHasAmount(session.user.id);
-  const userCoins = await getCoin(session.user.id);
+  const [howUserHas, userCoins] = await Promise.all([
+    getUserHasAmount(userId),
+    getCoin(userId),
+  ]);
 
   return { howUserHas, userCoins };
 }

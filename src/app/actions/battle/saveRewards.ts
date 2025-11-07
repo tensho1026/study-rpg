@@ -20,12 +20,18 @@ export default async function saveRewards(
   const session = await getServerSession(authOptions);
   if (!session) return;
   const userId = session.user.id;
-  await saveNomalItem(userId, nomalId);
-  await saveMonsterItem(userId, monsterId);
-  await saveBattleCoin(userId, coin);
-  const totalExp = await saveExp(userId, exp);
+
+  const [, , , totalExp] = await Promise.all([
+    saveNomalItem(userId, nomalId),
+    saveMonsterItem(userId, monsterId),
+    saveBattleCoin(userId, coin),
+    saveExp(userId, exp),
+  ]);
+
   const newLevel = await updateBattleLevel(userId, totalExp);
   await updateBattleStatus(userId, newLevel);
+
   await saveCurrentHp(userId, currentHp);
+
   return newLevel;
 }

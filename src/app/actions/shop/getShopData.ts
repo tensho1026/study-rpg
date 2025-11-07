@@ -10,9 +10,13 @@ import getCoins from "@/lib/common/getCoin";
 export default async function getEquipmentData() {
   const session = await getServerSession(authOptions);
   if (!session) return;
-  const equipments = await fetchEquipments();
-  const userCoins = await getCoins(session?.user.id);
-  const userEquipments = await getUserEquipments(session?.user.id);
+  const userId = session.user.id;
+
+  const [equipments, userCoins, userEquipments] = await Promise.all([
+    fetchEquipments(),
+    getCoins(userId),
+    getUserEquipments(userId),
+  ]);
 
   return { equipments, userCoins, userEquipments };
 }

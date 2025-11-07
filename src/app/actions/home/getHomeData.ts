@@ -8,9 +8,12 @@ import { getServerSession } from "next-auth";
 export const getHomeData = async () => {
   const session = await getServerSession(authOptions);
   if (!session) return;
+  const userId = session.user.id;
 
-  const userStatus = await getOrCreateUserStatusFunction(session.user.id);
+  const [userStatus, todayStudyRecord] = await Promise.all([
+    getOrCreateUserStatusFunction(userId),
+    getOrCreateTodayStudyRecord(userId),
+  ]);
 
-  const todayStudyRecord = await getOrCreateTodayStudyRecord(session.user.id);
   return { userStatus, todayStudyRecord };
 };

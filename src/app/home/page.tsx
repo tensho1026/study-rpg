@@ -8,10 +8,7 @@ import todayStudyTime from "@/utils/todayTime";
 export default async function StudyQuestPage() {
   const homeData = await getHomeData();
 
-  if (homeData === undefined) return;
-  if (homeData?.todayStudyRecord.minutes > 1440) {
-    homeData.todayStudyRecord.minutes = 1440;
-  }
+  if (!homeData === undefined) return;
 
   const progressPercent = progressExp(homeData?.userStatus);
 
