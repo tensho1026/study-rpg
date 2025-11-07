@@ -12,12 +12,17 @@ export default async function getJournalData() {
   if (!session) return;
   const userId = session.user.id;
 
-  const totalStudy = (await getOrCreateUserStatusFunction(userId)).totalStudy;
+  const [userStatus, todayRecord, weekRecord, monthRecord] = await Promise.all([
+    getOrCreateUserStatusFunction(userId),
+    getOrCreateTodayStudyRecord(userId),
+    getThisWeekRecord(userId),
+    getThisMonthRecord(userId),
+  ]);
 
-  const todayStudyRecord = (await getOrCreateTodayStudyRecord(userId)).minutes;
-
-  const thisWeekRecord = await getThisWeekRecord(userId);
-  const thisMonthRecord = await getThisMonthRecord(userId);
-
-  return { totalStudy, todayStudyRecord, thisWeekRecord, thisMonthRecord };
+  return {
+    totalStudy: userStatus.totalStudy,
+    todayStudyRecord: todayRecord.minutes,
+    thisWeekRecord: weekRecord,
+    thisMonthRecord: monthRecord,
+  };
 }

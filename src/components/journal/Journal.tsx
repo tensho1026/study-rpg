@@ -23,14 +23,12 @@ export default function Journal({ initialData }: { initialData: JournalData }) {
   };
   console.log(dataMap.month);
 
-  const totalWeekMinutes = dataMap.week.reduce(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (sum: number, item: any) => sum + item.minutes,
+  const totalWeekMinutes = (dataMap.week ?? []).reduce(
+    (sum: number, item) => sum + item.minutes,
     0
   );
-  const totalMonthMinutes = dataMap.month.reduce(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (sum: number, item: any) => sum + item.minutes,
+  const totalMonthMinutes = (dataMap.month ?? []).reduce(
+    (sum: number, item) => sum + item.minutes,
     0
   );
 
