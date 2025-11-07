@@ -16,13 +16,26 @@ type Props = {
 
 export default function ItemShop({ coin, mstData }: Props) {
   const [userCoin, setUserCoin] = useState(coin);
-  const [itemData, setItemData] = useState<BattleItem[] | null>(mstData ?? []);
+  const [itemData, setItemData] = useState<BattleItem[]>(mstData ?? []);
 
+  const [isPurchasing, setIsPurchasing] = useState(false);
   const handlePurchase = async (itemId: string, cost: number) => {
-    await purchaseItem(itemId, cost ?? 0);
-    const update = await getItemShopData();
-    setUserCoin(update?.userCoins ?? 0);
-    setItemData(update?.howUserHas ?? []);
+    if (isPurchasing) return;
+    setIsPurchasing(true);
+
+    setUserCoin((prev) => Math.max(prev - cost, 0));
+
+    try {
+      await purchaseItem(itemId, cost);
+      const update = await getItemShopData();
+      setUserCoin(update?.userCoins ?? 0);
+      setItemData(update?.howUserHas ?? []);
+    } catch (err) {
+      console.error("購入処理でエラーが発生:", err);
+      setUserCoin((prev) => prev + cost);
+    } finally {
+      setIsPurchasing(false);
+    }
   };
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
@@ -40,7 +53,7 @@ export default function ItemShop({ coin, mstData }: Props) {
           </header>
 
           <div className="grid gap-4 md:grid-cols-2">
-            {itemData?.map((item) => {
+            {itemData.map((item) => {
               return (
                 <Card
                   key={item.id}
@@ -77,6 +90,7 @@ export default function ItemShop({ coin, mstData }: Props) {
                       </p>
                       <Button
                         variant="outline"
+                        disabled={isPurchasing}
                         className="mt-2 border-indigo-300/40 bg-indigo-500/10 text-indigo-100 hover:bg-indigo-500/30"
                         onClick={() => handlePurchase(item.id, item.price ?? 0)}
                       >
