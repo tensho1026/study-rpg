@@ -7,5 +7,5 @@ export default async function JournalPage() {
   console.log(data?.todayStudyRecord, "今日の合計");
   console.log(data?.thisWeekRecord, "今週");
   console.log(data?.thisMonthRecord, "今月");
-  return <Journal />;
+  return <Journal initialData={data!} />;
 }

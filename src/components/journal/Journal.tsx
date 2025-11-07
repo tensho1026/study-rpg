@@ -3,22 +3,8 @@
 import { AppMenuButton } from "@/components/common/app-menu-button";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { formatMinutes } from "@/utils/formatMinutes";
 import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
-
-const STUDY_TOTALS = [
-  { label: "今日の勉強時間", value: "2時間 30分" },
-  { label: "今週の勉強時間", value: "14時間 05分" },
-  { label: "今月の勉強時間", value: "52時間 40分" },
-  { label: "これまでの合計", value: "312時間 15分" },
-];
-
-const GRAPH_TABS = [
-  { id: "day", label: "日" },
-  { id: "week", label: "週" },
-  { id: "month", label: "月" },
-] as const;
-
-const ACTIVE_GRAPH_TAB: (typeof GRAPH_TABS)[number]["id"] = "week";
 
 const GRAPH_META = {
   range: "2024年5月6日〜2024年5月12日",
@@ -98,7 +84,52 @@ const GRAPH_DATA = [
   },
 ];
 
-export default function Journal() {
+type JournalData = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  todayStudyRecord: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  thisWeekRecord: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  thisMonthRecord: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  totalStudy: any;
+};
+
+export default function Journal({ initialData }: { initialData: JournalData }) {
+  const dataMap = {
+    day: initialData.todayStudyRecord,
+    week: initialData.thisWeekRecord,
+    month: initialData.thisMonthRecord,
+    total: initialData.totalStudy,
+  };
+
+  console.log(dataMap, "データマップ");
+
+  const totalWeekMinutes = dataMap.week.reduce(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (sum: number, item: any) => sum + item.minutes,
+    0
+  );
+  const totalMonthMinutes = dataMap.month.reduce(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (sum: number, item: any) => sum + item.minutes,
+    0
+  );
+  console.log(totalWeekMinutes, "今週の合計");
+
+  const STUDY_TOTALS = [
+    { label: "今日の勉強時間", value: formatMinutes(dataMap.day) },
+    { label: "今週の勉強時間", value: formatMinutes(totalWeekMinutes) },
+    { label: "今月の勉強時間", value: formatMinutes(totalMonthMinutes) },
+    { label: "これまでの合計", value: formatMinutes(dataMap.total) },
+  ];
+
+  const GRAPH_TABS = [
+    { id: "day", label: "日" },
+    { id: "week", label: "週" },
+    { id: "month", label: "月" },
+  ] as const;
+
   return (
     <main className="min-h-screen bg-background p-4 md:p-8">
       <div className="mx-auto flex max-w-5xl flex-col space-y-6 md:space-y-8">
@@ -144,19 +175,8 @@ export default function Journal() {
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="inline-flex items-center gap-1 rounded-xl border border-border bg-background/60 p-1">
               {GRAPH_TABS.map((tab) => {
-                const isActive = tab.id === ACTIVE_GRAPH_TAB;
                 return (
-                  <Button
-                    key={tab.id}
-                    type="button"
-                    size="sm"
-                    variant={isActive ? "default" : "ghost"}
-                    className={
-                      isActive
-                        ? "bg-primary text-primary-foreground shadow-[0_0_18px_rgba(236,72,153,0.35)]"
-                        : "text-muted-foreground hover:bg-muted/60"
-                    }
-                  >
+                  <Button key={tab.id} type="button" size="sm">
                     {tab.label}
                   </Button>
                 );
