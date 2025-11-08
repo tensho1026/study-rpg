@@ -3,7 +3,6 @@
 import { useMemo, useState } from "react";
 import { Clock, Flame, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
-
 import { saveStudy } from "@/app/actions/home/study-record";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -26,6 +25,7 @@ export function StudyTimer({ total, totalMinutes, totalHours }: Props) {
   const [currentMinutes, setCurrentMinutes] = useState(0);
   const [currentHours, setCurrentHours] = useState(0);
   const router = useRouter();
+  const [isSaving, setIsSaving] = useState(false);
 
   const hourOptions = useMemo(() => Array.from({ length: 7 }, (_, i) => i), []);
   const minuteOptions = useMemo(
@@ -34,11 +34,19 @@ export function StudyTimer({ total, totalMinutes, totalHours }: Props) {
   );
 
   const handleTotal = async () => {
+    if (isSaving) return;
+    setIsSaving(true);
     const totalTime = currentHours * 60 + currentMinutes;
-    await saveStudy(totalTime);
-    setCurrentHours(0);
-    setCurrentMinutes(0);
-    router.refresh();
+    try {
+      await saveStudy(totalTime);
+      setCurrentHours(0);
+      setCurrentMinutes(0);
+      router.refresh();
+    } catch (err) {
+      console.error("学習記録の保存中にエラーが発生しました:", err);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -136,8 +144,13 @@ export function StudyTimer({ total, totalMinutes, totalHours }: Props) {
           </div>
 
           <Button
-            className="group relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500 px-6 py-4 text-base font-semibold text-slate-950 shadow-lg shadow-[0_0_25px_rgba(16,185,129,0.28)] transition hover:translate-y-[1px] hover:shadow-[0_0_35px_rgba(16,185,129,0.45)] focus-visible:ring-emerald-400/40"
+            className="group relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500 px-6 py-4 text-base font-semibold text-slate-950 shadow-lg transition hover:translate-y-[1px] hover:shadow-[0_0_35px_rgba(16,185,129,0.45)] focus-visible:ring-emerald-400/40"
             onClick={handleTotal}
+            disabled={
+              isSaving ||
+              (currentHours === 0 && currentMinutes === 0) ||
+              totalHours === 24
+            }
           >
             <span className="relative z-10 flex items-center justify-center gap-2">
               <Sparkles className="size-5 transition-transform group-hover:scale-110" />

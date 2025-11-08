@@ -1,5 +1,4 @@
 import ItemShop from "@/components/itemShop/ItemShop";
-import React from "react";
 import getItemShopData from "../actions/itemShop/getItemShopData";
 
 export default async function ItemShopPage() {

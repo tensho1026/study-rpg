@@ -4,11 +4,20 @@ import { StatusWindow } from "@/components/home/status-window";
 import { StudyTimer } from "@/components/home/study-timer";
 import progressExp from "@/utils/progressExp";
 import todayStudyTime from "@/utils/todayTime";
+import { notFound, redirect } from "next/navigation";
 
 export default async function StudyQuestPage() {
   const homeData = await getHomeData();
 
-  if (!homeData === undefined) return;
+  if (!homeData) {
+    // 未ログイン時
+    redirect("/auth/signin");
+  }
+
+  if (!homeData.userStatus) {
+    // DB障害や予期せぬデータ欠損など
+    notFound();
+  }
 
   const progressPercent = progressExp(homeData?.userStatus);
 

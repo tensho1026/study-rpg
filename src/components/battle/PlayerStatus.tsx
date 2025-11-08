@@ -5,6 +5,7 @@ import { Card } from "../ui/card";
 import HpBar from "./HpBar";
 import { BattleItem } from "@/types/battleItem";
 import reduceItemAmount from "@/app/actions/battle/reduceItemAmount";
+import { toast } from "sonner";
 
 type UserStatus = {
   name: string;
@@ -22,6 +23,32 @@ type Props = {
 export default function PlayerStatus({ userStatus, itemsData }: Props) {
   const [isItemWindowOpen, setIsItemWindowOpen] = useState(false);
   const [items, setItems] = useState(itemsData);
+
+  const handleUseItem = async (item: BattleItem) => {
+    userStatus.switchUseItem(item);
+    setIsItemWindowOpen(false);
+    setItems((prev) =>
+      prev.map((i) =>
+        i.id === item.id ? { ...i, quantity: (i.quantity ?? 0) - 1 } : i
+      )
+    );
+    try {
+      const updatedQuantity = await reduceItemAmount(item.id);
+      setItems((prev) =>
+        prev.map((i) =>
+          i.id === item.id ? { ...i, quantity: updatedQuantity } : i
+        )
+      );
+    } catch (err) {
+      toast.error("アイテム使用エラー");
+      console.error("アイテム使用エラー", err);
+      setItems((prev) =>
+        prev.map((i) =>
+          i.id === item.id ? { ...i, quantity: (i.quantity ?? 0) + 1 } : i
+        )
+      );
+    }
+  };
 
   return (
     <>
@@ -73,17 +100,7 @@ export default function PlayerStatus({ userStatus, itemsData }: Props) {
                   className="flex items-center justify-between rounded-sm border border-indigo-300/40 bg-indigo-900/60 px-3 py-2 shadow-[inset_0_0_6px_rgba(18,17,79,0.65)] transition hover:bg-indigo-200/30 hover:text-white"
                   disabled={item.quantity! <= 0}
                   onClick={() => {
-                    userStatus.switchUseItem(item);
-                    setIsItemWindowOpen(false);
-                    reduceItemAmount(item.id);
-
-                    setItems((prev) =>
-                      prev.map((i) =>
-                        i.id === item.id
-                          ? { ...i, quantity: (i.quantity ?? 0) - 1 }
-                          : i
-                      )
-                    );
+                    handleUseItem(item);
                   }}
                 >
                   <span className="truncate pr-2">{item.name}</span>

@@ -8,6 +8,7 @@ import { BattleItem } from "@/types/battleItem";
 import ItemShopFooter from "./ItemShopFooter";
 import purchaseItem from "@/app/actions/itemShop/purchaseItem";
 import getItemShopData from "@/app/actions/itemShop/getItemShopData";
+import { toast } from "sonner";
 
 type Props = {
   coin: number;
@@ -21,24 +22,37 @@ export default function ItemShop({ coin, mstData }: Props) {
   const [isPurchasing, setIsPurchasing] = useState(false);
   const handlePurchase = async (itemId: string, cost: number) => {
     if (isPurchasing) return;
+    if (cost > userCoin) {
+      toast.error("残高不足です");
+      return;
+    }
+
     setIsPurchasing(true);
 
     setUserCoin((prev) => Math.max(prev - cost, 0));
 
     try {
-      await purchaseItem(itemId, cost);
-      const update = await getItemShopData();
-      setUserCoin(update?.userCoins ?? 0);
-      setItemData(update?.howUserHas ?? []);
-    } catch (err) {
-      console.error("購入処理でエラーが発生:", err);
+      const result = await purchaseItem(itemId, cost);
+      if (result) {
+        toast.success("購入が完了しました");
+        setUserCoin(result?.newMoney ?? 0);
+        setItemData((prev) =>
+          prev.map((item) =>
+            item.id === result.updatedItem.battleItemId
+              ? { ...item, quantity: result.updatedItem.quantity }
+              : item
+          )
+        );
+      }
+    } catch (error) {
+      toast.error("error発生");
       setUserCoin((prev) => prev + cost);
     } finally {
       setIsPurchasing(false);
     }
   };
   return (
-    <div className="min-h-screen bg-background p-4 md:p-8">
+    <div className=" min-h-screen bg-background p-4 md:p-8">
       <div className="mx-auto flex max-w-5xl flex-col gap-6">
         <ItemShopHeader coin={userCoin} />
 
@@ -90,7 +104,7 @@ export default function ItemShop({ coin, mstData }: Props) {
                       </p>
                       <Button
                         variant="outline"
-                        disabled={isPurchasing}
+                        disabled={isPurchasing || userCoin < (item.price ?? 0)}
                         className="mt-2 border-indigo-300/40 bg-indigo-500/10 text-indigo-100 hover:bg-indigo-500/30"
                         onClick={() => handlePurchase(item.id, item.price ?? 0)}
                       >

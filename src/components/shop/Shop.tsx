@@ -43,6 +43,7 @@ export default function Shop({ shopEquipments, coin, userEquipment }: Props) {
           userEquipments={userEquipments}
           setUserEquipments={setUserEquipments}
           setUserCoins={setUserCoins}
+          userCoin={userCoins ?? 0}
         />
 
         {/* 戻るボタン */}

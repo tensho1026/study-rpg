@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BattleStatusType } from "@/types/battleStatus";
 import { Enemy } from "@/types/enemy";
 import { useBattleAnimation } from "@/hooks/useBattleAnimation";
@@ -12,13 +12,14 @@ import BattleArea from "./BattleArea";
 import saveRewards from "@/app/actions/battle/saveRewards";
 import { BattleItem } from "@/types/battleItem";
 import updateUserBattleItems from "@/app/actions/battle/updateUserItems";
+import reduceItemAmount from "@/app/actions/battle/reduceItemAmount";
 
 type Props = {
   enemyData: Enemy | null;
   userInfo: BattleStatusType | null;
   dropItems: {
     monsterDrop: DropDetail;
-    nomalDrop: DropDetail;
+    normalDrop: DropDetail;
   };
   userAttackStatus: number;
   userDefenseStatus: number;
@@ -44,6 +45,14 @@ export default function Battle({
   const initialLevelRef = useRef<number>(userInfo?.level ?? 0);
   const [userLevel, setUserLevel] = useState<number>(initialLevelRef.current);
   const [userItems, setUserItems] = useState<BattleItem[] | null>(items ?? []);
+  const timeouts = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  useEffect(() => {
+    return () => {
+      timeouts.current.forEach(clearTimeout);
+      timeouts.current = [];
+    };
+  }, []);
 
   const { userAnimation, enemyAnimation } = useBattleAnimation(
     setPlayerAttackAnim,
@@ -85,11 +94,11 @@ export default function Battle({
 
   const handleVictory = () => {
     if (!enemy) return;
-    setTimeout(async () => {
+    const id = setTimeout(async () => {
       setBattleLog("君の勝利だ！");
       setVictory(true);
       const newLevel = await saveRewards(
-        dropItem.nomalDrop.id,
+        dropItem.normalDrop.id,
         dropItem.monsterDrop.id,
         enemy.coin ?? 0,
         enemy.exp,
@@ -99,6 +108,8 @@ export default function Battle({
         setUserLevel(newLevel);
       }
     }, 2000);
+
+    timeouts.current.push(id);
 
     return;
   };
@@ -129,10 +140,11 @@ export default function Battle({
   };
 
   const handleDefeat = () => {
-    setTimeout(() => {
+    const id = setTimeout(() => {
       setBattleLog("君の負けだ...");
       setDefeat(true);
     }, 3000);
+    timeouts.current.push(id);
   };
 
   const handleAttack = async () => {
@@ -142,26 +154,27 @@ export default function Battle({
       handleVictory();
       return;
     }
-    setTimeout(() => {
+    const id = setTimeout(() => {
       enemyAttack();
     }, 2000);
+    timeouts.current.push(id);
   };
 
-  const handleUseitem = async (item: BattleItem) => {
+  const handleUseItem = async (item: BattleItem) => {
     if (!enemy) return;
     switchUseItem(item);
-    const update = await updateUserBattleItems();
-    setUserItems(update ?? []);
-    setTimeout(() => {
+
+    const id = setTimeout(() => {
       enemyAttack();
     }, 2000);
+    timeouts.current.push(id);
   };
   const userStatusComponentData = {
     name: status?.user.name ?? "",
     hp: status?.hp ?? 0,
     maxHp: status?.maxHp ?? 0,
     handleAttack: handleAttack,
-    switchUseItem: handleUseitem,
+    switchUseItem: handleUseItem,
   };
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_center,rgba(30,30,50,1),rgba(5,10,20,1))] p-4 md:p-8 font-mono">
@@ -194,7 +207,7 @@ export default function Battle({
           exp={enemy?.exp ?? 0}
           gold={enemy?.coin ?? 0}
           monsterDrop={dropItem.monsterDrop}
-          nomalDrop={dropItem.nomalDrop}
+          nomalDrop={dropItem.normalDrop}
           level={userLevel}
           previousLevel={initialLevelRef.current}
         />

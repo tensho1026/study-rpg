@@ -3,6 +3,7 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 
 type DropItem = {
   id: string;
@@ -20,6 +21,9 @@ export default function BattleVictoryResult({
   gold,
   drops,
 }: VictoryResultProps) {
+  const params = useParams();
+  const mapId = params.id as string;
+
   return (
     <Card className="space-y-4 border-2 border-emerald-500/40 bg-slate-950/80 p-6 text-slate-100">
       <header className="text-center">
@@ -62,7 +66,7 @@ export default function BattleVictoryResult({
       </section>
 
       <footer className="flex justify-end">
-        <Link href="/map">
+        <Link href={`/map/${mapId}`}>
           <Button className="bg-emerald-500 text-slate-900 hover:bg-emerald-400">
             次へ進む
           </Button>
