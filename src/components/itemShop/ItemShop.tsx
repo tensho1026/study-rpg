@@ -32,12 +32,17 @@ export default function ItemShop({ coin, mstData }: Props) {
     setUserCoin((prev) => Math.max(prev - cost, 0));
 
     try {
-      const success = await purchaseItem(itemId, cost);
-      if (success) {
+      const result = await purchaseItem(itemId, cost);
+      if (result) {
         toast.success("購入が完了しました");
-        const update = await getItemShopData();
-        setUserCoin(update?.userCoins ?? 0);
-        setItemData(update?.howUserHas ?? []);
+        setUserCoin(result?.newMoney ?? 0);
+        setItemData((prev) =>
+          prev.map((item) =>
+            item.id === result.updatedItem.battleItemId
+              ? { ...item, quantity: result.updatedItem.quantity }
+              : item
+          )
+        );
       }
     } catch (error) {
       toast.error("error発生");

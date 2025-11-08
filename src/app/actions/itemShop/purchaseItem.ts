@@ -30,7 +30,7 @@ export default async function purchaseItem(itemId: string, cost: number) {
       throw new Error("残高不足です。");
     }
 
-    await tx.userHasBattleItem.upsert({
+    const updatedItem = await tx.userHasBattleItem.upsert({
       where: {
         userId_battleItemId: {
           userId: session.user.id,
@@ -44,17 +44,27 @@ export default async function purchaseItem(itemId: string, cost: number) {
         userId: session.user.id,
         battleItemId: itemId,
       },
+      select: {
+        battleItemId: true,
+        quantity: true,
+      },
     });
 
-    await tx.userStatus.update({
+    const updatedMoney = await tx.userStatus.update({
       where: {
         userId: session.user.id,
       },
       data: {
         money: { decrement: cost },
       },
+      select: {
+        money: true,
+      },
     });
 
-    return true;
+    return {
+      updatedItem,
+      newMoney: updatedMoney.money,
+    };
   });
 }
