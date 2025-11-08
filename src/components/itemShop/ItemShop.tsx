@@ -7,7 +7,6 @@ import { useState } from "react";
 import { BattleItem } from "@/types/battleItem";
 import ItemShopFooter from "./ItemShopFooter";
 import purchaseItem from "@/app/actions/itemShop/purchaseItem";
-import getItemShopData from "@/app/actions/itemShop/getItemShopData";
 import { toast } from "sonner";
 
 type Props = {

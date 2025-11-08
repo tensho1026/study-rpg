@@ -4,28 +4,25 @@ type Props = {
   userId: string;
   today: Date;
 };
+
 export default async function getNowTodayStudyRecord({ userId, today }: Props) {
-  let todayminutes = await prisma.studyRecord.findFirst({
+  const record = await prisma.studyRecord.upsert({
     where: {
-      userId: userId,
+      userId_Date: {
+        userId,
+        Date: today,
+      },
+    },
+    update: {},
+    create: {
+      userId,
       Date: today,
+      minutes: 0,
     },
     select: {
       minutes: true,
     },
   });
 
-  if (!todayminutes) {
-    todayminutes = await prisma.studyRecord.create({
-      data: {
-        userId: userId,
-        Date: today,
-      },
-      select: {
-        minutes: true,
-      },
-    });
-  }
-
-  return todayminutes?.minutes;
+  return record.minutes;
 }

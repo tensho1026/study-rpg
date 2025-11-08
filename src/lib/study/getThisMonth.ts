@@ -1,6 +1,7 @@
 import { endOfMonth, startOfMonth } from "date-fns";
-import getToday from "./getToday";
+
 import { prisma } from "@/lib/prisma";
+import getToday from "@/utils/getToday";
 
 export default async function getThisMonthRecord(userId: string) {
   const today = getToday();
@@ -10,7 +11,7 @@ export default async function getThisMonthRecord(userId: string) {
   const thisMonthRecord = await prisma.studyRecord.findMany({
     where: {
       userId: userId,
-      updatedAt: {
+      Date: {
         gte: monthStart,
         lt: monthEnd,
       },

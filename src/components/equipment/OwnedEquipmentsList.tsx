@@ -18,9 +18,22 @@ function OwnedEquipmentsList({
   selectedCategory,
 }: Props) {
   const handleEquipItem = async (equipmentId: string, type: EquipmentType) => {
-    await equipItem(equipmentId, type);
-    const update = await getEquipmentData();
-    setEquipments(update ?? []);
+    const result = await equipItem(equipmentId, type);
+    if (!result) return;
+
+    setEquipments((prev) =>
+      prev.map((item) => {
+        if (item.equipmentId === result.equippedId) {
+          // 今回新しく装備したもの
+          return { ...item, isDraft: true };
+        }
+        if (item.equipmentId === result.unequippedId?.equipmentId) {
+          // 今まで装備していたもの
+          return { ...item, isDraft: false };
+        }
+        return item;
+      })
+    );
   };
 
   return (

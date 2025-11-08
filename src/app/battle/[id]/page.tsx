@@ -7,7 +7,7 @@ type Props = {
 };
 
 export default async function BattlePage({ params }: Props) {
-  const { id } = params;
+  const { id } = await params;
   const data = await getBattleData(id);
 
   if (!data || !data.battleStatus || !data.enemyData) {
