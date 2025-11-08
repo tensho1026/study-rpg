@@ -21,7 +21,7 @@ export default function Journal({ initialData }: { initialData: JournalData }) {
     month: initialData.thisMonthRecord,
     total: initialData.totalStudy,
   };
-  console.log(dataMap.month);
+
 
   const totalWeekMinutes = (dataMap.week ?? []).reduce(
     (sum: number, item) => sum + item.minutes,
