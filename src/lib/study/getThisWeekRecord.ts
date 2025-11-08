@@ -10,7 +10,7 @@ export default async function getThisWeekRecord(userId: string) {
   const thisWeekRecord = await prisma.studyRecord.findMany({
     where: {
       userId: userId,
-      updatedAt: {
+      Date: {
         gte: weekStart,
         lt: weekEnd,
       },

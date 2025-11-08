@@ -2,9 +2,9 @@
 
 import { authOptions } from "@/lib/auth";
 import { getOrCreateUserStatusFunction } from "@/lib/common/getUserStatus";
+import getThisMonthRecord from "@/lib/study/getThisMonth";
 import getThisWeekRecord from "@/lib/study/getThisWeekRecord";
 import getOrCreateTodayStudyRecord from "@/lib/study/getTodayStudyRecord";
-import getThisMonthRecord from "@/utils/getThisMonth";
 import { getServerSession } from "next-auth";
 
 export default async function getJournalData() {
