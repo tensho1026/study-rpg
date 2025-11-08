@@ -22,7 +22,10 @@ export default async function getBattleData(mapId: string) {
   }
 
   const userEquipments = battleStatus?.user.equipments;
-  const userBattleStatus = calcUserBattleStatus(battleStatus, userEquipments);
+  const userBattleStatus = calcUserBattleStatus(
+    battleStatus,
+    userEquipments ?? null 
+  );
 
   const [enemyData, dropItem, battleItems] = await Promise.all([
     getEnemy(mapId),
