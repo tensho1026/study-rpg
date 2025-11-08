@@ -11,8 +11,6 @@ import Result from "./Result";
 import BattleArea from "./BattleArea";
 import saveRewards from "@/app/actions/battle/saveRewards";
 import { BattleItem } from "@/types/battleItem";
-import updateUserBattleItems from "@/app/actions/battle/updateUserItems";
-import reduceItemAmount from "@/app/actions/battle/reduceItemAmount";
 
 type Props = {
   enemyData: Enemy | null;
