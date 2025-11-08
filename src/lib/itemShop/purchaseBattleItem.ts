@@ -12,7 +12,7 @@ export default async function purchaseBattleItem(
       },
     },
     update: {
-      quantity: { increment: 1 }, 
+      quantity: { increment: 1 },
     },
     create: {
       userId: userId,

@@ -8,6 +8,7 @@ import { BattleItem } from "@/types/battleItem";
 import ItemShopFooter from "./ItemShopFooter";
 import purchaseItem from "@/app/actions/itemShop/purchaseItem";
 import getItemShopData from "@/app/actions/itemShop/getItemShopData";
+import { toast } from "sonner";
 
 type Props = {
   coin: number;
@@ -21,6 +22,12 @@ export default function ItemShop({ coin, mstData }: Props) {
   const [isPurchasing, setIsPurchasing] = useState(false);
   const handlePurchase = async (itemId: string, cost: number) => {
     if (isPurchasing) return;
+    if (cost > userCoin) {
+      toast.error("残高不足です");
+      return;
+    }
+    toast.success("購入しました");
+
     setIsPurchasing(true);
 
     setUserCoin((prev) => Math.max(prev - cost, 0));
@@ -30,15 +37,15 @@ export default function ItemShop({ coin, mstData }: Props) {
       const update = await getItemShopData();
       setUserCoin(update?.userCoins ?? 0);
       setItemData(update?.howUserHas ?? []);
-    } catch (err) {
-      console.error("購入処理でエラーが発生:", err);
+    } catch (error) {
+      toast.error("errror発生");
       setUserCoin((prev) => prev + cost);
     } finally {
       setIsPurchasing(false);
     }
   };
   return (
-    <div className="min-h-screen bg-background p-4 md:p-8">
+    <div className=" min-h-screen bg-background p-4 md:p-8">
       <div className="mx-auto flex max-w-5xl flex-col gap-6">
         <ItemShopHeader coin={userCoin} />
 

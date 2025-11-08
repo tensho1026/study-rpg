@@ -8,6 +8,10 @@ import { getServerSession } from "next-auth";
 export default async function purchaseItem(itemId: string, cost: number) {
   const session = await getServerSession(authOptions);
   if (!session) return;
+
+  // ↓前に使ってたやつ
   await purchaseBattleItem(session.user.id, itemId);
   await decreaseUserCoins(session.user.id, cost);
+
+  // transactionを使うようにした;
 }

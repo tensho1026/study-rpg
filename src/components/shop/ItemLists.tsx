@@ -7,6 +7,7 @@ import { getItemIcon } from "@/utils/getIcon-Label";
 import purchaseEquipment from "@/app/actions/shop/purchaseEquipment";
 import getEquipmentData from "@/app/actions/shop/getShopData";
 import { ShopItem } from "@/types/shopItems";
+import { toast } from "sonner";
 
 type UserEquipment = {
   equipmentId: string;
@@ -19,6 +20,7 @@ type ItemListsProps = {
   userEquipments: UserEquipment[];
   setUserEquipments: Dispatch<SetStateAction<UserEquipment[]>>;
   setUserCoins: Dispatch<SetStateAction<number | null>>;
+  userCoin: number;
 };
 
 function ItemLists({
@@ -27,10 +29,19 @@ function ItemLists({
   userEquipments,
   setUserEquipments,
   setUserCoins,
+  userCoin,
 }: ItemListsProps) {
   const filteredItems = shopItems.filter((item) => item.type === selectedTab);
 
-  const handlePurchase = async (equipmentId: string) => {
+  const handlePurchase = async (
+    equipmentId: string,
+    cost: number,
+    userCoin: number
+  ) => {
+    if (cost > userCoin) {
+      toast.error("残高不足です");
+      return;
+    }
     await purchaseEquipment(equipmentId);
     const updated = await getEquipmentData();
     setUserCoins(updated?.userCoins ?? 0);
@@ -88,7 +99,7 @@ function ItemLists({
                       ? "bg-muted text-muted-foreground shadow-inner cursor-not-allowed"
                       : "bg-secondary text-secondary-foreground hover:bg-secondary/90"
                   }`}
-                  onClick={() => handlePurchase(item.id)}
+                  onClick={() => handlePurchase(item.id, item.price, userCoin)}
                   disabled={alreadyOwned}
                 >
                   {alreadyOwned ? "購入済" : "購入する"}
