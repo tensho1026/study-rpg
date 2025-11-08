@@ -70,7 +70,7 @@ export default function Battle({
 
   const healHp = (amount: number) => {
     userAnimation();
-    setBattleLog(`${status?.user.name}のHPが10回復した`);
+    setBattleLog(`${status?.user.name}のHPが${amount}回復した`);
     setStatus((prev) => {
       if (!prev) return null;
       // ここで最大hpより回復しないようにしている
@@ -86,7 +86,9 @@ export default function Battle({
     const updatedEnemy = { ...enemy, hp: newEnemyHp };
 
     setEnemy(updatedEnemy);
-    setBattleLog(`${status?.user.name}の攻撃！敵の${enemy.name}に10の攻撃！`);
+    setBattleLog(
+      `${status?.user.name}の攻撃！敵の${enemy.name}に${userAttackStatus}の攻撃！`
+    );
     return updatedEnemy;
   };
 
@@ -121,7 +123,8 @@ export default function Battle({
         0,
 
         // ここで敵の攻撃力より防御が高いと敵の攻撃で回復してしまうので注意する
-        prevStatus.hp - (200 - userDefenseStatus)
+
+        prevStatus.hp - (enemy.attack - userDefenseStatus)
       );
       const newStatus = { ...prevStatus, hp: newStatusHp };
 
@@ -131,7 +134,11 @@ export default function Battle({
       }
 
       const defenderName = prevStatus.user?.name ?? "";
-      setBattleLog(`敵の${enemy.name}の攻撃！${defenderName}に10の攻撃！`);
+      setBattleLog(
+        `敵の${enemy.name}の攻撃！${defenderName}に${
+          300 - userDefenseStatus
+        }の攻撃！`
+      );
 
       return newStatus;
     });

@@ -1,115 +1,139 @@
 "use client";
-import Link from "next/link";
-import { Card } from "@/components/ui/card";
-import { useSession } from "next-auth/react";
+import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function LandingPage() {
+  const router = useRouter();
   const { data } = useSession();
 
-  const router = useRouter();
-
   const handleClick = () => {
-    if (data) {
-      router.push("/home");
-    } else {
-      router.push("/auth/signin");
-    }
+    router.push(data ? "/home" : "/auth/signin");
   };
+
   return (
-    <main className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="max-w-2xl w-full space-y-8">
-        {/* Title */}
-        <div className="text-center space-y-2">
-          <h1 className="text-4xl md:text-6xl text-foreground mb-4 text-balance">
-            勉強クエスト
-          </h1>
-          <p className="text-sm md:text-base text-muted-foreground">
-            STUDY QUEST RPG
-          </p>
-        </div>
+    <main className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black text-white">
+      {/* 背景 */}
+      <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_center,rgba(100,150,255,0.15)_0%,transparent_80%)]" />
+      <div className="absolute inset-0 z-0 animate-[bgScroll_60s_linear_infinite] bg-[url('/textures/stars.png')] opacity-40" />
 
-        {/* Main Window */}
-        <Card className="rpg-window bg-card p-8 md:p-12">
-          <div className="space-y-8">
-            {/* Hero Character */}
-            <div className="flex justify-center">
-              <div className="text-8xl md:text-9xl">🧙‍♂️</div>
-            </div>
+      {/* 魔法陣 */}
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 0.25, rotate: 360 }}
+        transition={{ repeat: Infinity, duration: 90, ease: "linear" }}
+        className="absolute w-[600px] h-[600px] bg-[url('/textures/magic-circle.png')] bg-contain bg-no-repeat opacity-20"
+      />
 
-            {/* Features */}
-            <div className="space-y-4 text-card-foreground">
-              <div className="flex items-start gap-3">
-                <span className="text-xl">⚔️</span>
-                <div>
-                  <h3 className="text-sm md:text-base font-bold mb-1">
-                    勉強時間を記録
-                  </h3>
-                  <p className="text-xs md:text-sm text-muted-foreground">
-                    勉強した時間を入力して経験値とコインを獲得
-                  </p>
-                </div>
-              </div>
+      {/* メインコンテンツ */}
+      <div className="relative z-10 text-center space-y-10">
+        {/* タイトル */}
+        <motion.h1
+          initial={{ opacity: 0, y: -40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+          className="text-6xl md:text-8xl font-extrabold tracking-widest 
+          bg-gradient-to-r from-indigo-300 via-purple-400 to-pink-400 bg-clip-text text-transparent 
+          drop-shadow-[0_0_20px_rgba(120,90,255,0.5)]"
+        >
+          STUDY QUEST
+        </motion.h1>
 
-              <div className="flex items-start gap-3">
-                <span className="text-xl">📈</span>
-                <div>
-                  <h3 className="text-sm md:text-base font-bold mb-1">
-                    レベルアップ
-                  </h3>
-                  <p className="text-xs md:text-sm text-muted-foreground">
-                    経験値を貯めてレベルを上げよう
-                  </p>
-                </div>
-              </div>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 1 }}
+          className="text-sm md:text-base tracking-[0.3em] text-slate-400 uppercase"
+        >
+          勉強を冒険に変えるRPG
+        </motion.p>
 
-              <div className="flex items-start gap-3">
-                <span className="text-xl">🛡️</span>
-                <div>
-                  <h3 className="text-sm md:text-base font-bold mb-1">
-                    装備を強化
-                  </h3>
-                  <p className="text-xs md:text-sm text-muted-foreground">
-                    コインで武器や防具を購入して強くなろう
-                  </p>
-                </div>
-              </div>
-            </div>
+        {/* 冒険ボタン */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.2, duration: 1 }}
+          className="pt-8 space-y-6"
+        >
+          <Button
+            onClick={handleClick}
+            className="w-64 py-4 text-lg font-bold tracking-wider rounded-xl
+            bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500
+            shadow-[0_0_20px_rgba(180,120,255,0.4)]
+            hover:brightness-110 hover:shadow-[0_0_30px_rgba(200,160,255,0.7)]
+            active:scale-[0.98]
+            transition-all duration-300"
+          >
+            冒険を始める
+          </Button>
 
-            {/* CTA Button */}
-            <div className="pt-4">
+          {/* ログイン・新規登録 */}
+          <div className="flex flex-col md:flex-row justify-center items-center gap-4 pt-2">
+            {/* ログイン */}
+            <Link href="/auth/signin" className="w-48">
               <Button
-                className="rpg-button w-full py-4 text-base md:text-lg"
-                onClick={handleClick}
-              >
-                ▶ 冒険を始める
-              </Button>
-            </div>
-
-            {/* Auth Links */}
-            <div className="flex justify-center gap-4 text-xs md:text-sm pt-2">
-              <Link
-                href="/auth/signin"
-                className="text-muted-foreground hover:text-foreground transition-colors"
+                variant="outline"
+                className="w-full border-indigo-400/60 text-indigo-200 
+                hover:text-white hover:bg-indigo-500/30 hover:border-indigo-300
+                hover:shadow-[0_0_20px_rgba(130,170,255,0.6)]
+                active:scale-[0.98]
+                transition-all duration-300 text-sm py-3 font-semibold tracking-wide"
               >
                 ログイン
-              </Link>
-              <span className="text-muted-foreground">|</span>
-              <Link
-                href="/auth/signup"
-                className="text-muted-foreground hover:text-foreground transition-colors"
+              </Button>
+            </Link>
+
+            {/* 新規登録 */}
+            <Link href="/auth/signup" className="w-48">
+              <Button
+                variant="outline"
+                className="w-full border-pink-400/60 text-pink-200 
+                hover:text-white hover:bg-pink-500/30 hover:border-pink-300
+                hover:shadow-[0_0_20px_rgba(255,150,200,0.6)]
+                active:scale-[0.98]
+                transition-all duration-300 text-sm py-3 font-semibold tracking-wide"
               >
                 新規登録
-              </Link>
-            </div>
+              </Button>
+            </Link>
           </div>
-        </Card>
+        </motion.div>
 
-        {/* Footer */}
-        <p className="text-center text-xs text-muted-foreground">
-          勉強を冒険に変えよう
-        </p>
+        {/* フッター */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.8 }}
+          transition={{ delay: 2 }}
+          className="text-xs text-slate-500 mt-16 tracking-widest"
+        >
+          © 2025 Study Quest RPG
+        </motion.p>
+      </div>
+
+      {/* 光粒子 */}
+      <div className="absolute inset-0 overflow-hidden z-0">
+        {[...Array(25)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-cyan-300 rounded-full"
+            initial={{
+              x: Math.random() * 100 + "%",
+              y: Math.random() * 100 + "%",
+              opacity: 0,
+            }}
+            animate={{
+              y: ["0%", "120%"],
+              opacity: [0, 1, 0],
+            }}
+            transition={{
+              duration: 6 + Math.random() * 6,
+              repeat: Infinity,
+              delay: Math.random() * 5,
+            }}
+          />
+        ))}
       </div>
     </main>
   );
