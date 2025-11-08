@@ -6,6 +6,10 @@ export const getTabLabel = (type: "weapon" | "armor" | "accessory") => {
       return "防具";
     case "accessory":
       return "装飾品";
+    default: {
+      const _exhaustive: never = type;
+      return _exhaustive;
+    }
   }
 };
 
@@ -17,5 +21,10 @@ export const getItemIcon = (type: "weapon" | "armor" | "accessory") => {
       return "🛡️";
     case "accessory":
       return "💍";
+
+    default: {
+      const _exhaustive: never = type;
+      return _exhaustive;
+    }
   }
 };

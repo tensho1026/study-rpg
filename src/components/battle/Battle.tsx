@@ -18,7 +18,7 @@ type Props = {
   userInfo: BattleStatusType | null;
   dropItems: {
     monsterDrop: DropDetail;
-    nomalDrop: DropDetail;
+    normalDrop: DropDetail;
   };
   userAttackStatus: number;
   userDefenseStatus: number;
@@ -89,7 +89,7 @@ export default function Battle({
       setBattleLog("君の勝利だ！");
       setVictory(true);
       const newLevel = await saveRewards(
-        dropItem.nomalDrop.id,
+        dropItem.normalDrop.id,
         dropItem.monsterDrop.id,
         enemy.coin ?? 0,
         enemy.exp,
@@ -194,7 +194,7 @@ export default function Battle({
           exp={enemy?.exp ?? 0}
           gold={enemy?.coin ?? 0}
           monsterDrop={dropItem.monsterDrop}
-          nomalDrop={dropItem.nomalDrop}
+          nomalDrop={dropItem.normalDrop}
           level={userLevel}
           previousLevel={initialLevelRef.current}
         />

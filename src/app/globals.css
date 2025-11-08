@@ -115,20 +115,22 @@
   body {
     @apply bg-background text-foreground;
   }
+}
 
-  /* Pixel-perfect rendering */
-  * {
-    image-rendering: pixelated;
-    image-rendering: -moz-crisp-edges;
-    image-rendering: crisp-edges;
-  }
+/* ✅ Pixel-art rendering — limited to sprites/images only */
+.pixel-art {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
 }
 
 /* Custom RPG window border effect */
 .rpg-window {
   border: 4px solid;
-  border-color: oklch(0.98 0 0) oklch(0.3 0.03 240) oklch(0.3 0.03 240) oklch(0.98 0 0);
-  box-shadow: inset 2px 2px 0 oklch(0.7 0.02 240), inset -2px -2px 0 oklch(0.4 0.05 240);
+  border-color: oklch(0.98 0 0) oklch(0.3 0.03 240)
+    oklch(0.3 0.03 240) oklch(0.98 0 0);
+  box-shadow: inset 2px 2px 0 oklch(0.7 0.02 240),
+    inset -2px -2px 0 oklch(0.4 0.05 240);
 }
 
 /* Blinking cursor animation */

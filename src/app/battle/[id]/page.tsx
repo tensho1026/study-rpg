@@ -55,7 +55,7 @@ export default async function BattlePage({ params }: Props) {
     <Battle
       userInfo={data.battleStatus}
       enemyData={enemy}
-      dropItems={{ monsterDrop: monsterDrop, nomalDrop: normalDrop }}
+      dropItems={{ monsterDrop: monsterDrop, normalDrop: normalDrop }}
       userAttackStatus={data.userBattleStatus.attack}
       userDefenseStatus={data.userBattleStatus.defense}
       items={data.battleItems ?? []}

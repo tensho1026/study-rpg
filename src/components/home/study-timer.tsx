@@ -3,7 +3,6 @@
 import { useMemo, useState } from "react";
 import { Clock, Flame, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
-
 import { saveStudy } from "@/app/actions/home/study-record";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
