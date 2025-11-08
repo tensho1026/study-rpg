@@ -26,19 +26,21 @@ export default function ItemShop({ coin, mstData }: Props) {
       toast.error("残高不足です");
       return;
     }
-    toast.success("購入しました");
 
     setIsPurchasing(true);
 
     setUserCoin((prev) => Math.max(prev - cost, 0));
 
     try {
-      await purchaseItem(itemId, cost);
-      const update = await getItemShopData();
-      setUserCoin(update?.userCoins ?? 0);
-      setItemData(update?.howUserHas ?? []);
+      const success = await purchaseItem(itemId, cost);
+      if (success) {
+        toast.success("購入が完了しました");
+        const update = await getItemShopData();
+        setUserCoin(update?.userCoins ?? 0);
+        setItemData(update?.howUserHas ?? []);
+      }
     } catch (error) {
-      toast.error("errror発生");
+      toast.error("error発生");
       setUserCoin((prev) => prev + cost);
     } finally {
       setIsPurchasing(false);
@@ -97,7 +99,7 @@ export default function ItemShop({ coin, mstData }: Props) {
                       </p>
                       <Button
                         variant="outline"
-                        disabled={isPurchasing}
+                        disabled={isPurchasing || userCoin < (item.price ?? 0)}
                         className="mt-2 border-indigo-300/40 bg-indigo-500/10 text-indigo-100 hover:bg-indigo-500/30"
                         onClick={() => handlePurchase(item.id, item.price ?? 0)}
                       >
