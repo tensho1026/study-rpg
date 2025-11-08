@@ -1,10 +1,11 @@
 import { BattleStatusType } from "@/types/battleStatus";
+import { EquipmentType } from "@prisma/client";
 
 type BattleEquipment = {
   mstEquipment: {
-    type: "weapon" | "armor";
-    attack?: number;
-    defense?: number;
+    type: EquipmentType;
+    attack?: number | null;
+    defense?: number | null;
   };
 };
 
