@@ -4,7 +4,7 @@ export default async function reduceBattleItemAmount(
   userId: string,
   battleItemId: string
 ) {
-  await prisma.userHasBattleItem.update({
+  const updatedQuantity = await prisma.userHasBattleItem.update({
     where: {
       userId_battleItemId: {
         userId,
@@ -14,5 +14,11 @@ export default async function reduceBattleItemAmount(
     data: {
       quantity: { decrement: 1 },
     },
+    select: {
+      quantity: true,
+      
+    },
   });
+
+  return updatedQuantity.quantity
 }

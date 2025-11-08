@@ -12,7 +12,7 @@ import BattleArea from "./BattleArea";
 import saveRewards from "@/app/actions/battle/saveRewards";
 import { BattleItem } from "@/types/battleItem";
 import updateUserBattleItems from "@/app/actions/battle/updateUserItems";
-
+import reduceItemAmount from "@/app/actions/battle/reduceItemAmount";
 
 type Props = {
   enemyData: Enemy | null;
@@ -160,11 +160,10 @@ export default function Battle({
     timeouts.current.push(id);
   };
 
-  const handleUseitem = async (item: BattleItem) => {
+  const handleUseItem = async (item: BattleItem) => {
     if (!enemy) return;
     switchUseItem(item);
-    const update = await updateUserBattleItems();
-    setUserItems(update ?? []);
+
     const id = setTimeout(() => {
       enemyAttack();
     }, 2000);
@@ -175,7 +174,7 @@ export default function Battle({
     hp: status?.hp ?? 0,
     maxHp: status?.maxHp ?? 0,
     handleAttack: handleAttack,
-    switchUseItem: handleUseitem,
+    switchUseItem: handleUseItem,
   };
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_center,rgba(30,30,50,1),rgba(5,10,20,1))] p-4 md:p-8 font-mono">
