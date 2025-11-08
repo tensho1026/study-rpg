@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BattleStatusType } from "@/types/battleStatus";
 import { Enemy } from "@/types/enemy";
 import { useBattleAnimation } from "@/hooks/useBattleAnimation";
@@ -12,6 +12,7 @@ import BattleArea from "./BattleArea";
 import saveRewards from "@/app/actions/battle/saveRewards";
 import { BattleItem } from "@/types/battleItem";
 import updateUserBattleItems from "@/app/actions/battle/updateUserItems";
+
 
 type Props = {
   enemyData: Enemy | null;
@@ -44,6 +45,14 @@ export default function Battle({
   const initialLevelRef = useRef<number>(userInfo?.level ?? 0);
   const [userLevel, setUserLevel] = useState<number>(initialLevelRef.current);
   const [userItems, setUserItems] = useState<BattleItem[] | null>(items ?? []);
+  const timeouts = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  useEffect(() => {
+    return () => {
+      timeouts.current.forEach(clearTimeout);
+      timeouts.current = [];
+    };
+  }, []);
 
   const { userAnimation, enemyAnimation } = useBattleAnimation(
     setPlayerAttackAnim,
@@ -85,7 +94,7 @@ export default function Battle({
 
   const handleVictory = () => {
     if (!enemy) return;
-    setTimeout(async () => {
+    const id = setTimeout(async () => {
       setBattleLog("君の勝利だ！");
       setVictory(true);
       const newLevel = await saveRewards(
@@ -99,6 +108,8 @@ export default function Battle({
         setUserLevel(newLevel);
       }
     }, 2000);
+
+    timeouts.current.push(id);
 
     return;
   };
@@ -129,10 +140,11 @@ export default function Battle({
   };
 
   const handleDefeat = () => {
-    setTimeout(() => {
+    const id = setTimeout(() => {
       setBattleLog("君の負けだ...");
       setDefeat(true);
     }, 3000);
+    timeouts.current.push(id);
   };
 
   const handleAttack = async () => {
@@ -142,9 +154,10 @@ export default function Battle({
       handleVictory();
       return;
     }
-    setTimeout(() => {
+    const id = setTimeout(() => {
       enemyAttack();
     }, 2000);
+    timeouts.current.push(id);
   };
 
   const handleUseitem = async (item: BattleItem) => {
@@ -152,9 +165,10 @@ export default function Battle({
     switchUseItem(item);
     const update = await updateUserBattleItems();
     setUserItems(update ?? []);
-    setTimeout(() => {
+    const id = setTimeout(() => {
       enemyAttack();
     }, 2000);
+    timeouts.current.push(id);
   };
   const userStatusComponentData = {
     name: status?.user.name ?? "",
