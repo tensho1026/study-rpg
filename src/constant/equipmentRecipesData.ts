@@ -152,4 +152,4 @@ export const equipmentRecipesData = [
     materialId: "N8",
     quantity: 1,
   },
-] as const;
+] 
