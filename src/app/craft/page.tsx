@@ -8,16 +8,15 @@ import { craftEquipmentsData } from "@/constant/craftEquipmentsData";
 import { equipmentRecipesData } from "@/constant/equipmentRecipesData";
 import { enemyDropItemsData } from "@/constant/enemyDropitem";
 import { normalDropItemsData } from "@/constant/nomalDropItem";
-import { Radio, Shield, Swords } from "lucide-react";
+import { Shield, Swords, Hammer, Coins } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
+// --- データ整形 ---
 const recipeMap = equipmentRecipesData.reduce<
   Record<string, (typeof equipmentRecipesData)[number][]>
 >((acc, recipe) => {
-  if (!acc[recipe.equipmentId]) {
-    acc[recipe.equipmentId] = [];
-  }
+  if (!acc[recipe.equipmentId]) acc[recipe.equipmentId] = [];
   acc[recipe.equipmentId].push(recipe);
   return acc;
 }, {});
@@ -67,24 +66,14 @@ const playerMaterialStock: Record<string, number> = {
   N8: 1,
 };
 
-const formatRarity = (rarity: number) => {
-  const stars = "★".repeat(rarity);
-  return `${stars} (${rarity})`;
-};
+// 所持コイン
+const playerCoin = 2300;
+
+const formatRarity = (rarity: number) => "★".repeat(rarity);
 
 const craftMethods = [
-  {
-    id: "1",
-    title: "モンスター素材を使う",
-
-    accent: "text-amber-200",
-  },
-  {
-    id: "2",
-    title: "ノーマル素材を使う",
-
-    accent: "text-cyan-200",
-  },
+  { id: "1", title: "モンスター素材クラフト", accent: "text-amber-300" },
+  { id: "2", title: "共通素材クラフト", accent: "text-cyan-300" },
 ] as const;
 
 const categoryOptions = [
@@ -104,184 +93,184 @@ export default function CraftPage() {
     [activeCategory]
   );
 
-  const methodMeta = craftMethods.find((method) => method.id === craftMethod);
+  const methodMeta = craftMethods.find((m) => m.id === craftMethod);
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 px-4 py-10 text-white">
-      <div className="mx-auto flex max-w-6xl flex-col gap-8">
+    <main className="min-h-screen bg-[url('/pixel-bg.png')] bg-cover bg-fixed bg-center text-white">
+      <div className="mx-auto max-w-6xl px-4 py-10">
+        {/* Header */}
         <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div className="flex items-start gap-3 md:items-center">
-            <AppMenuButton className="border-white/15 bg-white/5 text-white/80 hover:bg-white/10 hover:text-white" />
-            <div>
-              <h1 className="text-3xl font-semibold text-white md:text-4xl">
-                クラフト
+          <div className="flex items-center gap-3">
+            <AppMenuButton className="border border-white/20 bg-slate-800/50 text-white/80 hover:bg-slate-700/70" />
+            <div className="flex items-center gap-2">
+              <Hammer className="text-yellow-300" />
+              <h1 className="font-[pixel] text-3xl text-yellow-200 drop-shadow-[0_0_6px_rgba(255,220,100,0.6)]">
+                クラフト工房
               </h1>
             </div>
           </div>
-          <div className="flex flex-col gap-2 text-sm md:text-right">
+
+          <div className="flex flex-col items-end gap-2 text-sm">
+            {/* 所持コイン */}
+            <div className="flex items-center gap-2 rounded-md border-2 border-yellow-400/40 bg-yellow-400/10 px-3 py-1 font-[pixel] shadow-[0_0_6px_rgba(255,255,150,0.3)]">
+              <Coins className="size-4 text-yellow-300" />
+              <span className="text-yellow-200">
+                {playerCoin.toLocaleString()} G
+              </span>
+            </div>
+
             <Button
               asChild
-              className="rounded-xl bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-500/40 hover:bg-emerald-400"
+              className="rounded-md border-2 border-emerald-400 bg-emerald-500/80 text-slate-950 font-bold shadow-[0_0_8px_rgba(0,255,150,0.4)] hover:bg-emerald-400 hover:shadow-[0_0_12px_rgba(0,255,180,0.6)]"
             >
-              <Link href="/home">ホームに戻る</Link>
+              <Link href="/home">🏠 ホームに戻る</Link>
             </Button>
           </div>
         </header>
 
-        <section className=" gap-6 ">
-          <Card className="space-y-8 border border-white/10 bg-white/5 p-6">
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-              <div className="flex flex-wrap gap-2">
-                {categoryOptions.map((category) => {
-                  const Icon = category.icon;
-                  return (
-                    <Button
-                      key={category.id}
-                      variant="outline"
-                      size="sm"
-                      className={cn(
-                        "gap-2 rounded-full border-white/10 bg-white/5 text-white/70 hover:bg-white/10",
-                        activeCategory === category.id &&
-                          "border-emerald-400/60 bg-emerald-500/10 text-white"
-                      )}
-                      onClick={() => setActiveCategory(category.id)}
-                    >
-                      <Icon className="size-4" />
-                      {category.label}
-                    </Button>
-                  );
-                })}
-              </div>
-            </div>
+        {/* Category selector */}
+        <section className="mt-8">
+          <div className="flex flex-wrap gap-3">
+            {categoryOptions.map((category) => {
+              const Icon = category.icon;
+              return (
+                <Button
+                  key={category.id}
+                  onClick={() => setActiveCategory(category.id)}
+                  className={cn(
+                    "flex items-center gap-2 rounded-full border-2 border-white/20 bg-slate-800/60 px-4 py-2 font-[pixel] tracking-wider transition-all hover:bg-slate-700 hover:text-yellow-100",
+                    activeCategory === category.id &&
+                      "border-yellow-400 text-yellow-200 shadow-[0_0_8px_rgba(255,220,120,0.5)]"
+                  )}
+                >
+                  <Icon className="size-4" />
+                  {category.label}
+                </Button>
+              );
+            })}
+          </div>
+        </section>
 
-            <div className="space-y-4">
-              <p className="text-xs uppercase tracking-[0.3em] text-white/60">
-                Craft Method
-              </p>
-              <div className="grid gap-3 md:grid-cols-2">
-                {craftMethods.map((method) => (
-                  <button
-                    key={method.id}
-                    type="button"
-                    className={cn(
-                      "flex flex-col gap-1 rounded-xl border px-4 py-3 text-left transition",
-                      craftMethod === method.id
-                        ? "border-emerald-400/70 bg-emerald-500/10"
-                        : "border-white/10 bg-white/5 hover:bg-white/10"
-                    )}
-                    onClick={() => setCraftMethod(method.id)}
-                  >
-                    <div className="flex items-center gap-2 text-xs">
-                      <span
-                        className={cn(
-                          "text-[11px] tracking-[0.3em]",
-                          method.accent
-                        )}
-                      ></span>
-                    </div>
-                    <p className="text-base font-semibold text-white">
-                      {method.title}
+        {/* Craft method */}
+        <section className="mt-6 grid gap-3 md:grid-cols-2">
+          {craftMethods.map((method) => (
+            <button
+              key={method.id}
+              onClick={() => setCraftMethod(method.id)}
+              className={cn(
+                "flex flex-col rounded-lg border-2 px-5 py-3 transition-all font-[pixel]",
+                craftMethod === method.id
+                  ? "border-emerald-400 bg-emerald-500/10 shadow-[0_0_10px_rgba(0,255,180,0.3)]"
+                  : "border-white/15 bg-slate-900/50 hover:bg-slate-800/70"
+              )}
+            >
+              <span className={cn("text-sm", method.accent)}>▶ {method.title}</span>
+            </button>
+          ))}
+        </section>
+
+        {/* Craft item list */}
+        <section className="mt-10 grid gap-6 md:grid-cols-2">
+          {filteredItems.map((equipment) => {
+            const recipes = recipeMap[equipment.id] ?? [];
+            const statLabel =
+              equipment.type === "weapon" ? "攻撃力" : "防御力";
+            const statValue =
+              equipment.type === "weapon"
+                ? equipment.attack ?? 0
+                : equipment.defense ?? 0;
+
+            return (
+              <Card
+                key={equipment.id}
+                className="flex flex-col justify-between border-2 border-slate-700 bg-slate-900/80 p-4 font-[pixel] shadow-[0_0_6px_rgba(255,255,255,0.1)]"
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-lg font-bold text-yellow-200 drop-shadow-[0_0_4px_rgba(255,255,150,0.6)]">
+                      {equipment.name}
+                    </h3>
+                    <p className="text-xs text-white/70">
+                      {formatRarity(equipment.rarity)}
                     </p>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              {filteredItems.map((equipment) => {
-                const recipes = recipeMap[equipment.id] ?? [];
-                return (
-                  <Card
-                    key={equipment.id}
-                    className="flex h-full flex-col justify-between border border-white/10 bg-slate-950/60 p-4 text-sm text-white/70"
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <h3 className="text-lg font-semibold text-white">
-                          {equipment.name}
-                        </h3>
-                        <p className="text-xs text-white/60">
-                          {formatRarity(equipment.rarity)}
-                        </p>
-                      </div>
-                      <div className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-right text-xs">
-                        <p className="text-white/60">Cost</p>
-                        <p className="text-base font-semibold text-white">
-                          {equipment.craftCost} G
-                        </p>
-                      </div>
-                    </div>
-
-                    <p className="mt-3 text-xs text-white/70">
-                      {equipment.description}
+                  </div>
+                  <div className="rounded-lg border border-yellow-300/30 bg-yellow-300/10 px-3 py-2 text-right text-xs">
+                    <p className="text-white/70">Cost</p>
+                    <p className="text-yellow-200 font-semibold">
+                      {equipment.craftCost} G
                     </p>
+                  </div>
+                </div>
 
-                    <div className="mt-4 space-y-2 text-xs">
-                      <p className="text-white/60">必要素材（所持数表示）</p>
-                      {recipes.map((recipe) => {
-                        const materialMeta = materialNameMap[
-                          recipe.materialId
-                        ] ?? {
-                          name: `ID: ${recipe.materialId}`,
-                          rarity: 1,
-                          type:
-                            recipe.materialType === "ENEMY"
-                              ? "モンスター素材"
-                              : "共通素材",
-                        };
-                        const haveAmount =
-                          playerMaterialStock[recipe.materialId] ?? 0;
-                        const isEnough = haveAmount >= recipe.quantity;
-                        return (
-                          <div
-                            key={`${equipment.id}-${recipe.materialId}`}
-                            className={cn(
-                              "flex items-center justify-between rounded-lg border px-3 py-2",
-                              isEnough
-                                ? "border-white/10 bg-white/5"
-                                : "border-rose-400/40 bg-rose-500/10"
-                            )}
-                          >
-                            <div>
-                              <p className="text-sm font-semibold text-white">
-                                {materialMeta.name}
-                              </p>
-                              <p className="text-[11px] text-white/50">
-                                {materialMeta.type} /{" "}
-                                {formatRarity(materialMeta.rarity)}
-                              </p>
-                            </div>
-                            <div className="text-right text-white">
-                              <p>
-                                必要{" "}
-                                <span className="font-semibold">
-                                  {recipe.quantity}
-                                </span>
-                              </p>
-                              <p
-                                className={cn(
-                                  "text-[11px]",
-                                  isEnough
-                                    ? "text-emerald-200"
-                                    : "text-rose-300"
-                                )}
-                              >
-                                所持 {haveAmount}
-                              </p>
-                            </div>
+                {/* 攻撃力/防御力 */}
+                <div className="mt-3 flex items-center gap-2">
+                  <span className="text-xs text-white/60">{statLabel}:</span>
+                  <span className="text-base font-bold text-emerald-300 drop-shadow-[0_0_4px_rgba(0,255,180,0.5)]">
+                    {statValue}
+                  </span>
+                </div>
+
+                <p className="mt-2 text-xs text-white/70">{equipment.description}</p>
+
+                <div className="mt-3">
+                  <p className="mb-2 text-[11px] text-white/50">
+                    必要素材（所持数）
+                  </p>
+                  <div className="space-y-2">
+                    {recipes.map((recipe) => {
+                      const materialMeta = materialNameMap[recipe.materialId] ?? {
+                        name: `未知の素材 (${recipe.materialId})`,
+                        rarity: 1,
+                        type:
+                          recipe.materialType === "ENEMY"
+                            ? "モンスター素材"
+                            : "共通素材",
+                      };
+                      const have = playerMaterialStock[recipe.materialId] ?? 0;
+                      const enough = have >= recipe.quantity;
+                      return (
+                        <div
+                          key={recipe.materialId}
+                          className={cn(
+                            "flex items-center justify-between rounded border-2 px-3 py-2 transition",
+                            enough
+                              ? "border-slate-600 bg-slate-800/80"
+                              : "border-rose-400/60 bg-rose-900/40"
+                          )}
+                        >
+                          <div>
+                            <p className="text-sm text-white">{materialMeta.name}</p>
+                            <p className="text-[10px] text-white/50">
+                              {materialMeta.type} {formatRarity(materialMeta.rarity)}
+                            </p>
                           </div>
-                        );
-                      })}
-                    </div>
+                          <div className="text-right">
+                            <p className="text-xs">
+                              必要 <span className="text-yellow-200">{recipe.quantity}</span>
+                            </p>
+                            <p
+                              className={cn(
+                                "text-[10px]",
+                                enough ? "text-emerald-300" : "text-rose-300"
+                              )}
+                            >
+                              所持 {have}
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
 
-                    <Button className="mt-4 w-full rounded-lg bg-emerald-500/80 text-slate-950 transition hover:bg-emerald-400">
-                      {methodMeta?.title} でクラフト (UIのみ)
-                    </Button>
-                  </Card>
-                );
-              })}
-            </div>
-          </Card>
+                <Button
+                  className="mt-4 w-full rounded-md border-2 border-emerald-400 bg-emerald-500/80 text-slate-950 font-bold transition-all hover:scale-[1.02] hover:bg-emerald-400 hover:shadow-[0_0_10px_rgba(0,255,160,0.6)]"
+                >
+                  🔨 {methodMeta?.title} 開始！（UIのみ）
+                </Button>
+              </Card>
+            );
+          })}
         </section>
       </div>
     </main>
