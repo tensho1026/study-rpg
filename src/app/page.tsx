@@ -24,7 +24,7 @@ export default function LandingPage() {
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.25, rotate: 360 }}
         transition={{ repeat: Infinity, duration: 90, ease: "linear" }}
-        className="absolute w-[600px] h-[600px] bg-[url('/textures/magic-circle.png')] bg-contain bg-no-repeat opacity-20"
+        className="absolute w-[600px] h-[600px]  bg-contain bg-no-repeat opacity-20"
       />
 
       {/* メインコンテンツ */}
