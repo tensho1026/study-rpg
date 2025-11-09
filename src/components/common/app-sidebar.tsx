@@ -8,11 +8,13 @@ import {
   BookOpenCheck,
   Coins,
   Compass,
+  Hammer,
   Home,
   LucideIcon,
   Shield,
   ShoppingBag,
   Swords,
+  Users,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -28,10 +30,13 @@ const sideMenu: Array<{
   { label: "勉強記録", icon: BookOpenCheck, href: "/journal" },
   { label: "装備ショップ", icon: ShoppingBag, href: "/shop" },
   { label: "装備", icon: Shield, href: "/equipment" },
-  { label: "戦闘", icon: Swords, href: "/battle" },
-  { label: "冒険", icon: Compass, href: "/map" },
+  { label: "戦闘", icon: Swords, href: "/battle/" },
+  { label: "冒険", icon: Compass, href: "/map/cave" },
   { label: "アイテムショップ", icon: Coins, href: "/itemShop" },
   { label: "マップ選ぶとこ", icon: Compass, href: "/adventure" },
+  { label: "ギルド", icon: Users, href: "/guild" },
+  { label: "クラフト", icon: Hammer, href: "/craft" },
+
 ] as const;
 
 interface AppSidebarProps {
