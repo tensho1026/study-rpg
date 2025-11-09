@@ -3,12 +3,16 @@ import seedEquipmentData from "./equipment";
 import seedEnemiesAndDrops from "./monsterDropItem";
 import seedNormalDropItems from "./nomalDropItem";
 import seedBattleItemData from "./battleItem";
+import seedEquipmentRecipes from "./equipmentRecipes";
+import seedCraftEquipments from "./craftEquipments";
 
 async function main() {
   await seedEquipmentData();
   await seedNormalDropItems();
   await seedEnemiesAndDrops();
-  await seedBattleItemData()
+  await seedBattleItemData();
+  await seedCraftEquipments();
+  await seedEquipmentRecipes();
 }
 main()
   .then(async () => {

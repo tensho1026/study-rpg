@@ -110,24 +110,30 @@ model MstEnemies {
 
 }
 
+
 model MstMonsterDropItem {
-  id        String   @id 
-  name      String
-  rare      Int
+  id          String   @id 
+  name        String
+  rare        Int
   description String
 
-  enemy MstEnemies?
-  userHas UserHasDropItems[]
+  enemy     MstEnemies?
+  userHas   UserHasDropItems[]
+  recipes   MstEquipmentRecipe[] @relation("MonsterRecipe")
 }
+
+
 
 model MstNomalDropitem {
-  id        String   @id 
-  name      String
-  rare      Int
+  id          String   @id 
+  name        String
+  rare        Int
   description String
-  userHas UserHasDropItems[]
 
+  userHas   UserHasDropItems[]
+  recipes   MstEquipmentRecipe[] @relation("NormalRecipe") // ← resipe → recipes に変更
 }
+
 
 model MstBattleItem {
   id           String       @id 
@@ -157,6 +163,39 @@ enum BattleItemType {
   key
 }
 
+model MstCraftEquipments {
+  id          String   @id 
+  name        String
+  type        EquipmentType
+  attack      Int?
+  defense     Int?
+  rarity      Int
+  cost         Int
+  description String
+  recipes     MstEquipmentRecipe[]
+}
+
+model MstEquipmentRecipe {
+  id           String   @id
+  equipmentId  String
+  materialType MaterialType
+  monsterMaterialId String?
+  normalMaterialId  String?
+  quantity     Int
+
+  equipment       MstCraftEquipments @relation(fields: [equipmentId], references: [id])
+  monsterMaterial MstMonsterDropItem? @relation("MonsterRecipe", fields: [monsterMaterialId], references: [id])
+  normalMaterial  MstNomalDropitem?  @relation("NormalRecipe", fields: [normalMaterialId], references: [id])
+}
+
+
+
+
+
+enum MaterialType {
+  ENEMY
+  NORMAL
+}
 
 
 model Equipment {
