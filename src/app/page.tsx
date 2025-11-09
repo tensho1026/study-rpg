@@ -5,6 +5,15 @@ import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
+// --- 固定シード擬似乱数関数 ---
+function seededRandom(seed: number) {
+  let value = seed;
+  return () => {
+    value = (value * 9301 + 49297) % 233280;
+    return value / 233280;
+  };
+}
+
 export default function LandingPage() {
   const router = useRouter();
   const { data } = useSession();
@@ -12,6 +21,15 @@ export default function LandingPage() {
   const handleClick = () => {
     router.push(data ? "/home" : "/auth/signin");
   };
+
+  // --- SSR と CSR で一致する粒子位置 ---
+  const rand = seededRandom(42);
+  const particles = Array.from({ length: 25 }, () => ({
+    x: rand() * 100,
+    y: rand() * 100,
+    duration: 6 + rand() * 6,
+    delay: rand() * 5,
+  }));
 
   return (
     <main className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black text-white">
@@ -24,12 +42,11 @@ export default function LandingPage() {
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.25, rotate: 360 }}
         transition={{ repeat: Infinity, duration: 90, ease: "linear" }}
-        className="absolute w-[600px] h-[600px]  bg-contain bg-no-repeat opacity-20"
+        className="absolute w-[600px] h-[600px] bg-contain bg-no-repeat opacity-20"
       />
 
       {/* メインコンテンツ */}
       <div className="relative z-10 text-center space-y-10">
-        {/* タイトル */}
         <motion.h1
           initial={{ opacity: 0, y: -40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -50,7 +67,6 @@ export default function LandingPage() {
           勉強を冒険に変えるRPG
         </motion.p>
 
-        {/* 冒険ボタン */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -69,9 +85,7 @@ export default function LandingPage() {
             冒険を始める
           </Button>
 
-          {/* ログイン・新規登録 */}
           <div className="flex flex-col md:flex-row justify-center items-center gap-4 pt-2">
-            {/* ログイン */}
             <Link href="/auth/signin" className="w-48">
               <Button
                 variant="outline"
@@ -85,7 +99,6 @@ export default function LandingPage() {
               </Button>
             </Link>
 
-            {/* 新規登録 */}
             <Link href="/auth/signup" className="w-48">
               <Button
                 variant="outline"
@@ -101,7 +114,6 @@ export default function LandingPage() {
           </div>
         </motion.div>
 
-        {/* フッター */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 0.8 }}
@@ -114,23 +126,16 @@ export default function LandingPage() {
 
       {/* 光粒子 */}
       <div className="absolute inset-0 overflow-hidden z-0">
-        {[...Array(25)].map((_, i) => (
+        {particles.map((p, i) => (
           <motion.div
             key={i}
             className="absolute w-1 h-1 bg-cyan-300 rounded-full"
-            initial={{
-              x: Math.random() * 100 + "%",
-              y: Math.random() * 100 + "%",
-              opacity: 0,
-            }}
-            animate={{
-              y: ["0%", "120%"],
-              opacity: [0, 1, 0],
-            }}
+            initial={{ x: `${p.x}%`, y: `${p.y}%`, opacity: 0 }}
+            animate={{ y: ["0%", "120%"], opacity: [0, 1, 0] }}
             transition={{
-              duration: 6 + Math.random() * 6,
+              duration: p.duration,
               repeat: Infinity,
-              delay: Math.random() * 5,
+              delay: p.delay,
             }}
           />
         ))}
