@@ -4,35 +4,10 @@ import { useMemo, useState } from "react";
 import { AppMenuButton } from "@/components/common/app-menu-button";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { craftEquipmentsData } from "@/constant/craftEquipmentsData";
-import { equipmentRecipesData } from "@/constant/equipmentRecipesData";
-import { enemyDropItemsData } from "@/constant/enemyDropitem";
-import { normalDropItemsData } from "@/constant/nomalDropItem";
 import { Shield, Swords, Hammer, Coins } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-
-// --- 素材メタ情報 ---
-const materialNameMap = [
-  ...enemyDropItemsData.map(({ item }) => ({
-    id: item.id,
-    name: item.name,
-    rarity: item.rare,
-    type: "ENEMY",
-  })),
-  ...normalDropItemsData.map((item) => ({
-    id: item.id,
-    name: item.name,
-    rarity: item.rare,
-    type: "NORMAL",
-  })),
-].reduce<Record<string, { name: string; rarity: number; type: string }>>(
-  (acc, entry) => {
-    acc[entry.id] = entry;
-    return acc;
-  },
-  {}
-);
+import { MstCraftEquipmentsWithRecipes } from "@/types/MstCraftEquipmentsWithRecipes";
 
 const craftMethods = [
   {
@@ -56,19 +31,23 @@ const categoryOptions = [
 
 type Props = {
   userCoin: number;
+  equipmentsData: MstCraftEquipmentsWithRecipes[];
 };
 
-export default function Craft({ userCoin }: Props) {
+export default function Craft({ userCoin, equipmentsData }: Props) {
   const [activeCategory, setActiveCategory] = useState<"weapon" | "armor">(
     "weapon"
   );
   const [craftMethod, setCraftMethod] = useState<"ENEMY" | "NORMAL">("ENEMY");
   const [coin, setCoin] = useState(userCoin);
+  const [equipments, setEquipments] = useState<MstCraftEquipmentsWithRecipes[]>(
+    equipmentsData ?? []
+  );
 
   // --- 装備カテゴリで絞る ---
   const filteredItems = useMemo(() => {
-    return craftEquipmentsData.filter((item) => item.type === activeCategory);
-  }, [activeCategory]);
+    return equipments.filter((item) => item.type === activeCategory);
+  }, [activeCategory, equipments]);
 
   return (
     <main className="min-h-screen  bg-cover bg-fixed bg-center text-white">
@@ -146,14 +125,12 @@ export default function Craft({ userCoin }: Props) {
         {/* Craft item list */}
         <section className="mt-10 grid gap-6 md:grid-cols-2">
           {filteredItems.map((equipment) => {
-            const recipe = equipmentRecipesData.find(
+            const recipe = equipment.recipes.find(
               (r) =>
                 r.equipmentId === equipment.id && r.materialType === craftMethod
             );
             if (!recipe) return null;
 
-            const materialMeta = materialNameMap[recipe.materialId];
-            // const have = playerMaterialStock[recipe.materialId] ?? 0;
             const have = 0;
             const enough = have >= recipe.quantity;
 
@@ -178,7 +155,7 @@ export default function Craft({ userCoin }: Props) {
                   <div className="rounded-lg border border-yellow-300/30 bg-yellow-300/10 px-3 py-2 text-right text-xs">
                     <p className="text-white/70">Cost</p>
                     <p className="text-yellow-200 font-semibold">
-                      {equipment.craftCost} G
+                      {equipment.cost} G
                     </p>
                   </div>
                 </div>
@@ -205,18 +182,19 @@ export default function Craft({ userCoin }: Props) {
                     >
                       <div>
                         <p className="text-sm text-white">
-                          {materialMeta?.name ?? "不明な素材"}
+                          {recipe.monsterMaterial?.name ?? "不明な素材"}
                         </p>
                         <p className="text-[10px] text-white/50">
-                          {materialMeta?.type === "ENEMY"
-                            ? "モンスター素材"
-                            : "共通素材"}{" "}
-                          ★{materialMeta?.rarity ?? 1}
+                          {recipe.materialType === "ENEMY"
+                            ? `モンスター素材  ★${
+                                recipe.monsterMaterial?.rare ?? 1
+                              }`
+                            : `共通素材 ★${recipe.normalMaterial?.rare ?? 1}`}
                         </p>
                       </div>
                       <div className="text-right">
                         <p className="text-xs">
-                          必要{" "}
+                          必要
                           <span className="text-yellow-200">
                             {recipe.quantity}
                           </span>
