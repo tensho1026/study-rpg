@@ -1,34 +1,13 @@
 "use client";
 
 import { useMemo, useState } from "react";
-
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Shield, Swords } from "lucide-react";
-
 import { cn } from "@/lib/utils";
 import { MstCraftEquipmentsWithRecipes } from "@/types/MstCraftEquipmentsWithRecipes";
 import CraftHeader from "./CraftHeader";
-
-const craftMethods = [
-  {
-    id: "1",
-    title: "モンスター素材クラフト",
-    type: "ENEMY",
-    accent: "text-amber-300",
-  },
-  {
-    id: "2",
-    title: "共通素材クラフト",
-    type: "NORMAL",
-    accent: "text-cyan-300",
-  },
-] as const;
-
-const categoryOptions = [
-  { id: "weapon", label: "武器", icon: Swords },
-  { id: "armor", label: "防具", icon: Shield },
-] as const;
+import Method from "./Method";
+import CategorySelector from "./CategorySelector";
 
 type Props = {
   userCoin: number;
@@ -68,48 +47,13 @@ export default function Craft({
         {/* Header */}
         <CraftHeader coin={coin} />
         {/* Category selector */}
-        <section className="mt-8">
-          <div className="flex flex-wrap gap-3">
-            {categoryOptions.map((category) => {
-              const Icon = category.icon;
-              return (
-                <Button
-                  key={category.id}
-                  onClick={() => setActiveCategory(category.id)}
-                  className={cn(
-                    "flex items-center gap-2 rounded-full border-2 border-white/20 bg-slate-800/60 px-4 py-2 font-[pixel] tracking-wider transition-all hover:bg-slate-700 hover:text-yellow-100",
-                    activeCategory === category.id &&
-                      "border-yellow-400 text-yellow-200 shadow-[0_0_8px_rgba(255,220,120,0.5)]"
-                  )}
-                >
-                  <Icon className="size-4" />
-                  {category.label}
-                </Button>
-              );
-            })}
-          </div>
-        </section>
+        <CategorySelector
+          setActiveCategory={setActiveCategory}
+          activeCategory={activeCategory}
+        />
 
         {/* Craft method */}
-        <section className="mt-6 grid gap-3 md:grid-cols-2">
-          {craftMethods.map((method) => (
-            <button
-              key={method.id}
-              onClick={() => setCraftMethod(method.type)}
-              className={cn(
-                "flex flex-col rounded-lg border-2 px-5 py-3 transition-all font-[pixel]",
-                craftMethod === method.type
-                  ? "border-emerald-400 bg-emerald-500/10 shadow-[0_0_10px_rgba(0,255,180,0.3)]"
-                  : "border-white/15 bg-slate-900/50 hover:bg-slate-800/70"
-              )}
-            >
-              <span className={cn("text-sm", method.accent)}>
-                ▶ {method.title}
-              </span>
-            </button>
-          ))}
-        </section>
-
+        <Method setCraftMethod={setCraftMethod} craftMethod={craftMethod} />
         {/* Craft item list */}
         <section className="mt-10 grid gap-6 md:grid-cols-2">
           {filteredItems.map((equipment) => {
