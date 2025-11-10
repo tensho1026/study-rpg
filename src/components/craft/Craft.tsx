@@ -32,9 +32,20 @@ const categoryOptions = [
 type Props = {
   userCoin: number;
   equipmentsData: MstCraftEquipmentsWithRecipes[];
+  userHasData: UserHasType;
 };
 
-export default function Craft({ userCoin, equipmentsData }: Props) {
+type UserHasType = {
+  nomalItemId?: string | null;
+  monsterItemId?: string | null;
+  quantity: number;
+}[];
+
+export default function Craft({
+  userCoin,
+  equipmentsData,
+  userHasData,
+}: Props) {
   const [activeCategory, setActiveCategory] = useState<"weapon" | "armor">(
     "weapon"
   );
@@ -43,6 +54,7 @@ export default function Craft({ userCoin, equipmentsData }: Props) {
   const [equipments, setEquipments] = useState<MstCraftEquipmentsWithRecipes[]>(
     equipmentsData ?? []
   );
+  const [userHas, setUserHas] = useState<UserHasType>(userHasData ?? []);
 
   // --- 装備カテゴリで絞る ---
   const filteredItems = useMemo(() => {
@@ -131,8 +143,12 @@ export default function Craft({ userCoin, equipmentsData }: Props) {
             );
             if (!recipe) return null;
 
-            const have = 0;
-            const enough = have >= recipe.quantity;
+            const have = userHas.find(
+              (h) =>
+                recipe.monsterMaterial?.id === h.monsterItemId ||
+                recipe.normalMaterial?.id === h.nomalItemId
+            );
+            const enough = (have?.quantity ?? 0) >= recipe.quantity;
 
             const statLabel = equipment.type === "weapon" ? "攻撃力" : "防御力";
             const statValue =
@@ -182,7 +198,10 @@ export default function Craft({ userCoin, equipmentsData }: Props) {
                     >
                       <div>
                         <p className="text-sm text-white">
-                          {recipe.monsterMaterial?.name ?? "不明な素材"}
+                          {/* {recipe.monsterMaterial?.name ?? "不明な素材"} */}{" "}
+                          {recipe.materialType === "ENEMY"
+                            ? `  ${recipe.monsterMaterial?.name ?? ""}`
+                            : `${recipe.normalMaterial?.name ?? ""}`}
                         </p>
                         <p className="text-[10px] text-white/50">
                           {recipe.materialType === "ENEMY"
@@ -205,7 +224,7 @@ export default function Craft({ userCoin, equipmentsData }: Props) {
                             enough ? "text-emerald-300" : "text-rose-300"
                           )}
                         >
-                          所持 {have}
+                          所持 {have?.quantity ?? 0}
                         </p>
                       </div>
                     </div>
