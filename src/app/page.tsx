@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -17,9 +17,13 @@ function seededRandom(seed: number) {
 export default function LandingPage() {
   const router = useRouter();
   const { data } = useSession();
+  console.log(data);
 
   const handleClick = () => {
     router.push(data ? "/home" : "/auth/signin");
+  };
+  const handleGuestLogin = async () => {
+    await signIn("guest", { redirect: true, callbackUrl: "/home" });
   };
 
   // --- SSR と CSR で一致する粒子位置 ---
@@ -85,7 +89,7 @@ export default function LandingPage() {
             冒険を始める
           </Button>
 
-          <div className="flex flex-col md:flex-row justify-center items-center gap-4 pt-2">
+          <div className="flex flex-col  md:flex-row justify-center items-center gap-4 pt-2">
             <Link href="/auth/signin" className="w-48">
               <Button
                 variant="outline"
@@ -98,6 +102,17 @@ export default function LandingPage() {
                 ログイン
               </Button>
             </Link>
+            <Button
+              onClick={handleGuestLogin}
+              variant="outline"
+              className=" border-yellow-400/60 text-yellow-200 
+              hover:text-black hover:bg-yellow-400 hover:border-yellow-300
+              hover:shadow-[0_0_20px_rgba(255,220,150,0.6)]
+               active:scale-[0.98]
+               transition-all duration-300 text-sm py-3 font-semibold tracking-wide"
+            >
+              ゲストログイン
+            </Button>
 
             <Link href="/auth/signup" className="w-48">
               <Button
