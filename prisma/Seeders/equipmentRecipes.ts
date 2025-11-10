@@ -1,5 +1,6 @@
 import { equipmentRecipesData } from "@/constant/equipmentRecipesData";
 import { prisma } from "@/lib/prisma";
+import { MaterialType } from "@prisma/client";
 
 export default async function seedEquipmentRecipes() {
   for (const recipe of equipmentRecipesData) {
@@ -19,14 +20,14 @@ export default async function seedEquipmentRecipes() {
       where: { id: `${recipe.equipmentId}_${recipe.materialId}` },
       update: {
         equipmentId: recipe.equipmentId,
-        materialType: recipe.materialType,
+        materialType: recipe.materialType as MaterialType,
         quantity: recipe.quantity,
         ...data,
       },
       create: {
         id: `${recipe.equipmentId}_${recipe.materialId}`,
         equipmentId: recipe.equipmentId,
-        materialType: recipe.materialType,
+        materialType: recipe.materialType as MaterialType,
         quantity: recipe.quantity,
         ...data,
       },

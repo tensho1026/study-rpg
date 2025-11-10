@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { BattleStatusType } from "@/types/battleStatus";
 import { Enemy } from "@/types/enemy";
-import { useBattleAnimation } from "@/hooks/useBattleAnimation";
+import { useBattleAnimation } from "@/hooks/battle/useBattleAnimation";
 import { DropDetail } from "@/types/dropItem";
 import Log from "./Log";
 import EnemyStatus from "./EnemyStatus";
