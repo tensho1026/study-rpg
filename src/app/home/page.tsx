@@ -2,13 +2,18 @@ import { getHomeData } from "@/app/actions/home/getHomeData";
 import { LevelUpNotification } from "@/components/home/level-up-notification";
 import { StatusWindow } from "@/components/home/status-window";
 import { StudyTimer } from "@/components/home/study-timer";
+import { authOptions } from "@/lib/auth";
 import progressExp from "@/utils/progressExp";
 import todayStudyTime from "@/utils/todayTime";
+import { getServerSession } from "next-auth";
 import { notFound, redirect } from "next/navigation";
 
 export default async function StudyQuestPage() {
   const homeData = await getHomeData();
 
+  const session = await getServerSession(authOptions);
+  if (!session) return;
+  console.log(session)
   if (!homeData) {
     // 未ログイン時
     redirect("/auth/signin");

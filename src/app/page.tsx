@@ -39,7 +39,7 @@ export default function LandingPage() {
     <main className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black text-white">
       {/* 背景 */}
       <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_center,rgba(100,150,255,0.15)_0%,transparent_80%)]" />
-      <div className="absolute inset-0 z-0 animate-[bgScroll_60s_linear_infinite] bg-[url('/textures/stars.png')] opacity-40" />
+      <div className="absolute inset-0 z-0 animate-[bgScroll_60s_linear_infinite]  opacity-40" />
 
       {/* 魔法陣 */}
       <motion.div

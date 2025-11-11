@@ -109,6 +109,19 @@ export default function SignupPage() {
               </svg>
               Googleで登録
             </Button>
+
+            <Button
+              onClick={() =>
+                signIn("guest", {
+                  redirect: true,
+                  callbackUrl: "/home",
+                })
+              }
+              type="button"
+              className="w-full rpg-button bg-accent text-accent-foreground border-2 border-border hover:bg-accent/90"
+            >
+              ゲストログイン
+            </Button>
           </div>
 
           {/* Login Link */}
