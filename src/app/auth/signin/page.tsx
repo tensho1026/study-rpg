@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginForm, loginSchema } from "@/lib/schemas/auth";
@@ -27,7 +27,8 @@ export default function LoginPage() {
       callbackUrl: "/home",
     });
   };
-
+  const { data } = useSession();
+  console.log(data);
   return (
     <main className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-md space-y-6">
@@ -78,6 +79,7 @@ export default function LoginPage() {
           </div>
 
           {/* Social Login Buttons */}
+          {/* Social Login Buttons */}
           <div className="space-y-3">
             <Button
               onClick={() =>
@@ -107,6 +109,20 @@ export default function LoginPage() {
                 />
               </svg>
               Googleでログイン
+            </Button>
+
+            {/* Guest Login Button */}
+            <Button
+              onClick={() =>
+                signIn("guest", {
+                  redirect: true,
+                  callbackUrl: "/home",
+                })
+              }
+              type="button"
+              className="w-full rpg-button bg-accent text-accent-foreground border-2 border-border hover:bg-accent/90"
+            >
+              ゲストログイン
             </Button>
           </div>
 
