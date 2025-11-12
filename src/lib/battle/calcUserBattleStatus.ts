@@ -6,7 +6,7 @@ type BattleEquipment = {
     type: EquipmentType;
     attack?: number | null;
     defense?: number | null;
-  };
+  } | null;
 };
 
 export default function calcUserBattleStatus(
@@ -17,10 +17,10 @@ export default function calcUserBattleStatus(
   if (!battleStatus) return { attack: 0, defense: 0 };
 
   const userWeapon = userEquipments?.find(
-    (equip) => equip.mstEquipment.type === "weapon"
+    (equip) => equip.mstEquipment?.type === "weapon"
   );
   const userArmor = userEquipments?.find(
-    (equip) => equip.mstEquipment.type === "armor"
+    (equip) => equip.mstEquipment?.type === "armor"
   );
 
   const userWeaponAttack = userWeapon?.mstEquipment?.attack ?? 0;
