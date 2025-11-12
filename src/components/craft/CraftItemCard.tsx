@@ -2,6 +2,7 @@ import { MstCraftEquipmentsWithRecipes } from "@/types/MstCraftEquipmentsWithRec
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import { cn } from "@/lib/utils";
+import craft from "@/app/actions/craft/craft";
 
 type Props = {
   equipment: MstCraftEquipmentsWithRecipes;
@@ -102,7 +103,12 @@ export default function CraftItemCard({
         </div>
       </div>
 
-      <Button className="mt-4 w-full rounded-md border-2 border-emerald-400 bg-emerald-500/80 text-slate-950 font-bold transition-all hover:scale-[1.02] hover:bg-emerald-400 hover:shadow-[0_0_10px_rgba(0,255,160,0.6)]">
+      <Button
+        className="mt-4 w-full rounded-md border-2 border-emerald-400 bg-emerald-500/80 text-slate-950 font-bold transition-all hover:scale-[1.02] hover:bg-emerald-400 hover:shadow-[0_0_10px_rgba(0,255,160,0.6)]"
+        onClick={() => {
+          craft(equipment.id);
+        }}
+      >
         🔨 クラフト
       </Button>
     </Card>
