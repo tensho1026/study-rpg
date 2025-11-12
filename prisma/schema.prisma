@@ -175,6 +175,7 @@ model MstCraftEquipments {
   cost         Int
   description String
   recipes     MstEquipmentRecipe[]
+  equipments Equipment[]
 }
 
 model MstEquipmentRecipe {
@@ -202,14 +203,23 @@ enum MaterialType {
 
 model Equipment {
   id           String       @id @default(cuid())
-  equipmentId  String
+  equipmentId  String?
+  craftEquipmentId String?
+  sourceType    EquipmentSourceType @default(SHOP) 
   userId       String
   isDraft      Boolean
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @default(now()) @updatedAt
-  mstEquipment MstEquipment @relation(fields: [equipmentId], references: [id])
+  mstEquipment MstEquipment? @relation(fields: [equipmentId], references: [id])
+  mstCraft      MstCraftEquipments? @relation(fields: [craftEquipmentId], references: [id])
   user         User         @relation(fields: [userId], references: [id])
   @@unique([userId, equipmentId], name: "userId_equipmentId")
+  @@unique([userId, craftEquipmentId])
+}
+
+enum EquipmentSourceType {
+  SHOP
+  CRAFT
 }
 
 enum EquipmentType {
