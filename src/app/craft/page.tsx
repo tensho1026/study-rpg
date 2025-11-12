@@ -3,7 +3,7 @@ import getCraftData from "../actions/craft/getCraftData";
 
 export default async function CraftPage() {
   const data = await getCraftData();
-
+  console.log(data?.userHasEquipments);
 
   return (
     <Craft
