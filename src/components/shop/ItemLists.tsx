@@ -10,7 +10,7 @@ import { ShopItem } from "@/types/shopItems";
 import { toast } from "sonner";
 
 type UserEquipment = {
-  equipmentId: string;
+  equipmentId: string | null;
   isDraft: boolean;
 };
 

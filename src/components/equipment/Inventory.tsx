@@ -1,5 +1,5 @@
 "use client";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import SelectTab from "../common/SelectTab";
 import { Card } from "../ui/card";
 import OwnedEquipmentsList from "./OwnedEquipmentsList";
@@ -15,9 +15,13 @@ function Inventory({ equipments, setEquipments }: Props) {
     "weapon" | "armor" | "accessory"
   >("weapon");
 
-  const filteredItems = equipments.filter(
-    (item) => item.mstEquipment?.type === selectedCategory
-  );
+  const filteredItems = useMemo(() => {
+    const filteredItems = equipments.filter(
+      (item) => item.mstEquipment?.type === selectedCategory
+    );
+    return filteredItems;
+  }, [equipments, selectedCategory]);
+
   return (
     <div className="lg:col-span-2">
       <Card className="rpg-window bg-card p-4">
