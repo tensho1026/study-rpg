@@ -16,7 +16,7 @@ function Inventory({ equipments, setEquipments }: Props) {
   >("weapon");
 
   const filteredItems = equipments.filter(
-    (item) => item.mstEquipment.type === selectedCategory
+    (item) => item.mstEquipment?.type === selectedCategory
   );
   return (
     <div className="lg:col-span-2">
