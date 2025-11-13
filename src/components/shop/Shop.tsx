@@ -8,7 +8,7 @@ import SelectTab from "@/components/common/SelectTab";
 import ItemLists from "@/components/shop/ItemLists";
 
 type UserEquipments = {
-  equipmentId: string;
+  equipmentId: string | null;
   isDraft: boolean;
 };
 
