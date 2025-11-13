@@ -34,11 +34,11 @@ export default function Equipment({ userEquipments }: Props) {
     );
 
     const totalAttack =
-      (equippedWeapon?.mstEquipment.attack || 0) +
-      (equippedAccessory?.mstEquipment.attack || 0);
+      (equippedWeapon?.mstEquipment!.attack || 0) +
+      (equippedAccessory?.mstEquipment!.attack || 0);
     const totalDefense =
-      (equippedArmor?.mstEquipment.defense || 0) +
-      (equippedAccessory?.mstEquipment.defense || 0);
+      (equippedArmor?.mstEquipment!.defense || 0) +
+      (equippedAccessory?.mstEquipment!.defense || 0);
 
     return {
       equippedWeapon,
@@ -60,9 +60,9 @@ export default function Equipment({ userEquipments }: Props) {
           <div className="space-y-4">
             {/* Current Equipment */}
             <CurrentEquipment
-              equippedWeapon={equippedWeapon?.mstEquipment.name}
-              equippedArmor={equippedArmor?.mstEquipment.name}
-              equippedAccessory={equippedAccessory?.mstEquipment.name}
+              equippedWeapon={equippedWeapon!.mstEquipment!.name}
+              equippedArmor={equippedArmor?.mstEquipment!.name}
+              equippedAccessory={equippedAccessory?.mstEquipment!.name}
             />
 
             {/* Battle Stats */}

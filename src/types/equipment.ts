@@ -9,5 +9,6 @@ export type Equipment = {
     name: string;
     type: "weapon" | "armor" | "accessory";
     price: number;
-  };
+  } | null
+
 };
