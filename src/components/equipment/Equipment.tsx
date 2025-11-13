@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { Equipment as EquipmentItem } from "@/types/equipment";
 import CurrentEquipment from "@/components/equipment/CurrentEquipment";
 import Title from "@/components/equipment/Title";
@@ -16,22 +16,39 @@ export default function Equipment({ userEquipments }: Props) {
     userEquipments ?? []
   );
 
-  const equippedWeapon = equipments.find(
-    (item) => item.mstEquipment.type === "weapon" && item.isDraft
-  );
-  const equippedArmor = equipments.find(
-    (item) => item.mstEquipment.type === "armor" && item.isDraft
-  );
-  const equippedAccessory = equipments.find(
-    (item) => item.mstEquipment.type === "accessory" && item.isDraft
-  );
+  const {
+    equippedWeapon,
+    equippedArmor,
+    equippedAccessory,
+    totalAttack,
+    totalDefense,
+  } = useMemo(() => {
+    const equippedWeapon = equipments.find(
+      (item) => item.mstEquipment?.type === "weapon" && item.isDraft
+    );
+    const equippedArmor = equipments.find(
+      (item) => item.mstEquipment?.type === "armor" && item.isDraft
+    );
+    const equippedAccessory = equipments.find(
+      (item) => item.mstEquipment?.type === "accessory" && item.isDraft
+    );
 
-  const totalAttack =
-    (equippedWeapon?.mstEquipment.attack || 0) +
-    (equippedAccessory?.mstEquipment.attack || 0);
-  const totalDefense =
-    (equippedArmor?.mstEquipment.defense || 0) +
-    (equippedAccessory?.mstEquipment.defense || 0);
+    const totalAttack =
+      (equippedWeapon?.mstEquipment!.attack || 0) +
+      (equippedAccessory?.mstEquipment!.attack || 0);
+    const totalDefense =
+      (equippedArmor?.mstEquipment!.defense || 0) +
+      (equippedAccessory?.mstEquipment!.defense || 0);
+
+    return {
+      equippedWeapon,
+      equippedArmor,
+      equippedAccessory,
+      totalAttack,
+      totalDefense,
+    };
+  }, [equipments]);
+
   return (
     <main className="min-h-screen bg-background p-4 md:p-8">
       <div className="max-w-6xl mx-auto space-y-4">
@@ -43,9 +60,9 @@ export default function Equipment({ userEquipments }: Props) {
           <div className="space-y-4">
             {/* Current Equipment */}
             <CurrentEquipment
-              equippedWeapon={equippedWeapon?.mstEquipment.name}
-              equippedArmor={equippedArmor?.mstEquipment.name}
-              equippedAccessory={equippedAccessory?.mstEquipment.name}
+              equippedWeapon={equippedWeapon!.mstEquipment!.name}
+              equippedArmor={equippedArmor?.mstEquipment!.name}
+              equippedAccessory={equippedAccessory?.mstEquipment!.name}
             />
 
             {/* Battle Stats */}
