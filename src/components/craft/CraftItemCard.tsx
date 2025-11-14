@@ -13,6 +13,19 @@ type Props = {
     quantity: number;
   }[];
   userHasEquipments: string[] | undefined;
+  setCoins: (value: number | ((prev: number) => number)) => void;
+  setUserHas: React.Dispatch<
+    React.SetStateAction<
+      {
+        monsterItemId?: string | null;
+        nomalItemId?: string | null;
+        quantity: number;
+      }[]
+    >
+  >;
+  setUserHasEquipments: React.Dispatch<
+    React.SetStateAction<string[] | undefined>
+  >;
 };
 
 export default function CraftItemCard({
@@ -20,6 +33,9 @@ export default function CraftItemCard({
   craftMethod,
   userHas,
   userHasEquipments,
+  setCoins,
+  setUserHas,
+  setUserHasEquipments,
 }: Props) {
   const recipe = equipment.recipes.find(
     (r) => r.equipmentId === equipment.id && r.materialType === craftMethod
@@ -31,7 +47,7 @@ export default function CraftItemCard({
       recipe.monsterMaterial?.id === h.monsterItemId ||
       recipe.normalMaterial?.id === h.nomalItemId
   );
-  console.log(have);
+
   const enough = (have?.quantity ?? 0) >= recipe.quantity;
 
   const statLabel = equipment.type === "weapon" ? "攻撃力" : "防御力";
@@ -39,7 +55,45 @@ export default function CraftItemCard({
     equipment.type === "weapon"
       ? equipment.attack ?? 0
       : equipment.defense ?? 0;
-  console.log(recipe, "レシピ");
+
+  const handleCraft = async () => {
+    const data = await craft(
+      equipment.id,
+      equipment.cost,
+      recipe.normalMaterialId,
+      recipe.monsterMaterialId,
+      recipe.quantity
+    );
+
+    setCoins(data?.money.money ?? 0);
+
+    setUserHas((prev) =>
+      prev.map((item) => {
+        if (
+          data?.materialQuantity?.nomalId &&
+          item.nomalItemId === data.materialQuantity.nomalId
+        ) {
+          return { ...item, quantity: data.materialQuantity.quantity };
+        }
+
+        if (
+          data?.materialQuantity?.monsterId &&
+          item.monsterItemId === data.materialQuantity.monsterId
+        ) {
+          return { ...item, quantity: data.materialQuantity.quantity };
+        }
+
+        return item;
+      })
+    );
+
+    if (data?.equippedId) {
+      setUserHasEquipments((prev) => {
+        return [...(prev ?? []), data?.equippedId];
+      });
+    }
+  };
+
   return (
     <Card
       key={equipment.id}
@@ -109,19 +163,13 @@ export default function CraftItemCard({
 
       <Button
         className="mt-4 w-full rounded-md border-2 border-emerald-400 bg-emerald-500/80 text-slate-950 font-bold transition-all hover:scale-[1.02] hover:bg-emerald-400 hover:shadow-[0_0_10px_rgba(0,255,160,0.6)]"
-        onClick={() => {
-          craft(
-            equipment.id,
-            equipment.cost,
-            recipe.normalMaterialId,
-            recipe.monsterMaterialId,
-            recipe.quantity
-          );
-        }}
-        disabled={userHasEquipments?.includes(equipment.id)}
+        onClick={handleCraft}
+        disabled={userHasEquipments?.includes(equipment.id) || !enough}
       >
         {userHasEquipments?.includes(equipment.id)
           ? "クラフト済み"
+          : !enough
+          ? "素材不足"
           : " 🔨 クラフト"}
       </Button>
     </Card>

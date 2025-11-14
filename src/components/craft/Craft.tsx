@@ -31,9 +31,8 @@ export default function Craft({
   );
   const [craftMethod, setCraftMethod] = useState<"ENEMY" | "NORMAL">("ENEMY");
   const [coin, setCoin] = useState(userCoin);
-  const [equipments, setEquipments] = useState<MstCraftEquipmentsWithRecipes[]>(
-    equipmentsData ?? []
-  );
+  const equipments = equipmentsData ?? [];
+
   const [userHas, setUserHas] = useState<UserHasType>(userHasData ?? []);
   const [userHasEquipment, setUserHasEquipments] = useState<
     string[] | undefined
@@ -64,6 +63,9 @@ export default function Craft({
               craftMethod={craftMethod}
               userHas={userHas}
               userHasEquipments={userHasEquipment ?? []}
+              setCoins={setCoin}
+              setUserHas={setUserHas}
+              setUserHasEquipments={setUserHasEquipments}
             />
           ))}
         </section>
