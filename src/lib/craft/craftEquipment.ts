@@ -13,4 +13,6 @@ export default async function craftEquipments(
       mstEquipment: undefined,
     },
   });
+
+  return equipmentId;
 }

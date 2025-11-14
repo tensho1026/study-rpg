@@ -12,6 +12,7 @@ type Props = {
   userCoin: number;
   equipmentsData: MstCraftEquipmentsWithRecipes[];
   userHasData: UserHasType;
+  userHasEquipments: string[] | undefined;
 };
 type UserHasType = {
   nomalItemId?: string | null;
@@ -23,16 +24,19 @@ export default function Craft({
   userCoin,
   equipmentsData,
   userHasData,
+  userHasEquipments,
 }: Props) {
   const [activeCategory, setActiveCategory] = useState<"weapon" | "armor">(
     "weapon"
   );
   const [craftMethod, setCraftMethod] = useState<"ENEMY" | "NORMAL">("ENEMY");
   const [coin, setCoin] = useState(userCoin);
-  const [equipments, setEquipments] = useState<MstCraftEquipmentsWithRecipes[]>(
-    equipmentsData ?? []
-  );
+  const equipments = equipmentsData ?? [];
+
   const [userHas, setUserHas] = useState<UserHasType>(userHasData ?? []);
+  const [userHasEquipment, setUserHasEquipments] = useState<
+    string[] | undefined
+  >(userHasEquipments);
 
   // --- 装備カテゴリで絞る ---
   const filteredEquipments = useFilteredEquipments(equipments, activeCategory);
@@ -58,6 +62,10 @@ export default function Craft({
               equipment={equipment}
               craftMethod={craftMethod}
               userHas={userHas}
+              userHasEquipments={userHasEquipment ?? []}
+              setCoins={setCoin}
+              setUserHas={setUserHas}
+              setUserHasEquipments={setUserHasEquipments}
             />
           ))}
         </section>
