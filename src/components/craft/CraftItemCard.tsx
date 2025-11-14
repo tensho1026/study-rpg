@@ -12,12 +12,14 @@ type Props = {
     nomalItemId?: string | null;
     quantity: number;
   }[];
+  userHasEquipments: string[] | undefined
 };
 
 export default function CraftItemCard({
   equipment,
   craftMethod,
   userHas,
+  userHasEquipments,
 }: Props) {
   const recipe = equipment.recipes.find(
     (r) => r.equipmentId === equipment.id && r.materialType === craftMethod
@@ -108,6 +110,7 @@ export default function CraftItemCard({
         onClick={() => {
           craft(equipment.id);
         }}
+        disabled={userHasEquipments?.includes(equipment.id)}
       >
         🔨 クラフト
       </Button>
