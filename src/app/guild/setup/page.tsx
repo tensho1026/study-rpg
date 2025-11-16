@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
-import { Crown, Sparkles, Users, X } from "lucide-react";
+import { useState } from "react";
+import { Crown, Sparkles, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -11,9 +11,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { CreateGuildForm, createGuildSchemaRaw } from "@/lib/schemas/guild";
+import createGuildAction from "@/app/actions/guild/createGuildAction";
 
 type GuildProfile = {
   id: string;
@@ -21,10 +31,6 @@ type GuildProfile = {
   description: string;
   members: number;
   leader: string;
-  activityTime: string;
-  requirements: string;
-  tags: string[];
-  recruitmentMessage: string;
 };
 
 const guildList: GuildProfile[] = [
@@ -35,11 +41,6 @@ const guildList: GuildProfile[] = [
       "週末は連合討伐、平日はまったりとクエスト消化。社会人中心の夜型ギルドです。",
     members: 27,
     leader: "リティア",
-    activityTime: "21:00 - 24:00 (JST)",
-    requirements: "Rank15以上 / VCは任意",
-    tags: ["PvE", "討伐隊", "社会人"],
-    recruitmentMessage:
-      "新しい古龍コンテンツに向けてメンバーを募集しています。予習資料も共有しているので初挑戦の方も安心して参加してください。",
   },
   {
     id: "midnight-cafe",
@@ -48,11 +49,6 @@ const guildList: GuildProfile[] = [
       "固定メンバーで小規模に活動するギルド。雑談やハウジングなどゆったり勢向け。",
     members: 14,
     leader: "シエル",
-    activityTime: "23:00 - 26:00 (JST)",
-    requirements: "Rank10以上 / イン率不問",
-    tags: ["カジュアル", "交流", "ハウジング"],
-    recruitmentMessage:
-      "ギルドハウスの改装が終わったので新メンバーを少しだけ募集中です。スクショ会や交流会が好きな方はぜひ。",
   },
   {
     id: "valor-company",
@@ -61,71 +57,21 @@ const guildList: GuildProfile[] = [
       "ランキング上位を狙うハードコア勢。攻略資料やルート管理なども徹底しています。",
     members: 32,
     leader: "ダリオ",
-    activityTime: "20:00 - 24:00 (JST)",
-    requirements: "Rank20以上 / ボイスチャット必須",
-    tags: ["PvP", "ランキング", "攻略"],
-    recruitmentMessage:
-      "次期シーズンでの頂点を共に目指す仲間を募集中。安定した参加ができる方を歓迎します。",
   },
 ];
-
-type ModalProps = {
-  open: boolean;
-  onClose: () => void;
-  title: string;
-  description?: string;
-  children: ReactNode;
-  footer?: ReactNode;
-};
-
-function ModalShell({
-  open,
-  onClose,
-  title,
-  description,
-  children,
-  footer,
-}: ModalProps) {
-  if (!open) {
-    return null;
-  }
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-10">
-      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
-      <div className="relative z-10 w-full max-w-lg md:max-w-xl rounded-2xl border bg-background p-6 shadow-2xl">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h3 className="text-2xl font-semibold">{title}</h3>
-            {description ? (
-              <p className="mt-1 text-sm text-muted-foreground">
-                {description}
-              </p>
-            ) : null}
-          </div>
-          <Button
-            aria-label="閉じる"
-            variant="ghost"
-            size="icon-sm"
-            onClick={onClose}
-            className="shrink-0"
-          >
-            <X className="size-4" />
-          </Button>
-        </div>
-        <div className="mt-5 space-y-5 text-left">{children}</div>
-        {footer ? (
-          <div className="mt-6 flex flex-wrap justify-end gap-3">{footer}</div>
-        ) : null}
-      </div>
-    </div>
-  );
-}
 
 export default function GuildSetupPage() {
   const [selectedGuild, setSelectedGuild] = useState<GuildProfile | null>(null);
   const [isGuildModalOpen, setIsGuildModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
+    resolver: zodResolver(createGuildSchemaRaw),
+  });
 
   const handleSelectGuild = (guild: GuildProfile) => {
     setSelectedGuild(guild);
@@ -135,6 +81,11 @@ export default function GuildSetupPage() {
   const closeGuildModal = () => {
     setIsGuildModalOpen(false);
     setSelectedGuild(null);
+  };
+
+  const onSubmit = async (data: CreateGuildForm) => {
+    await createGuildAction(data.name, data.description);
+    setIsCreateModalOpen(false);
   };
 
   return (
@@ -206,76 +157,96 @@ export default function GuildSetupPage() {
         </Card>
       </div>
 
-      <ModalShell
+      <Dialog
         open={Boolean(selectedGuild && isGuildModalOpen)}
-        onClose={closeGuildModal}
-        title={selectedGuild?.name ?? ""}
-        footer={
-          <>
+        onOpenChange={(open) => {
+          if (!open) {
+            closeGuildModal();
+          }
+        }}
+      >
+        <DialogContent className="max-w-xl space-y-6 text-left">
+          <DialogHeader className="text-left">
+            <DialogTitle>{selectedGuild?.name ?? ""}</DialogTitle>
+          </DialogHeader>
+          {selectedGuild ? (
+            <>
+              <div className="grid gap-4 rounded-xl border bg-muted/30 p-4 text-sm md:grid-cols-2">
+                <div>
+                  <p className="text-muted-foreground">リーダー</p>
+                  <p className="mt-1 flex items-center gap-1 text-base font-semibold">
+                    <Crown className="size-4 text-amber-500" />{" "}
+                    {selectedGuild.leader}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">メンバー</p>
+                  <p className="mt-1 text-base font-semibold">
+                    {selectedGuild.members}人
+                  </p>
+                </div>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  ギルド紹介
+                </p>
+                <p className="mt-2 leading-relaxed">
+                  {selectedGuild.description}
+                </p>
+              </div>
+            </>
+          ) : null}
+          <div className="flex flex-wrap justify-end gap-3">
             <Button variant="outline" onClick={closeGuildModal}>
               閉じる
             </Button>
             <Button>このギルドに申請する</Button>
-          </>
-        }
-      >
-        {selectedGuild ? (
-          <>
-            <div className="grid gap-4 rounded-xl border bg-muted/30 p-4 text-sm md:grid-cols-2">
-              <div>
-                <p className="text-muted-foreground">リーダー</p>
-                <p className="mt-1 flex items-center gap-1 text-base font-semibold">
-                  <Crown className="size-4 text-amber-500" />{" "}
-                  {selectedGuild.leader}
-                </p>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
+        <DialogContent className="space-y-6 text-left">
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <DialogHeader className="text-left">
+              <DialogTitle>新しいギルドを作成</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="guild-name">ギルド名</Label>
+                <Input
+                  id="guild-name"
+                  placeholder="例：蒼穹の旅団"
+                  {...register("name")}
+                />
+                {errors.name && (
+                  <p className="text-sm text-red-500">{errors.name.message}</p>
+                )}
               </div>
-              <div>
-                <p className="text-muted-foreground">メンバー</p>
-                <p className="mt-1 text-base font-semibold">
-                  {selectedGuild.members}人
-                </p>
+
+              <div className="space-y-2">
+                <Label htmlFor="guild-description">紹介文</Label>
+                <Textarea id="guild-description" {...register("description")} />
+                {errors.description && (
+                  <p className="text-sm text-red-500">
+                    {errors.description.message}
+                  </p>
+                )}
               </div>
             </div>
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">
-                ギルド紹介
-              </p>
-              <p className="mt-2 leading-relaxed">
-                {selectedGuild.description}
-              </p>
+            <div className="flex flex-wrap justify-end gap-3">
+              <Button
+                variant="outline"
+                onClick={() => setIsCreateModalOpen(false)}
+                type="submit"
+              >
+                やめておく
+              </Button>
+              <Button>この内容で作成する</Button>
             </div>
-          </>
-        ) : null}
-      </ModalShell>
-
-      <ModalShell
-        open={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
-        title="新しいギルドを作成"
-        footer={
-          <>
-            <Button
-              variant="outline"
-              onClick={() => setIsCreateModalOpen(false)}
-            >
-              やめておく
-            </Button>
-            <Button>この内容で作成する</Button>
-          </>
-        }
-      >
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="guild-name">ギルド名</Label>
-            <Input id="guild-name" placeholder="例：蒼穹の旅団" />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="guild-description">紹介文</Label>
-            <Textarea id="guild-description" />
-          </div>
-        </div>
-      </ModalShell>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
