@@ -22,11 +22,17 @@ export default function OwnedEquipmentsList({
 
     setEquipments((prev) =>
       prev.map((item) => {
-        if (item.equipmentId === result.equippedId) {
+        if (
+          item.equipmentId === result.equippedId ||
+          item.craftEquipmentId === result.equippedId
+        ) {
           // 今回新しく装備したもの
           return { ...item, isDraft: true };
         }
-        if (item.equipmentId === result.unequippedId?.equipmentId) {
+        if (
+          item.equipmentId === result.unequippedId?.equipmentId ||
+          item.craftEquipmentId === result.unequippedId?.craftEquipmentId
+        ) {
           // 今まで装備していたもの
           return { ...item, isDraft: false };
         }
@@ -47,7 +53,7 @@ export default function OwnedEquipmentsList({
           // if (!item.mstEquipment && !item.mstCraftEquipments) return null;
           const master = item.mstEquipment ?? item.mstCraftEquipments;
           if (!master) return null; // どちらも無いなら除外
-          console.log(master,'master ');
+          console.log(master, "master ");
 
           return (
             <div
@@ -100,12 +106,12 @@ export default function OwnedEquipmentsList({
                 </div>
 
                 <Button
-                  onClick={() =>
-                    handleEquipItem(
-                      item.equipmentId! || item.craftEquipmentId!,
-                      item.mstEquipment!.type
-                    )
-                  }
+                  onClick={() => {
+                    const id = item.equipmentId ?? item.craftEquipmentId;
+                    if (!id) return;
+
+                    handleEquipItem(id, master.type);
+                  }}
                   disabled={item.isDraft}
                   className="rpg-button bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed text-xs px-3 py-1"
                 >

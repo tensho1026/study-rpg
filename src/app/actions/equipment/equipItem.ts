@@ -17,9 +17,14 @@ export default async function equipItem(
   // つけている装備検索
   const draftedItemId = await findDraftedEquipment(session.user.id, type);
 
-  if (draftedItemId && draftedItemId.equipmentId) {
-    // つけていた装備を外す
-    await unequipEquipment(session.user.id, draftedItemId.equipmentId);
+  // つけていた装備を外す
+  if (draftedItemId) {
+    if (draftedItemId.equipmentId) {
+      await unequipEquipment(session.user.id, draftedItemId.equipmentId);
+    }
+    if (draftedItemId.craftEquipmentId) {
+      await unequipEquipment(session.user.id, draftedItemId.craftEquipmentId);
+    }
   }
 
   await equipEquipment(session.user.id, equipmentId);
