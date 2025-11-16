@@ -12,9 +12,11 @@ type Props = {
 };
 
 export default function Equipment({ userEquipments }: Props) {
-  const [equipments, setEquipments] = useState<EquipmentItem[]>(
-    userEquipments ?? []
-  );
+  const [equipments, setEquipments] = useState<EquipmentItem[]>(userEquipments);
+
+  // ---- マスター情報を共通化する安全関数 ----
+  const getMaster = (item: EquipmentItem | undefined) =>
+    item?.mstEquipment ?? item?.mstCraftEquipments ?? null;
 
   const {
     equippedWeapon,
@@ -24,21 +26,35 @@ export default function Equipment({ userEquipments }: Props) {
     totalDefense,
   } = useMemo(() => {
     const equippedWeapon = equipments.find(
-      (item) => item.mstEquipment?.type === "weapon" && item.isDraft
-    );
-    const equippedArmor = equipments.find(
-      (item) => item.mstEquipment?.type === "armor" && item.isDraft
-    );
-    const equippedAccessory = equipments.find(
-      (item) => item.mstEquipment?.type === "accessory" && item.isDraft
+      (item) =>
+        item.isDraft &&
+        (item.mstEquipment?.type === "weapon" ||
+          item.mstCraftEquipments?.type === "weapon")
     );
 
+    const equippedArmor = equipments.find(
+      (item) =>
+        item.isDraft &&
+        (item.mstEquipment?.type === "armor" ||
+          item.mstCraftEquipments?.type === "armor")
+    );
+
+    const equippedAccessory = equipments.find(
+      (item) =>
+        item.isDraft &&
+        (item.mstEquipment?.type === "accessory" ||
+          item.mstCraftEquipments?.type === "accessory")
+    );
+
+    const w = getMaster(equippedWeapon);
+    const a = getMaster(equippedArmor);
+    const acc = getMaster(equippedAccessory);
+
     const totalAttack =
-      (equippedWeapon?.mstEquipment!.attack || 0) +
-      (equippedAccessory?.mstEquipment!.attack || 0);
+      (w?.attack ?? 0) + (acc?.attack ?? 0);
+
     const totalDefense =
-      (equippedArmor?.mstEquipment!.defense || 0) +
-      (equippedAccessory?.mstEquipment!.defense || 0);
+      (a?.defense ?? 0) + (acc?.defense ?? 0);
 
     return {
       equippedWeapon,
@@ -49,30 +65,29 @@ export default function Equipment({ userEquipments }: Props) {
     };
   }, [equipments]);
 
+  const weaponMaster = getMaster(equippedWeapon);
+  const armorMaster = getMaster(equippedArmor);
+  const accessoryMaster = getMaster(equippedAccessory);
+
   return (
     <main className="min-h-screen bg-background p-4 md:p-8">
       <div className="max-w-6xl mx-auto space-y-4">
-        {/* Title */}
         <Title />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          {/* Left Column - Current Equipment & Stats */}
           <div className="space-y-4">
-            {/* Current Equipment */}
             <CurrentEquipment
-              equippedWeapon={equippedWeapon!.mstEquipment!.name}
-              equippedArmor={equippedArmor?.mstEquipment!.name}
-              equippedAccessory={equippedAccessory?.mstEquipment!.name}
+              equippedWeapon={weaponMaster?.name ?? "なし"}
+              equippedArmor={armorMaster?.name ?? "なし"}
+              equippedAccessory={accessoryMaster?.name ?? "なし"}
             />
 
-            {/* Battle Stats */}
             <BattleStatus
               totalAttack={totalAttack}
               totalDefense={totalDefense}
             />
           </div>
 
-          {/* Right Column - Inventory */}
           <Inventory setEquipments={setEquipments} equipments={equipments} />
         </div>
       </div>

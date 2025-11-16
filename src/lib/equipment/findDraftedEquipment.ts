@@ -9,13 +9,24 @@ export default async function findDraftedEquipment(
     where: {
       userId: userId,
       isDraft: true,
-      mstEquipment: {
-        type: type,
-      },
+      OR: [
+        {
+          mstEquipment: {
+            type: type,
+          },
+        },
+        {
+          mstCraft: {
+            type: type,
+          },
+        },
+      ],
     },
     select: {
       equipmentId: true,
+      craftEquipmentId: true,
     },
   });
+
   return draftedItemId;
 }
