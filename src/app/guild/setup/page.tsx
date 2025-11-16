@@ -93,7 +93,7 @@ function ModalShell({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-10">
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
-      <div className="relative z-10 w-full max-w-2xl rounded-2xl border bg-background p-6 shadow-2xl">
+      <div className="relative z-10 w-full max-w-lg md:max-w-xl rounded-2xl border bg-background p-6 shadow-2xl">
         <div className="flex items-start justify-between gap-4">
           <div>
             <h3 className="text-2xl font-semibold">{title}</h3>
@@ -164,13 +164,13 @@ export default function GuildSetupPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-5">
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-4 md:grid-cols-2 ">
               {guildList.map((guild) => (
                 <button
                   key={guild.id}
                   type="button"
                   onClick={() => handleSelectGuild(guild)}
-                  className="flex h-full flex-col gap-3 rounded-xl border border-border/60 bg-background/80 p-4 text-left transition hover:border-primary hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="flex h-full flex-col gap-3 rounded-xl border border-border/40  p-4 text-left transition hover:border-primary hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <span className="text-lg font-semibold">{guild.name}</span>
