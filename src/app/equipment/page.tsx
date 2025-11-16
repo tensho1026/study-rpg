@@ -13,9 +13,9 @@ export default async function EquipmentPage() {
       )
       .map((item) => ({
         equipmentId: item.equipmentId,
+        craftEquipmentId: item.craftEquipmentId,
         isDraft: item.isDraft,
         mstEquipment: item.mstEquipment,
-        craftEquipmentsId: item.craftEquipmentId,
         mstCraftEquipments: item.mstCraft,
       })) ?? [];
   // console.log(cleaned);
