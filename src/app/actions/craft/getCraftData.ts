@@ -11,9 +11,14 @@ export default async function getCraftData() {
   if (!session) return;
 
   const userId = session.user.id;
-  const userHasDropItems = await getUserHasDropItems(userId);
-  const mstData = await getMstData();
-  const userCoin = await getCoins(userId);
-  const userHasEquipments = await isUserHasCraftEquipment(session.user.id);
-  return { userHasDropItems, mstData, userCoin,userHasEquipments };
+
+  const [userHasDropItems, mstData, userCoin, userHasEquipments] =
+    await Promise.all([
+      getUserHasDropItems(userId),
+      getMstData(),
+      getCoins(userId),
+      isUserHasCraftEquipment(userId),
+    ]);
+
+  return { userHasDropItems, mstData, userCoin, userHasEquipments };
 }
