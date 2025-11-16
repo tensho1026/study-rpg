@@ -23,7 +23,7 @@ function Inventory({ equipments, setEquipments }: Props) {
     );
     return filteredItems;
   }, [equipments, selectedCategory]);
-  console.log(filteredItems);
+  
 
   return (
     <div className="lg:col-span-2">

@@ -3,7 +3,6 @@ import getEquipmentData from "../actions/equipment/getEquipmentData";
 
 export default async function EquipmentPage() {
   const data = await getEquipmentData();
-  // console.log(data);
   const cleaned =
     data
       ?.filter(
@@ -18,7 +17,6 @@ export default async function EquipmentPage() {
         mstEquipment: item.mstEquipment,
         mstCraftEquipments: item.mstCraft,
       })) ?? [];
-  // console.log(cleaned);
 
   return <Equipment userEquipments={cleaned ?? []} />;
 }
