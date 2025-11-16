@@ -22,6 +22,10 @@ model User {
   battleStatus  BattleStatus[]
   dropItem      UserHasDropItems[]
   battleItem    UserHasBattleItem[]
+
+
+  guildMemberships UserGuildStatus[]    
+  guildLeadership Guild? @relation("GuildLeader") 
   
 }
 
@@ -275,4 +279,33 @@ model UserHasBattleItem {
   
 }
 
+model Guild {
+  id String @id @default(cuid())
+  name String
+  description String
+  leaderId String @unique
+  leader User  @relation("GuildLeader", fields: [leaderId], references: [id])
+  members UserGuildStatus[]
 
+
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+
+
+
+}
+
+model UserGuildStatus {
+  id String @id @default(cuid())
+  userId String @unique
+  guildId String 
+  user      User     @relation(fields: [userId], references: [id])
+  guild     Guild    @relation(fields: [guildId], references: [id])
+
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@unique([userId, guildId])
+
+}
