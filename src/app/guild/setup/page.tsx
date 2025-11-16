@@ -20,6 +20,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { CreateGuildForm, createGuildSchemaRaw } from "@/lib/schemas/guild";
+import createGuildAction from "@/app/actions/guild/createGuildAction";
 
 type GuildProfile = {
   id: string;
@@ -61,6 +65,14 @@ export default function GuildSetupPage() {
   const [isGuildModalOpen, setIsGuildModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
+    resolver: zodResolver(createGuildSchemaRaw),
+  });
+
   const handleSelectGuild = (guild: GuildProfile) => {
     setSelectedGuild(guild);
     setIsGuildModalOpen(true);
@@ -69,6 +81,11 @@ export default function GuildSetupPage() {
   const closeGuildModal = () => {
     setIsGuildModalOpen(false);
     setSelectedGuild(null);
+  };
+
+  const onSubmit = async (data: CreateGuildForm) => {
+    await createGuildAction(data.name, data.description);
+    setIsCreateModalOpen(false);
   };
 
   return (
@@ -158,7 +175,8 @@ export default function GuildSetupPage() {
                 <div>
                   <p className="text-muted-foreground">リーダー</p>
                   <p className="mt-1 flex items-center gap-1 text-base font-semibold">
-                    <Crown className="size-4 text-amber-500" /> {selectedGuild.leader}
+                    <Crown className="size-4 text-amber-500" />{" "}
+                    {selectedGuild.leader}
                   </p>
                 </div>
                 <div>
@@ -189,26 +207,44 @@ export default function GuildSetupPage() {
 
       <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
         <DialogContent className="space-y-6 text-left">
-          <DialogHeader className="text-left">
-            <DialogTitle>新しいギルドを作成</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="guild-name">ギルド名</Label>
-              <Input id="guild-name" placeholder="例：蒼穹の旅団" />
-            </div>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <DialogHeader className="text-left">
+              <DialogTitle>新しいギルドを作成</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="guild-name">ギルド名</Label>
+                <Input
+                  id="guild-name"
+                  placeholder="例：蒼穹の旅団"
+                  {...register("name")}
+                />
+                {errors.name && (
+                  <p className="text-sm text-red-500">{errors.name.message}</p>
+                )}
+              </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="guild-description">紹介文</Label>
-              <Textarea id="guild-description" />
+              <div className="space-y-2">
+                <Label htmlFor="guild-description">紹介文</Label>
+                <Textarea id="guild-description" {...register("description")} />
+                {errors.description && (
+                  <p className="text-sm text-red-500">
+                    {errors.description.message}
+                  </p>
+                )}
+              </div>
             </div>
-          </div>
-          <div className="flex flex-wrap justify-end gap-3">
-            <Button variant="outline" onClick={() => setIsCreateModalOpen(false)}>
-              やめておく
-            </Button>
-            <Button>この内容で作成する</Button>
-          </div>
+            <div className="flex flex-wrap justify-end gap-3">
+              <Button
+                variant="outline"
+                onClick={() => setIsCreateModalOpen(false)}
+                type="submit"
+              >
+                やめておく
+              </Button>
+              <Button>この内容で作成する</Button>
+            </div>
+          </form>
         </DialogContent>
       </Dialog>
     </div>
