@@ -21,10 +21,6 @@ type GuildProfile = {
   description: string;
   members: number;
   leader: string;
-  activityTime: string;
-  requirements: string;
-  tags: string[];
-  recruitmentMessage: string;
 };
 
 const guildList: GuildProfile[] = [
@@ -35,11 +31,6 @@ const guildList: GuildProfile[] = [
       "週末は連合討伐、平日はまったりとクエスト消化。社会人中心の夜型ギルドです。",
     members: 27,
     leader: "リティア",
-    activityTime: "21:00 - 24:00 (JST)",
-    requirements: "Rank15以上 / VCは任意",
-    tags: ["PvE", "討伐隊", "社会人"],
-    recruitmentMessage:
-      "新しい古龍コンテンツに向けてメンバーを募集しています。予習資料も共有しているので初挑戦の方も安心して参加してください。",
   },
   {
     id: "midnight-cafe",
@@ -48,11 +39,6 @@ const guildList: GuildProfile[] = [
       "固定メンバーで小規模に活動するギルド。雑談やハウジングなどゆったり勢向け。",
     members: 14,
     leader: "シエル",
-    activityTime: "23:00 - 26:00 (JST)",
-    requirements: "Rank10以上 / イン率不問",
-    tags: ["カジュアル", "交流", "ハウジング"],
-    recruitmentMessage:
-      "ギルドハウスの改装が終わったので新メンバーを少しだけ募集中です。スクショ会や交流会が好きな方はぜひ。",
   },
   {
     id: "valor-company",
@@ -61,11 +47,6 @@ const guildList: GuildProfile[] = [
       "ランキング上位を狙うハードコア勢。攻略資料やルート管理なども徹底しています。",
     members: 32,
     leader: "ダリオ",
-    activityTime: "20:00 - 24:00 (JST)",
-    requirements: "Rank20以上 / ボイスチャット必須",
-    tags: ["PvP", "ランキング", "攻略"],
-    recruitmentMessage:
-      "次期シーズンでの頂点を共に目指す仲間を募集中。安定した参加ができる方を歓迎します。",
   },
 ];
 
