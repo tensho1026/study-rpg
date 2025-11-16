@@ -15,6 +15,7 @@ export default function Equipment({ userEquipments }: Props) {
   const [equipments, setEquipments] = useState<EquipmentItem[]>(
     userEquipments ?? []
   );
+  console.log(equipments)
 
   const {
     equippedWeapon,
@@ -24,13 +25,19 @@ export default function Equipment({ userEquipments }: Props) {
     totalDefense,
   } = useMemo(() => {
     const equippedWeapon = equipments.find(
-      (item) => item.mstEquipment?.type === "weapon" && item.isDraft
+      (item) =>
+        (item.mstEquipment?.type === "weapon" && item.isDraft) ||
+        (item.mstCraftEquipments?.type === "weapon" && item.isDraft)
     );
     const equippedArmor = equipments.find(
-      (item) => item.mstEquipment?.type === "armor" && item.isDraft
+      (item) =>
+        (item.mstEquipment?.type === "armor" && item.isDraft) ||
+        (item.mstCraftEquipments?.type === "armor" && item.isDraft)
     );
     const equippedAccessory = equipments.find(
-      (item) => item.mstEquipment?.type === "accessory" && item.isDraft
+      (item) =>
+        (item.mstEquipment?.type === "accessory" && item.isDraft) ||
+        (item.mstCraftEquipments?.type === "accessory" && item.isDraft)
     );
 
     const totalAttack =

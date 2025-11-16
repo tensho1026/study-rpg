@@ -17,10 +17,13 @@ function Inventory({ equipments, setEquipments }: Props) {
 
   const filteredItems = useMemo(() => {
     const filteredItems = equipments.filter(
-      (item) => item.mstEquipment?.type === selectedCategory
+      (item) =>
+        item.mstEquipment?.type === selectedCategory ||
+        item.mstCraftEquipments?.type === selectedCategory
     );
     return filteredItems;
   }, [equipments, selectedCategory]);
+  console.log(filteredItems);
 
   return (
     <div className="lg:col-span-2">

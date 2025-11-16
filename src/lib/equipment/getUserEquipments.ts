@@ -7,6 +7,7 @@ export default async function getUserEquipments(userId: string) {
     },
     select: {
       equipmentId: true,
+      craftEquipmentId: true,
       isDraft: true,
       mstEquipment: {
         select: {
@@ -14,6 +15,17 @@ export default async function getUserEquipments(userId: string) {
           name: true,
           type: true,
           price: true,
+          attack: true,
+          defense: true,
+          description: true,
+        },
+      },
+      mstCraft: {
+        select: {
+          id: true,
+          name: true,
+          type: true,
+          cost: true,
           attack: true,
           defense: true,
           description: true,

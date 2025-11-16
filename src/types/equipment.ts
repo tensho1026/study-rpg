@@ -1,5 +1,6 @@
 export type Equipment = {
-  equipmentId: string;
+  equipmentId?: string | null
+  craftEquipmentId?: string | null
   isDraft: boolean;
   mstEquipment: {
     id: string;
@@ -9,6 +10,14 @@ export type Equipment = {
     name: string;
     type: "weapon" | "armor" | "accessory";
     price: number;
-  } | null
-
+  } | null;
+  mstCraftEquipments: {
+    id: string;
+    attack?: number | null;
+    defense?: number | null;
+    description: string;
+    name: string;
+    type: "weapon" | "armor" | "accessory";
+    cost: number;
+  } | null;
 };
