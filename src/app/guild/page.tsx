@@ -11,6 +11,8 @@ import {
   Users,
 } from "lucide-react";
 import Link from "next/link";
+import isUserGuild from "../actions/guild/isUserGuild";
+import { redirect } from "next/navigation";
 
 const members = [
   { name: "アリア", role: "ギルドマスター", level: 32, studyMinutes: 980 },
@@ -39,7 +41,12 @@ const chatLog = [
 ];
 
 const tradeItems = [
-  { id: "T-01", item: "集中ポーション ×3", owner: "カイト", want: "計算ドリル" },
+  {
+    id: "T-01",
+    item: "集中ポーション ×3",
+    owner: "カイト",
+    want: "計算ドリル",
+  },
   { id: "T-02", item: "ノートテンプレ", owner: "ユナ", want: "コイン 150G" },
   { id: "T-03", item: "暗記カード", owner: "レン", want: "装備素材" },
 ];
@@ -55,7 +62,11 @@ const guildStats = [
   { label: "今週の寄付", value: "4,200 G", icon: Coins },
 ];
 
-export default function GuildPage() {
+export default async function GuildPage() {
+  const isInGuild = await isUserGuild();
+  if (!isInGuild) {
+    redirect("/guild/setup");
+  }
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 px-4 py-10 text-white">
       <div className="mx-auto flex max-w-6xl flex-col gap-6">
