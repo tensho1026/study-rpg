@@ -14,4 +14,6 @@ export default async function createGuildAction(
   const userId = session.user.id;
   const guildId = await createGuild(name, description, userId);
   await createUserGuildStatus(userId, guildId);
+
+  return guildId
 }
