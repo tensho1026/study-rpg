@@ -25,6 +25,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CreateGuildForm, createGuildSchemaRaw } from "@/lib/schemas/guild";
 import createGuildAction from "@/app/actions/guild/createGuildAction";
 import { useRouter } from "next/navigation";
+import joinGuild from "@/app/actions/guild/joinGuild";
 
 type GuildProfile = {
   id: string;
@@ -88,6 +89,11 @@ export default function Setup() {
   const onSubmit = async (data: CreateGuildForm) => {
     const guildId = await createGuildAction(data.name, data.description);
     setIsCreateModalOpen(false);
+    router.push(`/guild/${guildId}`);
+  };
+
+  const handleJoin = async (guildId: string) => {
+    await joinGuild(guildId);
     router.push(`/guild/${guildId}`);
   };
 
@@ -203,7 +209,14 @@ export default function Setup() {
             <Button variant="outline" onClick={closeGuildModal}>
               閉じる
             </Button>
-            <Button>このギルドに申請する</Button>
+            <Button
+              onClick={() => {
+                if (!selectedGuild) return;
+                handleJoin(selectedGuild?.id);
+              }}
+            >
+              このギルドに申請する
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
