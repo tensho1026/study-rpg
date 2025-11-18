@@ -27,45 +27,26 @@ import createGuildAction from "@/app/actions/guild/createGuildAction";
 import { useRouter } from "next/navigation";
 import joinGuild from "@/app/actions/guild/joinGuild";
 
-type GuildProfile = {
-  id: string;
-  name: string;
-  description: string;
-  members: number;
-  leader: string;
+type GuildWithMembers = Prisma.GuildGetPayload<{
+  include: {
+    members: true;
+    leader: true;
+  };
+}>;
+
+type Props = {
+  guilds: GuildWithMembers[];
 };
+import { Prisma } from "@prisma/client";
 
-const guildList: GuildProfile[] = [
-  {
-    id: "dawn-brigade",
-    name: "暁の旅団",
-    description:
-      "週末は連合討伐、平日はまったりとクエスト消化。社会人中心の夜型ギルドです。",
-    members: 27,
-    leader: "リティア",
-  },
-  {
-    id: "midnight-cafe",
-    name: "深夜喫茶ロゼ",
-    description:
-      "固定メンバーで小規模に活動するギルド。雑談やハウジングなどゆったり勢向け。",
-    members: 14,
-    leader: "シエル",
-  },
-  {
-    id: "valor-company",
-    name: "蒼刃騎士団",
-    description:
-      "ランキング上位を狙うハードコア勢。攻略資料やルート管理なども徹底しています。",
-    members: 32,
-    leader: "ダリオ",
-  },
-];
-
-export default function Setup() {
-  const [selectedGuild, setSelectedGuild] = useState<GuildProfile | null>(null);
+export default function Setup({ guilds }: Props) {
+  const [selectedGuild, setSelectedGuild] = useState<GuildWithMembers | null>(
+    null
+  );
   const [isGuildModalOpen, setIsGuildModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+  const guildLists = guilds;
 
   const router = useRouter();
   const {
@@ -76,7 +57,7 @@ export default function Setup() {
     resolver: zodResolver(createGuildSchemaRaw),
   });
 
-  const handleSelectGuild = (guild: GuildProfile) => {
+  const handleSelectGuild = (guild: GuildWithMembers) => {
     setSelectedGuild(guild);
     setIsGuildModalOpen(true);
   };
@@ -125,7 +106,7 @@ export default function Setup() {
           </CardHeader>
           <CardContent className="space-y-5">
             <div className="grid gap-4 md:grid-cols-2 ">
-              {guildList.map((guild) => (
+              {guildLists.map((guild) => (
                 <button
                   key={guild.id}
                   type="button"
@@ -135,7 +116,7 @@ export default function Setup() {
                   <div className="flex items-start justify-between gap-2">
                     <span className="text-lg font-semibold">{guild.name}</span>
                     <span className="text-xs font-medium text-muted-foreground">
-                      {guild.members}名
+                      {guild.members.length}名
                     </span>
                   </div>
                   <p className="text-sm text-muted-foreground">
@@ -185,13 +166,13 @@ export default function Setup() {
                   <p className="text-muted-foreground">リーダー</p>
                   <p className="mt-1 flex items-center gap-1 text-base font-semibold">
                     <Crown className="size-4 text-amber-500" />{" "}
-                    {selectedGuild.leader}
+                    {selectedGuild.leader.name}
                   </p>
                 </div>
                 <div>
                   <p className="text-muted-foreground">メンバー</p>
                   <p className="mt-1 text-base font-semibold">
-                    {selectedGuild.members}人
+                    {selectedGuild.members.length}人
                   </p>
                 </div>
               </div>
