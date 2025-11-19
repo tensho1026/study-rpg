@@ -17,7 +17,6 @@ function seededRandom(seed: number) {
 export default function LandingPage() {
   const router = useRouter();
   const { data } = useSession();
-  console.log(data);
 
   const handleClick = () => {
     router.push(data ? "/home" : "/auth/signin");

@@ -13,7 +13,6 @@ export default async function StudyQuestPage() {
 
   const session = await getServerSession(authOptions);
   if (!session) return;
-  console.log(session)
   if (!homeData) {
     // 未ログイン時
     redirect("/auth/signin");
