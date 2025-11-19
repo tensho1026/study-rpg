@@ -1,3 +1,4 @@
+import getGuildByIdAction from "@/app/actions/guild/getGuildByIdAction";
 import isUserGuild from "@/app/actions/guild/isUserGuild";
 import { AppMenuButton } from "@/components/common/app-menu-button";
 import { Button } from "@/components/ui/button";
@@ -63,11 +64,20 @@ const guildStats = [
   { label: "今週の寄付", value: "4,200 G", icon: Coins },
 ];
 
-export default async function GuildPage() {
+type Props = {
+  params: {
+    id: string;
+  };
+};
+
+export default async function GuildPage({ params }: Props) {
   const isInGuild = await isUserGuild();
   if (!isInGuild) {
     redirect("/guild/setup");
   }
+  const { id } = await params;
+  const guildData = await getGuildByIdAction(id);
+  console.log(guildData);
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 px-4 py-10 text-white">
       <div className="mx-auto flex max-w-6xl flex-col gap-6">
