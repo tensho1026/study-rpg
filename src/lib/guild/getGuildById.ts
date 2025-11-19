@@ -7,7 +7,15 @@ export default async function getGuildByid(id: string) {
     },
     include: {
       leader: true,
-      members: true,
+      members: {
+        include: {
+          user: {
+            include: {
+              userStatus: true,
+            },
+          },
+        },
+      },
     },
   });
   return data;
