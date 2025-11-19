@@ -77,7 +77,8 @@ export default async function GuildPage({ params }: Props) {
   }
   const { id } = await params;
   const guildData = await getGuildByIdAction(id);
-  console.log(guildData);
+  console.log(id);
+  console.log(guildData, "ギルドデータ");
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 px-4 py-10 text-white">
       <div className="mx-auto flex max-w-6xl flex-col gap-6">

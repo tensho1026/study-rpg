@@ -2,11 +2,11 @@ import { redirect } from "next/navigation";
 import getUserGuild from "../actions/guild/getUserGuild";
 
 export default async function GuildIndex() {
-  const guild = await getUserGuild();
+  const userGuildStatus = await getUserGuild();
 
-  if (!guild) {
+  if (!userGuildStatus) {
     redirect("/guild/setup");
   }
 
-  redirect(`/guild/${guild.id}`);
+  redirect(`/guild/${userGuildStatus.guildId}`);
 }
