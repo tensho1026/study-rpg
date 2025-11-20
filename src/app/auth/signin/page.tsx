@@ -27,8 +27,6 @@ export default function LoginPage() {
       callbackUrl: "/home",
     });
   };
-  const { data } = useSession();
-  console.log(data);
   return (
     <main className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-md space-y-6">

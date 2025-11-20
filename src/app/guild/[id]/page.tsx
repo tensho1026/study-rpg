@@ -1,3 +1,4 @@
+import getGuildByIdAction from "@/app/actions/guild/getGuildByIdAction";
 import isUserGuild from "@/app/actions/guild/isUserGuild";
 import { AppMenuButton } from "@/components/common/app-menu-button";
 import { Button } from "@/components/ui/button";
@@ -14,14 +15,6 @@ import {
 import Link from "next/link";
 
 import { redirect } from "next/navigation";
-
-const members = [
-  { name: "アリア", role: "ギルドマスター", level: 32, studyMinutes: 980 },
-  { name: "カイト", role: "副団長", level: 28, studyMinutes: 760 },
-  { name: "ミナト", role: "戦術班", level: 24, studyMinutes: 640 },
-  { name: "ユナ", role: "支援班", level: 21, studyMinutes: 520 },
-  { name: "レン", role: "新人", level: 16, studyMinutes: 310 },
-];
 
 const chatLog = [
   {
@@ -52,22 +45,48 @@ const tradeItems = [
   { id: "T-03", item: "暗記カード", owner: "レン", want: "装備素材" },
 ];
 
-const guildStats = [
-  { label: "メンバー数", value: `0${members.length}`, icon: Users },
-  {
-    label: "合計勉強時間",
-    value: `${members.reduce((sum, m) => sum + m.studyMinutes, 0)} 分`,
-    icon: Timer,
-  },
-  { label: "平均レベル", value: "Lv. 24", icon: Shield },
-  { label: "今週の寄付", value: "4,200 G", icon: Coins },
-];
+type Props = {
+  params: {
+    id: string;
+  };
+};
 
-export default async function GuildPage() {
+export default async function GuildPage({ params }: Props) {
   const isInGuild = await isUserGuild();
   if (!isInGuild) {
     redirect("/guild/setup");
   }
+  const { id } = await params;
+  const guildData = await getGuildByIdAction(id);
+  console.log(id);
+  console.log(guildData, "ギルドデータ");
+  if (!guildData) {
+    return;
+  }
+
+  const totalStudy = guildData.members.reduce((sum, member) => {
+    return sum + (member.user.userStatus?.totalStudy ?? 0);
+  }, 0);
+
+  const totalLevel = guildData.members.reduce((sum, member) => {
+    return sum + (member.user.userStatus?.level ?? 0);
+  }, 0);
+  const averageLevel = totalLevel / guildData.members.length;
+  console.log(averageLevel);
+  const guildStats = [
+    {
+      label: "メンバー数",
+      value: `0${guildData?.members.length}`,
+      icon: Users,
+    },
+    {
+      label: "合計勉強時間",
+      value: ` ${totalStudy} 分`,
+      icon: Timer,
+    },
+    { label: "平均レベル", value: `Lv.${averageLevel} `, icon: Shield },
+    // { label: "今週の寄付", value: "4,200 G", icon: Coins },
+  ];
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 px-4 py-10 text-white">
       <div className="mx-auto flex max-w-6xl flex-col gap-6">
@@ -75,15 +94,9 @@ export default async function GuildPage() {
           <div className="flex items-start gap-3 md:items-center">
             <AppMenuButton className="border-white/15 bg-white/5 text-white/80 hover:bg-white/10 hover:text-white" />
             <div>
-              <p className="text-xs uppercase tracking-[0.4em] text-emerald-200/80">
-                Guild Hub
-              </p>
               <h1 className="text-3xl font-semibold text-white md:text-4xl">
-                星灯りの書庫ギルド
+                {guildData?.name}
               </h1>
-              <p className="text-xs text-white/70 md:text-sm">
-                勉強時間と知識を分かち合うアカデミックギルド
-              </p>
             </div>
           </div>
           <Button
@@ -94,7 +107,7 @@ export default async function GuildPage() {
           </Button>
         </header>
 
-        <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {guildStats.map((stat) => (
             <Card
               key={stat.label}
@@ -168,21 +181,25 @@ export default async function GuildPage() {
                 </div>
                 <Crown className="size-6 text-amber-200" />
               </div>
+
               <div className="mt-4 space-y-3 text-sm">
-                {members.map((member) => (
+                {guildData.members.map((member) => (
                   <div
-                    key={member.name}
+                    key={member.id}
                     className="flex items-center justify-between rounded-xl border border-white/10 bg-slate-900/60 px-4 py-3"
                   >
                     <div>
                       <p className="text-base font-semibold text-white">
-                        {member.name}{" "}
-                        <span className="text-sm text-emerald-200">
-                          ({member.role})
+                        {member.user.name}
+                        <span className="text-sm text-emerald-200 pl-8">
+                          {member.userId === guildData.leaderId
+                            ? "リーダー"
+                            : null}
                         </span>
                       </p>
                       <p className="text-xs text-white/60">
-                        Lv.{member.level} / {member.studyMinutes} 分
+                        Lv.{member.user.userStatus?.level} /
+                        {member.user.userStatus?.totalStudy} 分
                       </p>
                     </div>
                     <Button
