@@ -22,6 +22,7 @@ model User {
   battleStatus  BattleStatus[]
   dropItem      UserHasDropItems[]
   battleItem    UserHasBattleItem[]
+  messages      Message[]
 
 
   guildMemberships UserGuildStatus[]    
@@ -286,6 +287,7 @@ model Guild {
   leaderId String @unique
   leader User  @relation("GuildLeader", fields: [leaderId], references: [id])
   members UserGuildStatus[]
+  messages Message[]
 
 
   createdAt    DateTime  @default(now())
@@ -308,4 +310,18 @@ model UserGuildStatus {
 
   @@unique([userId, guildId])
 
+}
+
+model Message {
+id String @id @default(cuid())
+senderId String
+guildId String
+content String
+user      User     @relation(fields: [senderId], references: [id])
+guild     Guild    @relation(fields: [guildId], references: [id])
+
+createdAt    DateTime  @default(now())
+updatedAt    DateTime  @updatedAt
+
+@@index([guildId, createdAt])
 }
