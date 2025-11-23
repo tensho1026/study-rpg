@@ -3,9 +3,11 @@ import isUserGuild from "@/app/actions/guild/isUserGuild";
 import { AppMenuButton } from "@/components/common/app-menu-button";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { createMessageSchemaRaw } from "@/lib/schemas/guild/message";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ArrowRightLeft,
-  Coins,
   Crown,
   MessageCircle,
   Shield,
@@ -15,6 +17,7 @@ import {
 import Link from "next/link";
 
 import { redirect } from "next/navigation";
+import { useForm } from "react-hook-form";
 
 const chatLog = [
   {
@@ -87,6 +90,14 @@ export default async function GuildPage({ params }: Props) {
     { label: "平均レベル", value: `Lv.${averageLevel} `, icon: Shield },
     // { label: "今週の寄付", value: "4,200 G", icon: Coins },
   ];
+
+  // const {
+  //   register,
+  //   formState: { errors },
+  //   handleSubmit,
+  // } = useForm({
+  //   resolver: zodResolver(createMessageSchemaRaw),
+  // });
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 px-4 py-10 text-white">
       <div className="mx-auto flex max-w-6xl flex-col gap-6">
@@ -156,11 +167,10 @@ export default async function GuildPage({ params }: Props) {
             </div>
 
             <div className="flex flex-col gap-3 sm:flex-row">
-              <input
+              <Input
                 type="text"
                 placeholder="メッセージを入力..."
                 className="flex-1 rounded-xl border border-white/15 bg-slate-900/60 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:border-emerald-400 focus:outline-none"
-                disabled
               />
               <Button className="rounded-xl bg-white/20 text-white shadow hover:bg-white/30">
                 送信 (準備中)

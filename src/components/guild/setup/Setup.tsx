@@ -22,7 +22,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CreateGuildForm, createGuildSchemaRaw } from "@/lib/schemas/guild";
+import { CreateGuildForm, createGuildSchemaRaw } from "@/lib/schemas/guild/guild";
 import createGuildAction from "@/app/actions/guild/createGuildAction";
 import { useRouter } from "next/navigation";
 import joinGuild from "@/app/actions/guild/joinGuild";
