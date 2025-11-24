@@ -122,9 +122,10 @@ export default function Battle({
       if (!prevStatus) return null;
 
       const newStatusHp = calcPlayerHp(
+        prevStatus,
         enemy.attack,
         userDefenseStatus,
-        prevStatus
+
       );
       const newStatus = { ...prevStatus, hp: newStatusHp };
 

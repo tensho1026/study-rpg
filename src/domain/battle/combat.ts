@@ -6,9 +6,10 @@ export const calcEnemyHp = (enemy: Enemy, userAttack: number) => {
 };
 
 export const calcPlayerHp = (
+  player: BattleStatusType,
   enemyAtk: number,
   userDef: number,
-  player: BattleStatusType
+
 ) => {
   const damage = Math.max(0, enemyAtk - userDef);
   return Math.max(0, player.hp - damage);
