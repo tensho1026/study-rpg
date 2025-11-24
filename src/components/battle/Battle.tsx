@@ -11,6 +11,7 @@ import Result from "./Result";
 import BattleArea from "./BattleArea";
 import saveRewards from "@/app/actions/battle/saveRewards";
 import { BattleItem } from "@/types/battleItem";
+import { calcEnemyHp, calcHeal, calcPlayerHp } from "@/domain/battle/combat";
 
 type Props = {
   enemyData: Enemy | null;
@@ -74,7 +75,7 @@ export default function Battle({
     setStatus((prev) => {
       if (!prev) return null;
       // ここで最大hpより回復しないようにしている
-      const newHp = Math.min(prev.maxHp, prev.hp + amount);
+      const newHp = calcHeal(prev, amount);
       return { ...prev, hp: newHp };
     });
   };
@@ -82,7 +83,7 @@ export default function Battle({
   const userAttack = () => {
     if (!enemy) return;
     userAnimation();
-    const newEnemyHp = Math.max(0, enemy.hp - userAttackStatus);
+    const newEnemyHp = calcEnemyHp(enemy, userAttackStatus);
     const updatedEnemy = { ...enemy, hp: newEnemyHp };
 
     setEnemy(updatedEnemy);
@@ -119,12 +120,11 @@ export default function Battle({
     enemyAnimation();
     setStatus((prevStatus) => {
       if (!prevStatus) return null;
-      const newStatusHp = Math.max(
-        0,
 
-        // ここで敵の攻撃力より防御が高いと敵の攻撃で回復してしまうので注意する
-
-        prevStatus.hp - (enemy.attack - userDefenseStatus)
+      const newStatusHp = calcPlayerHp(
+        enemy.attack,
+        userDefenseStatus,
+        prevStatus
       );
       const newStatus = { ...prevStatus, hp: newStatusHp };
 
