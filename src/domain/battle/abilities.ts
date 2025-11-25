@@ -1,29 +1,28 @@
-import { Enemy } from "@/types/enemy";
-import { calcEnemyHp, calcHeal, calcPlayerHp } from "./combat";
+// domain/battle/abilities.ts
 import { BattleStatusType } from "@/types/battleStatus";
+import { Enemy } from "@/types/enemy";
 
+// プレイヤーの攻撃処理（純粋計算のみ）
 export const playerAttackAbility = (
   player: BattleStatusType,
   enemy: Enemy,
-  userAttackStatus: number
+  atk: number
 ) => {
-  const newEnemyHp = calcEnemyHp(enemy, userAttackStatus);
-  return { ...enemy, hp: newEnemyHp };
+  const newHp = Math.max(0, enemy.hp - atk);
+  return { ...enemy, hp: newHp };
 };
 
-export const playerHealAbility = (
-  player: BattleStatusType,
-  healAmount: number
-) => {
-  const newHp = calcHeal(player, healAmount);
-
-  return { ...player, hp: newHp };
-};
+// 敵の攻撃（プレイヤー HP 計算）
 export const enemyAttackAbility = (
   player: BattleStatusType,
-  enemy: Enemy,
-  userDefenseStatus: number
+  enemyAtk: number,
+  userDef: number
 ) => {
-  const newHp = calcPlayerHp(player, enemy.attack, userDefenseStatus);
-  return { ...player, hp: newHp };
+  const damage = Math.max(0, enemyAtk - userDef);
+  return Math.max(0, player.hp - damage);
+};
+
+// 回復（純粋関数）
+export const healAbility = (player: BattleStatusType, amount: number) => {
+  return Math.min(player.maxHp, player.hp + amount);
 };

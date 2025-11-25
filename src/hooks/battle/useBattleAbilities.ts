@@ -1,20 +1,26 @@
-import { Enemy } from "@/types/enemy";
-import { useBattleAnimation } from "./useBattleAnimation";
-import { playerAttackAbility } from "@/domain/battle/abilities";
-import { BattleStatusType } from "@/types/battleStatus";
-import { calcHeal, calcPlayerHp } from "@/domain/battle/combat";
+// hooks/battle/useBattleAbilities.ts
+"use client";
 
-export const useBattleAbilities = ({
+import { Enemy } from "@/types/enemy";
+import { BattleStatusType } from "@/types/battleStatus";
+import { BattleItem } from "@/types/battleItem";
+import { useBattleAnimation } from "./useBattleAnimation";
+import {
+  playerAttackAbility,
+  enemyAttackAbility,
+  healAbility,
+} from "@/domain/battle/abilities";
+
+export function useBattleAbilities({
   setPlayerAttackAnim,
   setEnemyAttackAnim,
   setEnemy,
   setBattleLog,
   setStatus,
   enemy,
-  player,
+  status,
   userAttackStatus,
   userDefenseStatus,
-  status,
 }: {
   setPlayerAttackAnim: React.Dispatch<React.SetStateAction<boolean>>;
   setEnemyAttackAnim: React.Dispatch<React.SetStateAction<boolean>>;
@@ -22,57 +28,68 @@ export const useBattleAbilities = ({
   setBattleLog: React.Dispatch<React.SetStateAction<string>>;
   setStatus: React.Dispatch<React.SetStateAction<BattleStatusType | null>>;
 
-  enemy: Enemy;
-  player: BattleStatusType;
+  enemy: Enemy | null;
+  status: BattleStatusType | null;
+
   userAttackStatus: number;
   userDefenseStatus: number;
-  status: BattleStatusType | null;
-}) => {
+}) {
   const { userAnimation, enemyAnimation } = useBattleAnimation(
     setPlayerAttackAnim,
     setEnemyAttackAnim
   );
 
+  // プレイヤー攻撃
   const attack = () => {
-    if (!enemy) return;
+    if (!enemy || !status) return null;
+
     userAnimation();
-    const updatedEnemy = playerAttackAbility(player, enemy, userAttackStatus);
+
+    const updatedEnemy = playerAttackAbility(status, enemy, userAttackStatus);
+
     setEnemy(updatedEnemy);
     setBattleLog(
-      `${status?.user.name}の攻撃！敵の${enemy.name}に${userAttackStatus}の攻撃！`
+      `${status.user.name}の攻撃！敵の${enemy.name}に${userAttackStatus}ダメージ！`
     );
+
     return updatedEnemy;
   };
 
+  // 回復
   const heal = (amount: number) => {
     if (!status) return;
+
     userAnimation();
-    setBattleLog(`${status?.user.name}のHPが${amount}回復した`);
-    const updatedPlayerHp = calcHeal(status, amount);
-    setStatus({ ...status, hp: updatedPlayerHp });
+    setBattleLog(`${status.user.name}のHPが${amount}回復した`);
+
+    const newHp = healAbility(status, amount);
+    setStatus({ ...status, hp: newHp });
   };
 
+  // 敵の攻撃
   const enemyAttack = () => {
-    if (!enemy || !status) return;
+    if (!enemy || !status) return false;
+
     enemyAnimation();
 
-    const updatedPlayerHp = calcPlayerHp(
-      status,
-      enemy.attack,
-      userDefenseStatus
-    );
-    setStatus({ ...status, hp: updatedPlayerHp });
+    const newHp = enemyAttackAbility(status, enemy.attack, userDefenseStatus);
 
+    setStatus({ ...status, hp: newHp });
     setBattleLog(
-      `敵の${enemy.name}の攻撃！${status.user.name}に${
-        300 - userDefenseStatus
-      }の攻撃！`
+      `敵の${enemy.name}の攻撃！${status.user.name}は${
+        enemy.attack - userDefenseStatus
+      }ダメージ！`
     );
 
-    const isDead = updatedPlayerHp <= 0;
-
-    return isDead;
+    return newHp <= 0;
   };
 
-  return { attack, heal, enemyAttack };
-};
+  // アイテムの使用
+  const runItemAbility = (item: BattleItem) => {
+    if (item.type === "heal") {
+      heal(item.healHp ?? 0);
+    }
+  };
+
+  return { attack, enemyAttack, runItemAbility };
+}
