@@ -37,16 +37,22 @@ Study-RPG は、勉強時間に応じてコイン・経験値などの報酬を�
 ## Screenshots
 
 ### Home
-<img src="..." width="600" />
+<img width="1249" height="617" alt="Image" src="https://github.com/user-attachments/assets/0402ca99-7a68-4486-92c9-c6ded824cb4b" />
 
 ### Map
-<img src="..." width="600" />
+<img width="1257" height="1283" alt="Image" src="https://github.com/user-attachments/assets/b54a717e-15a1-4175-86df-7e02f3973afc" />
 
 ### Battle
-<img src="..." width="600" />
+<img width="1168" height="756" alt="Image" src="https://github.com/user-attachments/assets/820975c0-904e-4139-b3bb-7016e10db941" />
 
 ### Craft
-<img src="..." width="600" />
+<img width="1217" height="1018" alt="Image" src="https://github.com/user-attachments/assets/d2f9685a-042f-4631-a8cb-b4054f3dcf28" />
+
+
+
+
+
+
 
 
 ## Tech Stack
@@ -67,7 +73,6 @@ Study-RPG は、勉強時間に応じてコイン・経験値などの報酬を�
 - Radix UI  
 - Lucide Icons  
 - react-hook-form  
-- pixi.js
 
 ### Validation
 - Zod
