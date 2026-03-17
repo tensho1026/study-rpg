@@ -45,13 +45,22 @@ export default function CraftItemCard({
   );
   if (!recipe) return null;
 
+  const {
+    materialType,
+    quantity,
+    normalMaterial,
+    normalMaterialId,
+    monsterMaterial,
+    monsterMaterialId,
+  } = recipe;
+
   const have = userHas.find(
     (h) =>
-      recipe.monsterMaterial?.id === h.monsterItemId ||
-      recipe.normalMaterial?.id === h.nomalItemId
+      monsterMaterial?.id === h.monsterItemId ||
+      normalMaterial?.id === h.nomalItemId
   );
 
-  const enough = (have?.quantity ?? 0) >= recipe.quantity;
+  const enough = (have?.quantity ?? 0) >= quantity;
   const hasEnoughCoins = equipment.cost <= coin;
 
   const statLabel = equipment.type === "weapon" ? "攻撃力" : "防御力";
@@ -62,11 +71,7 @@ export default function CraftItemCard({
 
   async function handleCraft() {
     try {
-      const data = await craft(
-        equipment.id,
-        recipe.normalMaterialId,
-        recipe.monsterMaterialId
-      );
+      const data = await craft(equipment.id, normalMaterialId, monsterMaterialId);
 
       setCoins(data?.money.money ?? 0);
 
@@ -139,20 +144,20 @@ export default function CraftItemCard({
             <div>
               <p className="text-sm text-white">
                 {/* {recipe.monsterMaterial?.name ?? "不明な素材"} */}{" "}
-                {recipe.materialType === "ENEMY"
-                  ? `  ${recipe.monsterMaterial?.name ?? ""}`
-                  : `${recipe.normalMaterial?.name ?? ""}`}
+                {materialType === "ENEMY"
+                  ? `  ${monsterMaterial?.name ?? ""}`
+                  : `${normalMaterial?.name ?? ""}`}
               </p>
               <p className="text-[10px] text-white/50">
-                {recipe.materialType === "ENEMY"
-                  ? `モンスター素材  ★${recipe.monsterMaterial?.rare ?? 1}`
-                  : `共通素材 ★${recipe.normalMaterial?.rare ?? 1}`}
+                {materialType === "ENEMY"
+                  ? `モンスター素材  ★${monsterMaterial?.rare ?? 1}`
+                  : `共通素材 ★${normalMaterial?.rare ?? 1}`}
               </p>
             </div>
             <div className="text-right">
               <p className="text-xs">
                 必要
-                <span className="text-yellow-200">{recipe.quantity}</span>
+                <span className="text-yellow-200">{quantity}</span>
               </p>
               <p
                 className={cn(
