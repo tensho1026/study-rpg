@@ -19,6 +19,7 @@ export default async function BattlePage({ params }: Props) {
     hp: data.enemyData.hp,
     maxHp: data.enemyData.maxHp,
     attack: data.enemyData.attack,
+    defense: data.enemyData.defense,
     exp: data.enemyData.exp,
     coin: data.enemyData.gold,
   };

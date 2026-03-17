@@ -31,7 +31,7 @@ export default function ItemShop({ coin, mstData }: Props) {
     setUserCoin((prev) => Math.max(prev - cost, 0));
 
     try {
-      const result = await purchaseItem(itemId, cost);
+      const result = await purchaseItem(itemId);
       if (result) {
         toast.success("購入が完了しました");
         setUserCoin(result?.newMoney ?? 0);
@@ -44,7 +44,7 @@ export default function ItemShop({ coin, mstData }: Props) {
         );
       }
     } catch (error) {
-      toast.error("error発生");
+      toast.error(error instanceof Error ? error.message : "購入に失敗しました");
       setUserCoin((prev) => prev + cost);
     } finally {
       setIsPurchasing(false);

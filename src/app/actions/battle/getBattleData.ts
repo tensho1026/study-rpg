@@ -7,6 +7,8 @@ import getBattleStatus from "@/lib/battle/getBattleStatus";
 import getEnemy from "@/lib/battle/getEnemy";
 import getRandomDropItem from "@/lib/battle/getRandomDropItem";
 import getUserHasItems from "@/lib/battle/getUserHasItems";
+import getBattleBaseStats from "@/lib/battle/getBattleBaseStats";
+import updateBattleStatus from "@/lib/battle/updateBattleStatus";
 import { getServerSession } from "next-auth";
 
 export default async function getBattleData(mapId: string) {
@@ -21,10 +23,23 @@ export default async function getBattleData(mapId: string) {
     battleStatus = await getBattleStatus(userId);
   }
 
+  if (battleStatus) {
+    const expectedStats = getBattleBaseStats(battleStatus.level);
+    const needsSync =
+      battleStatus.maxHp !== expectedStats.maxHp ||
+      battleStatus.attack !== expectedStats.attack ||
+      battleStatus.defense !== expectedStats.defense;
+
+    if (needsSync) {
+      await updateBattleStatus(userId, battleStatus.level);
+      battleStatus = await getBattleStatus(userId);
+    }
+  }
+
   const userEquipments = battleStatus?.user.equipments;
   const userBattleStatus = calcUserBattleStatus(
     battleStatus,
-    userEquipments ?? null 
+    userEquipments ?? null
   );
 
   const [enemyData, dropItem, battleItems] = await Promise.all([

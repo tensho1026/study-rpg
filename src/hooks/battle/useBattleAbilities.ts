@@ -45,11 +45,14 @@ export function useBattleAbilities({
 
     userAnimation();
 
-    const updatedEnemy = playerAttackAbility(status, enemy, userAttackStatus);
+    const { enemy: updatedEnemy, damage } = playerAttackAbility(
+      enemy,
+      userAttackStatus
+    );
 
     setEnemy(updatedEnemy);
     setBattleLog(
-      `${status.user.name}の攻撃！敵の${enemy.name}に${userAttackStatus}ダメージ！`
+      `${status.user.name}の攻撃！敵の${enemy.name}に${damage}ダメージ！`
     );
 
     return updatedEnemy;
@@ -72,13 +75,15 @@ export function useBattleAbilities({
 
     enemyAnimation();
 
-    const newHp = enemyAttackAbility(status, enemy.attack, userDefenseStatus);
+    const { hp: newHp, damage } = enemyAttackAbility(
+      status,
+      enemy.attack,
+      userDefenseStatus
+    );
 
     setStatus({ ...status, hp: newHp });
     setBattleLog(
-      `敵の${enemy.name}の攻撃！${status.user.name}は${
-        enemy.attack - userDefenseStatus
-      }ダメージ！`
+      `敵の${enemy.name}の攻撃！${status.user.name}は${damage}ダメージ！`
     );
 
     return newHp <= 0;

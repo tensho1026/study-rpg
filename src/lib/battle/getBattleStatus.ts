@@ -14,7 +14,8 @@ export default async function getBattleStatus(userId: string) {
               isDraft:true
             },
             include:{
-              mstEquipment:true
+              mstEquipment:true,
+              mstCraft:true,
             }
           },
 
@@ -25,4 +26,3 @@ export default async function getBattleStatus(userId: string) {
 
   return battleStatus;
 }
-

@@ -16,10 +16,14 @@ function seededRandom(seed: number) {
 
 export default function LandingPage() {
   const router = useRouter();
-  const { data } = useSession();
+  const { status } = useSession();
 
   const handleClick = () => {
-    router.push(data ? "/home" : "/auth/signin");
+    if (status === "loading") {
+      return;
+    }
+
+    router.push(status === "authenticated" ? "/home" : "/auth/signin");
   };
   const handleGuestLogin = async () => {
     await signIn("guest", { redirect: true, callbackUrl: "/home" });

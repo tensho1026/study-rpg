@@ -3,6 +3,7 @@ import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import { cn } from "@/lib/utils";
 import craft from "@/app/actions/craft/craft";
+import { toast } from "sonner";
 
 type Props = {
   equipment: MstCraftEquipmentsWithRecipes;
@@ -13,6 +14,7 @@ type Props = {
     quantity: number;
   }[];
   userHasEquipments: string[] | undefined;
+  coin: number;
   setCoins: (value: number | ((prev: number) => number)) => void;
   setUserHas: React.Dispatch<
     React.SetStateAction<
@@ -33,6 +35,7 @@ export default function CraftItemCard({
   craftMethod,
   userHas,
   userHasEquipments,
+  coin,
   setCoins,
   setUserHas,
   setUserHasEquipments,
@@ -42,13 +45,23 @@ export default function CraftItemCard({
   );
   if (!recipe) return null;
 
+  const {
+    materialType,
+    quantity,
+    normalMaterial,
+    normalMaterialId,
+    monsterMaterial,
+    monsterMaterialId,
+  } = recipe;
+
   const have = userHas.find(
     (h) =>
-      recipe.monsterMaterial?.id === h.monsterItemId ||
-      recipe.normalMaterial?.id === h.nomalItemId
+      monsterMaterial?.id === h.monsterItemId ||
+      normalMaterial?.id === h.nomalItemId
   );
 
-  const enough = (have?.quantity ?? 0) >= recipe.quantity;
+  const enough = (have?.quantity ?? 0) >= quantity;
+  const hasEnoughCoins = equipment.cost <= coin;
 
   const statLabel = equipment.type === "weapon" ? "攻撃力" : "防御力";
   const statValue =
@@ -56,43 +69,41 @@ export default function CraftItemCard({
       ? equipment.attack ?? 0
       : equipment.defense ?? 0;
 
-  const handleCraft = async () => {
-    const data = await craft(
-      equipment.id,
-      equipment.cost,
-      recipe.normalMaterialId,
-      recipe.monsterMaterialId,
-      recipe.quantity
-    );
+  async function handleCraft() {
+    try {
+      const data = await craft(equipment.id, normalMaterialId, monsterMaterialId);
 
-    setCoins(data?.money.money ?? 0);
+      setCoins(data?.money.money ?? 0);
 
-    setUserHas((prev) =>
-      prev.map((item) => {
-        if (
-          data?.materialQuantity?.nomalId &&
-          item.nomalItemId === data.materialQuantity.nomalId
-        ) {
-          return { ...item, quantity: data.materialQuantity.quantity };
-        }
+      setUserHas((prev) =>
+        prev.map((item) => {
+          if (
+            data?.materialQuantity?.nomalId &&
+            item.nomalItemId === data.materialQuantity.nomalId
+          ) {
+            return { ...item, quantity: data.materialQuantity.quantity };
+          }
 
-        if (
-          data?.materialQuantity?.monsterId &&
-          item.monsterItemId === data.materialQuantity.monsterId
-        ) {
-          return { ...item, quantity: data.materialQuantity.quantity };
-        }
+          if (
+            data?.materialQuantity?.monsterId &&
+            item.monsterItemId === data.materialQuantity.monsterId
+          ) {
+            return { ...item, quantity: data.materialQuantity.quantity };
+          }
 
-        return item;
-      })
-    );
+          return item;
+        })
+      );
 
-    if (data?.equippedId) {
-      setUserHasEquipments((prev) => {
-        return [...(prev ?? []), data?.equippedId];
-      });
+      if (data?.equippedId) {
+        setUserHasEquipments((prev) => {
+          return [...(prev ?? []), data?.equippedId];
+        });
+      }
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "クラフトに失敗しました");
     }
-  };
+  }
 
   return (
     <Card
@@ -133,20 +144,20 @@ export default function CraftItemCard({
             <div>
               <p className="text-sm text-white">
                 {/* {recipe.monsterMaterial?.name ?? "不明な素材"} */}{" "}
-                {recipe.materialType === "ENEMY"
-                  ? `  ${recipe.monsterMaterial?.name ?? ""}`
-                  : `${recipe.normalMaterial?.name ?? ""}`}
+                {materialType === "ENEMY"
+                  ? `  ${monsterMaterial?.name ?? ""}`
+                  : `${normalMaterial?.name ?? ""}`}
               </p>
               <p className="text-[10px] text-white/50">
-                {recipe.materialType === "ENEMY"
-                  ? `モンスター素材  ★${recipe.monsterMaterial?.rare ?? 1}`
-                  : `共通素材 ★${recipe.normalMaterial?.rare ?? 1}`}
+                {materialType === "ENEMY"
+                  ? `モンスター素材  ★${monsterMaterial?.rare ?? 1}`
+                  : `共通素材 ★${normalMaterial?.rare ?? 1}`}
               </p>
             </div>
             <div className="text-right">
               <p className="text-xs">
                 必要
-                <span className="text-yellow-200">{recipe.quantity}</span>
+                <span className="text-yellow-200">{quantity}</span>
               </p>
               <p
                 className={cn(
@@ -164,12 +175,16 @@ export default function CraftItemCard({
       <Button
         className="mt-4 w-full rounded-md border-2 border-emerald-400 bg-emerald-500/80 text-slate-950 font-bold transition-all hover:scale-[1.02] hover:bg-emerald-400 hover:shadow-[0_0_10px_rgba(0,255,160,0.6)]"
         onClick={handleCraft}
-        disabled={userHasEquipments?.includes(equipment.id) || !enough}
+        disabled={
+          userHasEquipments?.includes(equipment.id) || !enough || !hasEnoughCoins
+        }
       >
         {userHasEquipments?.includes(equipment.id)
           ? "クラフト済み"
           : !enough
           ? "素材不足"
+          : !hasEnoughCoins
+          ? "コイン不足"
           : " 🔨 クラフト"}
       </Button>
     </Card>
