@@ -11,6 +11,7 @@ export type BattleStatusType = Prisma.BattleStatusGetPayload<{
           };
           include: {
             mstEquipment: true;
+            mstCraft: true;
           };
         };
       };

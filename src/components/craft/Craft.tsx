@@ -65,6 +65,7 @@ export default function Craft({
               craftMethod={craftMethod}
               userHas={userHasMaterials}
               userHasEquipments={userHasEquipment ?? []}
+              coin={coin}
               setCoins={setCoin}
               setUserHas={setUserHasMaterials}
               setUserHasEquipments={setUserHasEquipments}

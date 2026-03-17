@@ -4,29 +4,38 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 
-export default async function purchaseItem(itemId: string, cost: number) {
+export default async function purchaseItem(itemId: string) {
   const session = await getServerSession(authOptions);
   if (!session) return;
 
-  // ↓前に使ってたやつ
-  // await purchaseBattleItem(session.user.id, itemId);
-  // await decreaseUserCoins(session.user.id, cost);
-
-  // transactionを使うようにした;
   return await prisma.$transaction(async (tx) => {
-    const user = await tx.userStatus.findFirst({
-      where: {
-        userId: session.user.id,
-      },
-      select: {
-        money: true,
-      },
-    });
+    const [user, item] = await Promise.all([
+      tx.userStatus.upsert({
+        where: {
+          userId: session.user.id,
+        },
+        update: {},
+        create: {
+          userId: session.user.id,
+        },
+        select: {
+          money: true,
+        },
+      }),
+      tx.mstBattleItem.findUnique({
+        where: {
+          id: itemId,
+        },
+        select: {
+          price: true,
+        },
+      }),
+    ]);
 
-    if (!user) {
-      throw new Error("ユーザーが存在しません。");
+    if (!item || item.price == null) {
+      throw new Error("アイテム価格が取得できません。");
     }
-    if (user.money < cost) {
+    if (user.money < item.price) {
       throw new Error("残高不足です。");
     }
 
@@ -55,7 +64,7 @@ export default async function purchaseItem(itemId: string, cost: number) {
         userId: session.user.id,
       },
       data: {
-        money: { decrement: cost },
+        money: { decrement: item.price },
       },
       select: {
         money: true,
