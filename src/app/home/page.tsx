@@ -9,16 +9,14 @@ import { getServerSession } from "next-auth";
 import { notFound, redirect } from "next/navigation";
 
 export default async function StudyQuestPage() {
-  const homeData = await getHomeData();
-
   const session = await getServerSession(authOptions);
-  if (!session) return;
-  if (!homeData) {
-    // 未ログイン時
+  if (!session) {
     redirect("/auth/signin");
   }
 
-  if (!homeData.userStatus) {
+  const homeData = await getHomeData();
+
+  if (!homeData || !homeData.userStatus) {
     // DB障害や予期せぬデータ欠損など
     notFound();
   }

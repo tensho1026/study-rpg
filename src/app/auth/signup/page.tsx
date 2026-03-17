@@ -1,16 +1,20 @@
 "use client";
 import type React from "react";
+import { useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { signIn, useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterForm, registerSchemaRaw } from "@/lib/schemas/auth";
 
 export default function SignupPage() {
+  const router = useRouter();
+  const { status } = useSession();
   const {
     register,
     formState: { errors },
@@ -18,6 +22,12 @@ export default function SignupPage() {
   } = useForm({
     resolver: zodResolver(registerSchemaRaw),
   });
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.replace("/home");
+    }
+  }, [router, status]);
 
   const onSubmit = async (data: RegisterForm) => {
     await signIn("email", {
