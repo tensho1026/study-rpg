@@ -42,10 +42,14 @@ function ItemLists({
       toast.error("残高不足です");
       return;
     }
-    await purchaseEquipment(equipmentId);
-    const updated = await getEquipmentData();
-    setUserCoins(updated?.userCoins ?? 0);
-    setUserEquipments(updated?.userEquipments ?? []);
+    try {
+      await purchaseEquipment(equipmentId);
+      const updated = await getEquipmentData();
+      setUserCoins(updated?.userCoins ?? 0);
+      setUserEquipments(updated?.userEquipments ?? []);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "購入に失敗しました");
+    }
   };
 
   return (

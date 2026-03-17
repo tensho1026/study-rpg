@@ -94,7 +94,7 @@ export const equipmentRecipesData = [
     equipmentId: "cw_dragon",
     materialType: "NORMAL",
     materialId: "N8", // 竜の涙
-    quantity: 1,
+    quantity: 2,
   },
 
   // 防具：ウルフ
@@ -150,6 +150,6 @@ export const equipmentRecipesData = [
     equipmentId: "ca_dimension",
     materialType: "NORMAL",
     materialId: "N8",
-    quantity: 1,
+    quantity: 2,
   },
 ] 
